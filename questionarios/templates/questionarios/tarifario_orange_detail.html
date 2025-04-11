@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Detalhes do Tarifário Orange - {{ indicador.get_mes_display }}/{{ indicador.ano }}</h2>
+        <div>
+            <a href="{% url \'\'questionarios:tarifario_orange_update\' indicador.pk %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a href="{% url \'\'questionarios:tarifario_orange_list\'\' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- Internet USB Pré-pago -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Internet USB Pré-pago
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>Dongle 3G:</strong> {{ indicador.dongle_3g }}</p>
+                    <p><strong>Dongle 4G:</strong> {{ indicador.dongle_4g }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Airbox 4G:</strong> {{ indicador.airbox_4g }}</p>
+                    <p><strong>Flybox 4G:</strong> {{ indicador.flybox_4g }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Flybox 4G+:</strong> {{ indicador.flybox_4g_plus }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Internet USB/BOX Residencial -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Internet USB/BOX Residencial
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Adesão</h5>
+                    <p><strong>Casa Zen 2Mbits:</strong> {{ indicador.casa_zen_2mbits_adesao }}</p>
+                    <p><strong>Casa Conforto 4Mbits:</strong> {{ indicador.casa_conforto_4mbits_adesao }}</p>
+                    <p><strong>Casabox 2Mbits:</strong> {{ indicador.casabox_2mbits_adesao }}</p>
+                    <p><strong>Casabox 5Mbits:</strong> {{ indicador.casabox_5mbits_adesao }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Mensal</h5>
+                    <p><strong>Casa Zen 2Mbits:</strong> {{ indicador.casa_zen_2mbits_mensal }}</p>
+                    <p><strong>Casa Conforto 4Mbits:</strong> {{ indicador.casa_conforto_4mbits_mensal }}</p>
+                    <p><strong>Casabox 2Mbits:</strong> {{ indicador.casabox_2mbits_mensal }}</p>
+                    <p><strong>Casabox 5Mbits:</strong> {{ indicador.casabox_5mbits_mensal }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Passes -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Passes
+        </div>
+        <div class="card-body">
+            <h5>Passes Ilimitados</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>1h:</strong> {{ indicador.pass_ilimite_1h }}</p>
+                    <p><strong>3h:</strong> {{ indicador.pass_ilimite_3h }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>8h:</strong> {{ indicador.pass_ilimite_8h }}</p>
+                    <p><strong>Dimanche:</strong> {{ indicador.pass_ilimite_dimanche }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Nuit:</strong> {{ indicador.pass_ilimite_nuit }}</p>
+                    <p><strong>Jours Férié:</strong> {{ indicador.pass_jours_ferie }}</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4">Passes de Dados</h5>
+            <div class="row">
+                <div class="col-md-3">
+                    <p><strong>30 Mo:</strong> {{ indicador.pass_30_mo }}</p>
+                    <p><strong>75 Mo:</strong> {{ indicador.pass_75_mo }}</p>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>150 Mo:</strong> {{ indicador.pass_150_mo }}</p>
+                    <p><strong>250 Mo:</strong> {{ indicador.pass_250_mo }}</p>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>500 Mo:</strong> {{ indicador.pass_500_mo }}</p>
+                    <p><strong>600 Mo:</strong> {{ indicador.pass_600_mo }}</p>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>400 Mo:</strong> {{ indicador.pass_400_mo }}</p>
+                    <p><strong>1 Go:</strong> {{ indicador.pass_1_go }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarifas -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Tarifas
+        </div>
+        <div class="card-body">
+            <h5>On-net</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>Orange Livre (06h-22h):</strong> {{ indicador.tarifa_orange_livre_6h_22h }}</p>
+                    <p><strong>Orange Livre (22h-06h):</strong> {{ indicador.tarifa_orange_livre_22h_6h }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Jovem VIP:</strong> {{ indicador.tarifa_orange_jovem_vip_jovem }}</p>
+                    <p><strong>Jovem VIP (06h-22h):</strong> {{ indicador.tarifa_orange_jovem_vip_6h_22h }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Jovem VIP (22h-06h):</strong> {{ indicador.tarifa_orange_jovem_vip_22h_6h }}</p>
+                    <p><strong>Intenso:</strong> {{ indicador.tarifa_orange_intenso }}</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4">Off-net Local</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>Orange Livre:</strong> {{ indicador.tarifa_offnet_orange_livre }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Jovem VIP:</strong> {{ indicador.tarifa_offnet_orange_jovem_vip }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Intenso:</strong> {{ indicador.tarifa_offnet_orange_intenso }}</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4">Zonas Internacionais</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <p><strong>Zona 1:</strong> {{ indicador.tarifa_zona1 }}</p>
+                    <p><strong>Zona 2:</strong> {{ indicador.tarifa_zona2 }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Zona 3:</strong> {{ indicador.tarifa_zona3 }}</p>
+                    <p><strong>Zona 4:</strong> {{ indicador.tarifa_zona4 }}</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Zona 5:</strong> {{ indicador.tarifa_zona5 }}</p>
+                    <p><strong>Zona 6:</strong> {{ indicador.tarifa_zona6 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Outras Informações -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Outras Informações
+        </div>
+        <div class="card-body">
+            <p><strong>Taxa/Imposto:</strong> {{ indicador.taxa_imposto }}</p>
+            <p><strong>Promoções:</strong> {{ indicador.promocoes|default:"Nenhuma promoção cadastrada" }}</p>
+            <p><strong>Link do Plano:</strong> 
+                {% if indicador.link_plano %}
+                <a href="{{ indicador.link_plano }}" target="_blank">{{ indicador.link_plano }}</a>
+                {% else %}
+                Não disponível
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Metadados -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            Informações do Registro
+        </div>
+        <div class="card-body">
+            <p><strong>Criado por:</strong> {{ indicador.criado_por }}</p>
+            <p><strong>Data de criação:</strong> {{ indicador.data_criacao|date:"d/m/Y H:i" }}</p>
+            <p><strong>Última atualização:</strong> {{ indicador.data_atualizacao|date:"d/m/Y H:i" }}</p>
+            <p><strong>Atualizado por:</strong> {{ indicador.atualizado_por }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

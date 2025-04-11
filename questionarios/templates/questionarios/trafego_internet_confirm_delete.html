@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Confirmar Exclusão</h2>
+    <p>Tem certeza que deseja excluir o indicador de Tráfego de Internet para {{ object.ano }}/{{ object.get_mes_display }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+    </form>
+    <a href="{% url \'\'questionarios:trafego_internet_list\'\' %}" class="btn btn-secondary mt-2">Cancelar</a>
+</div>
+{% endblock %}

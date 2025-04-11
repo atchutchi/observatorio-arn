@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalhes do Indicador de Tráfego de Internet</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Informações Gerais
+        </div>
+        <div class="card-body">
+            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
+            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
+            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Tráfego de Serviços de Internet fixo via rádio
+        </div>
+        <div class="card-body">
+            <p><strong>Tráfego Total:</strong> {{ indicador.trafego_total }} Mbit/s</p>
+            <p><strong>Por via Satélite:</strong> {{ indicador.por_via_satelite|default_if_none:"N/A" }} Mbit/s</p>
+            <p><strong>Por Sistema Hertziano Fixo de Terra:</strong> {{ indicador.por_sistema_hertziano_fixo_terra }} Mbit/s</p>
+            <p><strong>Fibra Ótica:</strong> {{ indicador.fibra_otica }} Mbit/s</p>
+        </div>
+    </div>
+
+    <!-- Adicione mais seções para os outros grupos de campos -->
+
+    <a href="{% url \'\'questionarios:trafego_internet_update\' indicador.pk %}" class="btn btn-primary">Editar</a>
+    <a href="{% url \'\'questionarios:trafego_internet_list\'\' %}" class="btn btn-secondary">Voltar para a Lista</a>
+</div>
+{% endblock %}

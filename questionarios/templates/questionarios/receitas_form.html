@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/receitas.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Receitas</h2>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Informações Gerais
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.operadora.label_tag }}
+                        {{ form.operadora }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.ano.label_tag }}
+                        {{ form.ano }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.mes.label_tag }}
+                        {{ form.mes }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Receitas de Serviços a Clientes Retalhistas
+            </div>
+            <div class="card-body">
+                <h5>Receitas de Mensalidades</h5>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        {{ form.receitas_mensalidades.label_tag }}
+                        {{ form.receitas_mensalidades }}
+                    </div>
+                </div>
+
+                <h5 class="mt-4">Receitas de Serviços de Voz</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_chamadas_on_net.label_tag }}
+                        {{ form.receitas_chamadas_on_net }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_chamadas_off_net.label_tag }}
+                        {{ form.receitas_chamadas_off_net }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_chamadas_mtn.label_tag }}
+                        {{ form.receitas_chamadas_mtn }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_chamadas_rede_movel_b.label_tag }}
+                        {{ form.receitas_chamadas_rede_movel_b }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_chamadas_outros.label_tag }}
+                        {{ form.receitas_chamadas_outros }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        {{ form.receitas_servico_telefonico_fixo.label_tag }}
+                        {{ form.receitas_servico_telefonico_fixo }}
+                    </div>
+                </div>
+
+                <h5 class="mt-4">Receitas de Chamadas Internacionais</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_chamadas_cedeao.label_tag }}
+                        {{ form.receitas_chamadas_cedeao }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_chamadas_cplp.label_tag }}
+                        {{ form.receitas_chamadas_cplp }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_chamadas_palop.label_tag }}
+                        {{ form.receitas_chamadas_palop }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_chamadas_resto_africa.label_tag }}
+                        {{ form.receitas_chamadas_resto_africa }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_chamadas_resto_mundo.label_tag }}
+                        {{ form.receitas_chamadas_resto_mundo }}
+                    </div>
+                </div>
+
+                <h5 class="mt-4">Receitas de Roaming e Mensagens</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_voz_roaming_out.label_tag }}
+                        {{ form.receitas_voz_roaming_out }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_mensagens.label_tag }}
+                        {{ form.receitas_mensagens }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_mms.label_tag }}
+                        {{ form.receitas_mms }}
+                    </div>
+                </div>
+
+                <h5 class="mt-4">Receitas de Dados Móveis</h5>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_dados_moveis.label_tag }}
+                        {{ form.receitas_dados_moveis }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_internet_banda_larga.label_tag }}
+                        {{ form.receitas_internet_banda_larga }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_videochamadas.label_tag }}
+                        {{ form.receitas_videochamadas }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_mobile_tv.label_tag }}
+                        {{ form.receitas_mobile_tv }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.receitas_outros_servicos_dados.label_tag }}
+                        {{ form.receitas_outros_servicos_dados }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Receitas de Serviços a Clientes Grossistas
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_terminacao_voz.label_tag }}
+                        {{ form.receitas_terminacao_voz }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_terminacao_dados.label_tag }}
+                        {{ form.receitas_terminacao_dados }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_originacao_trafego.label_tag }}
+                        {{ form.receitas_originacao_trafego }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.receitas_servicos_especiais.label_tag }}
+                        {{ form.receitas_servicos_especiais }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        {{ form.outras_receitas_grossistas.label_tag }}
+                        {{ form.outras_receitas_grossistas }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Salvar
+        </button>
+        <a href="{% url \'\'questionarios:receitas_list\'\' %}" class="btn btn-secondary">
+            <i class="fas fa-times"></i> Cancelar
+        </a>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/receitas.js' %}"></script>
+{% endblock %}

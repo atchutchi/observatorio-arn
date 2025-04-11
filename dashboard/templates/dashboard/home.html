@@ -1,0 +1,128 @@
+{# dashboard/templates/dashboard/home.html #}
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="dashboard-card p-4">
+                <h2>Bem-vindo, {{ request.user.get_full_name }}</h2>
+                <p class="text-secondary">Observatório do Mercado das Telecomunicações</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row">
+        {% if request.user.is_operator %}
+            <!-- Operator Stats -->
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h6>Submissões Pendentes</h6>
+                    <h3>{{ stats.pending_submissions }}</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h6>Última Submissão</h6>
+                    <h3>{{ stats.last_submission|date:"d/m/Y" }}</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <h6>Status da Licença</h6>
+                    <h3>{{ stats.license_status }}</h3>
+                </div>
+            </div>
+        {% else %}
+            <!-- Admin/Staff Stats -->
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <h6>Total Operadoras</h6>
+                    <h3>{{ stats.total_operators }}</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <h6>Submissões este Mês</h6>
+                    <h3>{{ stats.monthly_submissions }}</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <h6>Aprovações Pendentes</h6>
+                    <h3>{{ stats.pending_approvals }}</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <h6>Taxa de Compliance</h6>
+                    <h3>{{ stats.compliance_rate }}%</h3>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="dashboard-card p-4">
+                <h5>Atividades Recentes</h5>
+                <div class="table-responsive">
+                    <table class="table dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Atividade</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for activity in recent_activities %}
+                            <tr>
+                                <td>{{ activity.date|date:"d/m/Y H:i" }}</td>
+                                <td>{{ activity.description }}</td>
+                                <td>
+                                    <span class="badge bg-{{ activity.status_class }}">
+                                        {{ activity.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center">Nenhuma atividade recente</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="dashboard-card p-4">
+                <h5>Ações Rápidas</h5>
+                <div class="d-grid gap-2">
+                    {% if request.user.is_operator %}
+                        <a href="{% url 'estacoes_moveis_create' %}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Nova Submissão
+                        </a>
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fas fa-history me-2"></i>Ver Histórico
+                        </a>
+                    {% else %}
+                        <a href="{% url 'dashboard:analytics' %}" class="btn btn-primary">
+                            <i class="fas fa-chart-line me-2"></i>Ver Análises
+                        </a>
+                        <a href="{% url 'dashboard:reports' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-file-alt me-2"></i>Gerar Relatório
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

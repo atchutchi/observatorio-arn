@@ -1,0 +1,16 @@
+Django==3.2.24
+python-dotenv==0.21.1
+supabase==0.7.1
+huggingface-hub==0.13.4
+google-auth==2.22.0
+django-allauth==0.54.0
+gunicorn==21.2.0
+whitenoise==6.5.0
+psycopg2-binary==2.9.6
+pillow==9.5.0
+requests==2.31.0
+dj-database-url==2.0.0
+django-widget-tweaks==1.4.12
+djangorestframework==3.14.0
+markdown==3.4.4
+django-filter==23.2 

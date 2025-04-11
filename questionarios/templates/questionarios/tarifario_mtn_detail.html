@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Detalhes do Tarifário MTN</h2>
+        <div>
+            <a href="{% url \'\'questionarios:tarifario_mtn_update\' indicador.pk %}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <a href="{% url \'\'questionarios:tarifario_mtn_list\'\' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- Equipamentos Huawei -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Equipamentos Huawei
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Huawei 4G LTE:</strong> {{ indicador.huawei_4g_lte }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Huawei Mobile Wi-Fi 4G:</strong> {{ indicador.huawei_mobile_wifi_4g }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pacotes Diários -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Pacotes Diários
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <p><strong>30MB:</strong> {{ indicador.pacote_30mb }}</p>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>100MB:</strong> {{ indicador.pacote_100mb }}</p>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>300MB:</strong> {{ indicador.pacote_300mb }}</p>
+                </div>
+                <div class="col-md-3">
+                    <p><strong>1GB:</strong> {{ indicador.pacote_1gb }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Continue com os outros blocos de informação -->
+
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            Informações do Registro
+        </div>
+        <div class="card-body">
+            <p><strong>Criado por:</strong> {{ indicador.criado_por }}</p>
+            <p><strong>Data de criação:</strong> {{ indicador.data_criacao|date:"d/m/Y H:i" }}</p>
+            <p><strong>Última atualização:</strong> {{ indicador.data_atualizacao|date:"d/m/Y H:i" }}</p>
+            <p><strong>Atualizado por:</strong> {{ indicador.atualizado_por }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

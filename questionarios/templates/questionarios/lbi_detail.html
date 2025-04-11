@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalhes do Indicador de LBI</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Informações Gerais
+        </div>
+        <div class="card-body">
+            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
+            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
+            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Largura de banda de Internet internacional por tecnologia
+        </div>
+        <div class="card-body">
+            <p><strong>Satélite:</strong> {{ indicador.satelite|default_if_none:"N/A" }}</p>
+            <p><strong>Cabo de Fibra Óptica:</strong> {{ indicador.cabo_fibra_optica }}</p>
+            <p><strong>Feixe Hertziano:</strong> {{ indicador.feixe_hertziano }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Down link
+        </div>
+        <div class="card-body">
+            <p><strong>Disponível (Nominal):</strong> {{ indicador.disponivel_nominal_down }}</p>
+            <p><strong>Instalada/Equipada:</strong> {{ indicador.instalada_equipada_down }}</p>
+            <p><strong>Contratada:</strong> {{ indicador.contratada_down }}</p>
+            <p><strong>Utilizada:</strong> {{ indicador.utilizada_down }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Up link
+        </div>
+        <div class="card-body">
+            <p><strong>Disponível (Nominal):</strong> {{ indicador.disponivel_nominal_up }}</p>
+            <p><strong>Instalada/Equipada:</strong> {{ indicador.instalada_equipada_up }}</p>
+            <p><strong>Contratada:</strong> {{ indicador.contratada_up }}</p>
+            <p><strong>Utilizada:</strong> {{ indicador.utilizada_up }}</p>
+        </div>
+    </div>
+
+    <a href="{% url \'\'questionarios:lbi_update\' indicador.pk %}" class="btn btn-primary">Editar</a>
+    <a href="{% url \'\'questionarios:lbi_list\'\' %}" class="btn btn-secondary">Voltar para a Lista</a>
+</div>
+{% endblock %}

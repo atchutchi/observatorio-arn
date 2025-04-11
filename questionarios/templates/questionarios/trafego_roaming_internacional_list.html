@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Lista de Indicadores de Tráfego de Roaming Internacional</h2>
+    <a href="{% url 'questionarios:trafego_roaming_internacional_create' %}" class="btn btn-primary mb-3">Adicionar Novo Indicador</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Operadora</th>
+                <th>Ano</th>
+                <th>Mês</th>
+                <th>Chamadas IN</th>
+                <th>Chamadas OUT</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for indicador in trafego_roaming_internacional_list %}
+            <tr>
+                <td>{{ indicador.get_operadora_display }}</td>
+                <td>{{ indicador.ano }}</td>
+                <td>{{ indicador.mes }}</td>
+                <td>{{ indicador.chamadas_originadas_rede }}</td>
+                <td>{{ indicador.chamadas_originadas_operador_roaming }}</td>
+                <td>
+                    <a href="{% url 'questionarios:trafego_roaming_internacional_detail' indicador.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                    <a href="{% url 'questionarios:trafego_roaming_internacional_update' indicador.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'questionarios:trafego_roaming_internacional_delete' indicador.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">Nenhum indicador cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

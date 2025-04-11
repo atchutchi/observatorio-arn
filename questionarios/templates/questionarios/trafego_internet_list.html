@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Lista de Indicadores de Tráfego de Internet</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <a href="{% url 'questionarios:trafego_internet_create' %}" class="btn btn-primary">Adicionar Novo Indicador</a>
+        </div>
+        <div class="col-md-6 text-right">
+            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseUploadForm">
+                <i class="fas fa-file-excel"></i> Importar via Excel
+            </button>
+        </div>
+    </div>
+    
+    <div class="collapse mb-4" id="collapseUploadForm">
+        <div class="card card-body">
+            <h5>Importar dados de Tráfego de Internet via Excel</h5>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ upload_form.excel_file.id_for_label }}">{{ upload_form.excel_file.label }}</label>
+                            {{ upload_form.excel_file }}
+                            <small class="form-text text-muted">{{ upload_form.excel_file.help_text }}</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="{{ upload_form.operadora.id_for_label }}">{{ upload_form.operadora.label }}</label>
+                            {{ upload_form.operadora }}
+                            <small class="form-text text-muted">{{ upload_form.operadora.help_text }}</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="{{ upload_form.ano.id_for_label }}">{{ upload_form.ano.label }}</label>
+                            {{ upload_form.ano }}
+                            <small class="form-text text-muted">{{ upload_form.ano.help_text }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> O arquivo Excel deve conter uma aba chamada <strong>'Internet_Trafico'</strong> com a estrutura esperada.
+                </div>
+                <button type="submit" class="btn btn-primary">Processar Arquivo</button>
+            </form>
+        </div>
+    </div>
+    
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} {% if 'small' in message.extra_tags %}small{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Operadora</th>
+                <th>Ano</th>
+                <th>Mês</th>
+                <th>Tráfego Total</th>
+                <th>Banda Larga Total</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for indicador in trafego_internet_list %}
+            <tr>
+                <td>{{ indicador.get_operadora_display }}</td>
+                <td>{{ indicador.ano }}</td>
+                <td>{{ indicador.get_mes_display }}</td>
+                <td>{{ indicador.trafego_total }}</td>
+                <td>{{ indicador.banda_larga_total }}</td>
+                <td>
+                    <a href="{% url 'questionarios:trafego_internet_detail' indicador.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                    <a href="{% url 'questionarios:trafego_internet_update' indicador.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'questionarios:trafego_internet_delete' indicador.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">Nenhum indicador cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

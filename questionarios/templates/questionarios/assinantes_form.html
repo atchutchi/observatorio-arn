@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Assinantes</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Informações Gerais
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.operadora.label_tag }}
+                        {{ form.operadora }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.ano.label_tag }}
+                        {{ form.ano }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.mes.label_tag }}
+                        {{ form.mes }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Assinantes
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.assinantes_pre_pago.label_tag }}
+                        {{ form.assinantes_pre_pago }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.assinantes_pos_pago.label_tag }}
+                        {{ form.assinantes_pos_pago }}
+                    </div>
+                </div>
+                <div class="row">
+                     <div class="col-md-4 mb-3">
+                        {{ form.assinantes_fixo.label_tag }}
+                        {{ form.assinantes_fixo }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.assinantes_internet_movel.label_tag }}
+                        {{ form.assinantes_internet_movel }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.assinantes_internet_fixa.label_tag }}
+                        {{ form.assinantes_internet_fixa }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="{% url 'questionarios:assinantes_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %} 

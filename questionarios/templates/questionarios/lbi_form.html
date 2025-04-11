@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/lbi.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de LBI</h2>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Informações Gerais
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.operadora.label_tag }}
+                        {{ form.operadora }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.ano.label_tag }}
+                        {{ form.ano }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.mes.label_tag }}
+                        {{ form.mes }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Largura de banda de Internet internacional por tecnologia
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.satelite.label_tag }}
+                        {{ form.satelite }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.cabo_fibra_optica.label_tag }}
+                        {{ form.cabo_fibra_optica }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.feixe_hertziano.label_tag }}
+                        {{ form.feixe_hertziano }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Down link
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        {{ form.disponivel_nominal_down.label_tag }}
+                        {{ form.disponivel_nominal_down }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.instalada_equipada_down.label_tag }}
+                        {{ form.instalada_equipada_down }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.contratada_down.label_tag }}
+                        {{ form.contratada_down }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.utilizada_down.label_tag }}
+                        {{ form.utilizada_down }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Up link
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        {{ form.disponivel_nominal_up.label_tag }}
+                        {{ form.disponivel_nominal_up }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.instalada_equipada_up.label_tag }}
+                        {{ form.instalada_equipada_up }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.contratada_up.label_tag }}
+                        {{ form.contratada_up }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.utilizada_up.label_tag }}
+                        {{ form.utilizada_up }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/lbi_form_validation.js' %}"></script>
+{% endblock %}

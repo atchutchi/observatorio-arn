@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Tarifário MTN</h2>
+
+    <form method="post" class="needs-validation mtn-form" novalidate>
+        {% csrf_token %}
+
+        <!-- Informações Gerais -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Informações Gerais
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form.ano.label_tag }}
+                        {{ form.ano }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form.mes.label_tag }}
+                        {{ form.mes }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Equipamentos Huawei -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Equipamentos Huawei
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.huawei_4g_lte.label_tag }}
+                        {{ form.huawei_4g_lte }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.huawei_mobile_wifi_4g.label_tag }}
+                        {{ form.huawei_mobile_wifi_4g }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pacotes Diários -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Pacotes Diários
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        {{ form.pacote_30mb.label_tag }}
+                        {{ form.pacote_30mb }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.pacote_100mb.label_tag }}
+                        {{ form.pacote_100mb }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.pacote_300mb.label_tag }}
+                        {{ form.pacote_300mb }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.pacote_1gb.label_tag }}
+                        {{ form.pacote_1gb }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pacotes Semanais -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Pacotes Semanais
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.pacote_650mb.label_tag }}
+                        {{ form.pacote_650mb }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.pacote_1000mb.label_tag }}
+                        {{ form.pacote_1000mb }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pacotes Mensais -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Pacotes Mensais
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_1_5gb.label_tag }}
+                        {{ form.pacote_1_5gb }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_10gb.label_tag }}
+                        {{ form.pacote_10gb }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_18gb.label_tag }}
+                        {{ form.pacote_18gb }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_30gb.label_tag }}
+                        {{ form.pacote_30gb }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_50gb.label_tag }}
+                        {{ form.pacote_50gb }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_60gb.label_tag }}
+                        {{ form.pacote_60gb }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pacotes Y'ello Night -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Pacotes Y'ello Night
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_yello_350mb.label_tag }}
+                        {{ form.pacote_yello_350mb }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_yello_1_5gb.label_tag }}
+                        {{ form.pacote_yello_1_5gb }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_yello_1_5gb_7dias.label_tag }}
+                        {{ form.pacote_yello_1_5gb_7dias }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pacotes Ilimitados -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Pacotes Ilimitados
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_1hora.label_tag }}
+                        {{ form.pacote_1hora }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_3horas.label_tag }}
+                        {{ form.pacote_3horas }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.pacote_9horas.label_tag }}
+                        {{ form.pacote_9horas }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Taxas e Links -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Outras Informações
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.taxa_imposto.label_tag }}
+                        {{ form.taxa_imposto }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.link_plano.label_tag }}
+                        {{ form.link_plano }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{% url \'\'questionarios:tarifario_mtn_list\'\' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+{% block extra_js %}
+<script src="{% static 'js/tarifario_mtn_form_validation.js' %}"></script>
+{% endblock %}
+{% endblock %}

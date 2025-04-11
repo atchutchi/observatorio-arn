@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block title %}Dashboard - Observatório Telecom GB{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Dashboard Analítico</h1>
+
+    <!-- Key Metrics Row -->
+    <div class="row mb-4">
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">Operadoras Ativas</h6>
+                        <h3>{{ total_operadoras|default:0 }}</h3>
+                    </div>
+                    <div class="stats-icon bg-primary text-white"><i class="fas fa-building"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card shadow-sm orange">
+                 <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">Total Assinantes ({{ latest_year_assinantes|default:"-" }})</h6>
+                        {# Format with intcomma for thousands separator #}
+                        <h3>{{ total_assinantes_geral|intcomma|default:0 }}</h3> 
+                    </div>
+                    <div class="stats-icon bg-warning text-white"><i class="fas fa-users"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card shadow-sm green">
+                 <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">Investimento Total ({{ latest_year_investimento|default:"-" }})</h6>
+                         {# Assuming XOF, format as currency (basic) #}
+                        <h3>{{ total_investimento_geral|intcomma|default:"0" }} <small>XOF</small></h3>
+                    </div>
+                    <div class="stats-icon bg-success text-white"><i class="fas fa-money-bill-wave"></i></div>
+                </div>
+            </div>
+        </div>
+         <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stats-card shadow-sm red">
+                 <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">Líder Market Share</h6>
+                        {# Replace with dynamic data when available #}
+                        <h3>{{ market_share_leader|default:"N/D" }}</h3> 
+                        <small>{{ market_share_value|default:"-" }}</small>
+                    </div>
+                    <div class="stats-icon bg-danger text-white"><i class="fas fa-percentage"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header">Evolução de Assinantes (Exemplo)</div>
+                <div class="card-body">
+                    <canvas id="assinantesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+             <div class="card shadow-sm h-100">
+                <div class="card-header">Receita por Operadora (Exemplo)</div>
+                <div class="card-body">
+                    <canvas id="receitaChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Example Chart Data (Replace with dynamic data from context when implemented)
+const assinantesCtx = document.getElementById('assinantesChart').getContext('2d');
+const assinantesChart = new Chart(assinantesCtx, {
+    type: 'line',
+    data: {
+        labels: ['2020', '2021', '2022', '2023', '{{ latest_year_assinantes|default:"Ano" }}'],
+        datasets: [{
+            label: 'Total Assinantes',
+            data: [1800000, 1950000, 2100000, 2200000, {{ total_assinantes_geral|default:0 }}],
+            borderColor: '#0d6efd',
+            tension: 0.1
+        }]
+    }
+});
+
+const receitaCtx = document.getElementById('receitaChart').getContext('2d');
+const receitaChart = new Chart(receitaCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Orange', 'MTN', 'Guinetel'],
+        datasets: [{
+            label: 'Receita Anual (Bi XOF - Exemplo)',
+            data: [60, 55, 13],
+            backgroundColor: ['#fd7e14', '#ffc107', '#198754']
+        }]
+    }
+});
+</script>
+{% endblock %} 

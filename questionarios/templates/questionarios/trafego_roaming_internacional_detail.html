@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalhes do Indicador de Tráfego de Roaming Internacional</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Informações Gerais
+        </div>
+        <div class="card-body">
+            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
+            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
+            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Chamadas de Roaming internacional - IN
+        </div>
+        <div class="card-body">
+            <p><strong>Chamadas originadas na rede:</strong> {{ indicador.chamadas_originadas_rede }}</p>
+            <p><strong>Chamadas terminadas na rede:</strong> {{ indicador.chamadas_terminadas_rede }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Minutos de Roaming internacional - IN
+        </div>
+        <div class="card-body">
+            <p><strong>Minutos originados na rede:</strong> {{ indicador.minutos_originados_rede }}</p>
+            <p><strong>Minutos terminados na rede:</strong> {{ indicador.minutos_terminados_rede }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Tráfego de dados em ROAMING internacional - IN
+        </div>
+        <div class="card-body">
+            <p><strong>Mensagens escritas enviadas:</strong> {{ indicador.mensagens_escritas_enviadas }}</p>
+            <p><strong>Mensagens escritas recebidas:</strong> {{ indicador.mensagens_escritas_recebidas }}</p>
+            <p><strong>Sessões de acesso à Internet:</strong> {{ indicador.sessoes_acesso_internet }}</p>
+            <p><strong>Volume de acesso à Internet:</strong> {{ indicador.volume_acesso_internet }} Mbit</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Chamadas de Roaming Internacional - OUT
+        </div>
+        <div class="card-body">
+            <p><strong>Chamadas originadas no operador de Roaming:</strong> {{ indicador.chamadas_originadas_operador_roaming }}</p>
+            <p><strong>Chamadas terminadas no operador de Roaming:</strong> {{ indicador.chamadas_terminadas_operador_roaming }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Minutos de Roaming Internacional - OUT
+        </div>
+        <div class="card-body">
+            <p><strong>Minutos originados no operador de Roaming:</strong> {{ indicador.minutos_originados_operador_roaming }}</p>
+            <p><strong>Minutos terminados no operador de Roaming:</strong> {{ indicador.minutos_terminados_operador_roaming }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Tráfego de dados em Roaming Internacional - OUT
+        </div>
+        <div class="card-body">
+            <p><strong>Mensagens escritas enviadas:</strong> {{ indicador.mensagens_escritas_enviadas_out }}</p>
+            <p><strong>Sessões de acesso à Internet:</strong> {{ indicador.sessoes_acesso_internet_out }}</p>
+            <p><strong>Volume de acesso à Internet:</strong> {{ indicador.volume_acesso_internet_out }} Mbit</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Acordos de Roaming Internacional
+        </div>
+        <div class="card-body">
+            <p><strong>Número de países:</strong> {{ indicador.acordos_roaming_internacional }}</p>
+        </div>
+    </div>
+
+    <a href="{% url \'\'questionarios:trafego_roaming_internacional_update\' indicador.pk %}" class="btn btn-primary">Editar</a>
+    <a href="{% url \'\'questionarios:trafego_roaming_internacional_list\'\' %}" class="btn btn-secondary">Voltar para a Lista</a>
+</div>
+{% endblock %}

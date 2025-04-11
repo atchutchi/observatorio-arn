@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalhes do Indicador de Receitas</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Informações Gerais
+        </div>
+        <div class="card-body">
+            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
+            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
+            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Receitas de Serviços a Clientes Retalhistas
+        </div>
+        <div class="card-body">
+            <h5>Receitas de Mensalidades</h5>
+            <p><strong>Mensalidades:</strong> {{ indicador.receitas_mensalidades|floatformat:2 }} FCFA</p>
+
+            <h5 class="mt-4">Receitas de Serviços de Voz</h5>
+            <p><strong>Chamadas On-net:</strong> {{ indicador.receitas_chamadas_on_net|floatformat:2 }} FCFA</p>
+            <p><strong>Chamadas Off-net:</strong> {{ indicador.receitas_chamadas_off_net|floatformat:2 }} FCFA</p>
+            <p><strong>Chamadas MTN:</strong> {{ indicador.receitas_chamadas_mtn|floatformat:2 }} FCFA</p>
+            <p><strong>Chamadas Rede Móvel B:</strong> {{ indicador.receitas_chamadas_rede_movel_b|floatformat:2 }} FCFA</p>
+            <p><strong>Outros:</strong> {{ indicador.receitas_chamadas_outros|default_if_none:"N/A"|floatformat:2 }} FCFA</p>
+
+            <h5 class="mt-4">Receitas Internacionais</h5>
+            <p><strong>CEDEAO:</strong> {{ indicador.receitas_chamadas_cedeao|floatformat:2 }} FCFA</p>
+            <p><strong>CPLP:</strong> {{ indicador.receitas_chamadas_cplp|floatformat:2 }} FCFA</p>
+            <p><strong>PALOP:</strong> {{ indicador.receitas_chamadas_palop|floatformat:2 }} FCFA</p>
+            <p><strong>Resto de África:</strong> {{ indicador.receitas_chamadas_resto_africa|floatformat:2 }} FCFA</p>
+            <p><strong>Resto do Mundo:</strong> {{ indicador.receitas_chamadas_resto_mundo|floatformat:2 }} FCFA</p>
+
+            <h5 class="mt-4">Receitas de Roaming e Mensagens</h5>
+            <p><strong>Roaming-out Voz:</strong> {{ indicador.receitas_voz_roaming_out|floatformat:2 }} FCFA</p>
+            <p><strong>Mensagens:</strong> {{ indicador.receitas_mensagens|floatformat:2 }} FCFA</p>
+            <p><strong>MMS:</strong> {{ indicador.receitas_mms|default_if_none:"N/A"|floatformat:2 }} FCFA</p>
+
+            <h5 class="mt-4">Receitas de Dados</h5>
+            <p><strong>Dados Móveis:</strong> {{ indicador.receitas_dados_moveis|floatformat:2 }} FCFA</p>
+            <p><strong>Internet Banda Larga:</strong> {{ indicador.receitas_internet_banda_larga|floatformat:2 }} FCFA</p>
+            <p><strong>Videochamadas:</strong> {{ indicador.receitas_videochamadas|default_if_none:"N/A"|floatformat:2 }} FCFA</p>
+            <p><strong>Mobile TV:</strong> {{ indicador.receitas_mobile_tv|default_if_none:"N/A"|floatformat:2 }} FCFA</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Receitas de Serviços a Clientes Grossistas
+        </div>
+        <div class="card-body">
+            <p><strong>Terminação de Voz:</strong> {{ indicador.receitas_terminacao_voz|floatformat:2 }} FCFA</p>
+            <p><strong>Terminação de Dados:</strong> {{ indicador.receitas_terminacao_dados|default_if_none:"N/A"|floatformat:2 }} FCFA</p>
+            <p><strong>Originação de Tráfego:</strong> {{ indicador.receitas_originacao_trafego|default_if_none:"N/A"|floatformat:2 }} FCFA</p>
+            <p><strong>Serviços Especiais:</strong> {{ indicador.receitas_servicos_especiais|default_if_none:"N/A"|floatformat:2 }} FCFA</p>
+            <p><strong>Outras Receitas Grossistas:</strong> {{ indicador.outras_receitas_grossistas|floatformat:2 }} FCFA</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Totais
+        </div>
+        <div class="card-body">
+            <p><strong>Total Receitas Retalhistas:</strong> {{ indicador.calcular_total_receitas_retalhistas|floatformat:2 }} FCFA</p>
+            <p><strong>Total Receitas Grossistas:</strong> {{ indicador.calcular_total_receitas_grossistas|floatformat:2 }} FCFA</p>
+            <p><strong>Total Geral:</strong> {{ indicador.calcular_total_receitas|floatformat:2 }} FCFA</p>
+        </div>
+    </div>
+
+    <a href="{% url \'\'questionarios:receitas_update\' indicador.pk %}" class="btn btn-primary">Editar</a>
+    <a href="{% url \'\'questionarios:receitas_list\'\' %}" class="btn btn-secondary">Voltar para a Lista</a>
+</div>
+{% endblock %}

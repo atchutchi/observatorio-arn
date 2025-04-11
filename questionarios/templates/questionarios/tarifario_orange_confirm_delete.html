@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h2 class="mb-0">Confirmar Exclusão</h2>
+        </div>
+        <div class="card-body">
+            <p>Você tem certeza que deseja excluir o tarifário Orange de {{ object.get_mes_display }}/{{ object.ano }}?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                <a href="{% url \'\'questionarios:tarifario_orange_list\'\' %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

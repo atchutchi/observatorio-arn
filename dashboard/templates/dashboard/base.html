@@ -1,0 +1,78 @@
+{# dashboard/templates/dashboard/base.html #}
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <!-- Sidebar -->
+    <div class="dashboard-sidebar">
+        <div class="user-profile mb-4">
+            <div class="d-flex align-items-center">
+                <div class="avatar me-3">
+                    <img src="{% static 'images/default-avatar.png' %}" alt="Profile" class="rounded-circle" width="50">
+                </div>
+                <div>
+                    <h6 class="mb-0">{{ request.user.get_full_name }}</h6>
+                    <small class="text-secondary">{{ request.user.email }}</small>
+                </div>
+            </div>
+        </div>
+
+        <nav class="dashboard-nav">
+            <a href="{% url 'dashboard:home' %}" class="nav-link {% if active_page == 'home' %}active{% endif %}">
+                <i class="fas fa-home me-2"></i> Dashboard
+            </a>
+
+            {% if request.user.is_operator %}
+            <div class="nav-section mb-3">
+                <h6 class="text-secondary mb-2">Questionários</h6>
+                <a href="{% url 'questionarios:estacoes_moveis_list' %}" class="nav-link">
+                    <i class="fas fa-mobile-alt me-2"></i> Estações Móveis
+                </a>
+                <!-- Add other questionnaire links -->
+            </div>
+            {% endif %}
+
+            {% if request.user.is_staff %}
+            <div class="nav-section mb-3">
+                <h6 class="text-secondary mb-2">Análise</h6>
+                <a href="{% url 'dashboard:analytics' %}" class="nav-link">
+                    <i class="fas fa-chart-line me-2"></i> Análise de Dados
+                </a>
+                <a href="{% url 'dashboard:reports' %}" class="nav-link">
+                    <i class="fas fa-file-alt me-2"></i> Relatórios
+                </a>
+            </div>
+            {% endif %}
+
+            {% if request.user.is_superuser %}
+            <div class="nav-section mb-3">
+                <h6 class="text-secondary mb-2">Administração</h6>
+                <a href="{% url 'usuarios:operator-list' %}" class="nav-link">
+                    <i class="fas fa-users-cog me-2"></i> Operadores
+                </a>
+                <a href="{% url 'usuarios:pending_approval_list' %}" class="nav-link">
+                    <i class="fas fa-user-check me-2"></i> Aprovações
+                </a>
+            </div>
+            {% endif %}
+
+            <div class="nav-section mb-3">
+                <h6 class="text-secondary mb-2">Outros</h6>
+                <a href="{% url 'dashboard:chatbot' %}" class="nav-link {% if active_page == 'chatbot' %}active{% endif %}">
+                    <i class="fas fa-robot me-2"></i> Assistente Virtual
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-main">
+        {% block dashboard_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

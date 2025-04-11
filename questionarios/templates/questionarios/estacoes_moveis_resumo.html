@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Resumo de Estações Móveis - {{ ano }}</h2>
+
+    <!-- Filtro de Operadora -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Filtrar por Operadora
+        </div>
+        <div class="card-body">
+            <form method="get" class="form-inline">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <select name="operadora" class="form-control">
+                            <option value="">Todas</option>
+                            <option value="orange" {% if request.GET.operadora == 'orange' %}selected{% endif %}>Orange</option>
+                            <option value="mtn" {% if request.GET.operadora == 'mtn' %}selected{% endif %}>MTN</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Operadora Selecionada -->
+    {% if operadora_selecionada %}
+    <div class="alert alert-info">
+        Mostrando dados da operadora: {{ operadora_selecionada|upper }}
+    </div>
+    {% endif %}
+
+    <h3>Totais Trimestrais</h3>
+    {% for trimestre in totais_trimestrais %}
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            {{ trimestre.trimestre }}º Trimestre
+        </div>
+        <div class="card-body">
+            <p><strong>Total de Utilizadores:</strong> {{ trimestre.total_utilizadores }}</p>
+            <p><strong>Total de Carregamentos:</strong> {{ trimestre.total_carregamentos }}</p>
+            <p><strong>Total de Levantamentos:</strong> {{ trimestre.total_levantamentos }}</p>
+            <p><strong>Total de Transferências:</strong> {{ trimestre.total_transferencias }}</p>
+            <p><strong>Total de Estações Móveis:</strong> {{ trimestre.total_estacoes_moveis }}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <h3>Totais Anuais</h3>
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Ano {{ ano }}
+        </div>
+        <div class="card-body">
+            <p><strong>Total de Utilizadores:</strong> {{ total_utilizadores_anual }}</p>
+            <p><strong>Total de Carregamentos:</strong> {{ total_carregamentos_anual }}</p>
+            <p><strong>Total de Levantamentos:</strong> {{ total_levantamentos_anual }}</p>
+            <p><strong>Total de Transferências:</strong> {{ total_transferencias_anual }}</p>
+            <p><strong>Total de Estações Móveis:</strong> {{ total_estacoes_moveis_anual }}</p>
+        </div>
+    </div>
+
+    <h3>Detalhes Mensais</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Mês</th>
+                    <th>Operadora</th>
+                    <th>Total de Utilizadores</th>
+                    <th>Total de Carregamentos</th>
+                    <th>Total de Levantamentos</th>
+                    <th>Total de Transferências</th>
+                    <th>Total de Estações Móveis</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for indicador in indicadores %}
+                <tr>
+                    <td>{{ indicador.get_mes_display }}</td>
+                    <td>{{ indicador.get_operadora_display }}</td>
+                    <td>{{ indicador.calcular_total_utilizadores }}</td>
+                    <td>{{ indicador.calcular_total_carregamentos }}</td>
+                    <td>{{ indicador.calcular_total_levantamentos }}</td>
+                    <td>{{ indicador.calcular_total_transferencias }}</td>
+                    <td>{{ indicador.calcular_total_estacoes_moveis }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="mt-4 mb-4">
+        <a href="{% url 'questionarios:estacoes_moveis_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
+        <button class="btn btn-primary" onclick="window.print()">
+            <i class="fas fa-print"></i> Imprimir Relatório
+        </button>
+    </div>
+</div>
+{% endblock %}

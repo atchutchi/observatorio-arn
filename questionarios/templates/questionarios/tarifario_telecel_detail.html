@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalhes do Tarifário TELECEL</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Informações Gerais
+        </div>
+        <div class="card-body">
+            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
+            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
+            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
+             <p><strong>Taxa Imposto:</strong> {{ indicador.taxa_imposto }}</p>
+             <p><strong>Link Plano:</strong> <a href="{{ indicador.link_plano }}" target="_blank">{{ indicador.link_plano }}</a></p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Equipamentos
+        </div>
+        <div class="card-body">
+            <p><strong>Huawei 4G LTE:</strong> {{ indicador.huawei_4g_lte }}</p>
+            <p><strong>Huawei Mobile Wi-Fi 4G:</strong> {{ indicador.huawei_mobile_wifi_4g }}</p>
+        </div>
+    </div>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Pacotes Dados (Ex: Diários, Semanais, Mensais)
+        </div>
+        <div class="card-body">
+            <p><strong>30MB:</strong> {{ indicador.pacote_30mb }}</p>
+            <p><strong>100MB:</strong> {{ indicador.pacote_100mb }}</p>
+            <p><strong>300MB:</strong> {{ indicador.pacote_300mb }}</p>
+            <p><strong>1GB:</strong> {{ indicador.pacote_1gb }}</p>
+             <p><strong>650MB (Semanal):</strong> {{ indicador.pacote_650mb }}</p>
+            <p><strong>1000MB (Semanal):</strong> {{ indicador.pacote_1000mb }}</p>
+            <p><strong>1.5GB (Mensal):</strong> {{ indicador.pacote_1_5gb }}</p>
+             {# Add other package details as needed #}
+        </div>
+    </div>
+
+
+    <a href="{% url 'questionarios:tarifario_telecel_update' indicador.pk %}" class="btn btn-primary">Editar</a>
+    <a href="{% url 'questionarios:tarifario_telecel_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
+</div>
+{% endblock %} 

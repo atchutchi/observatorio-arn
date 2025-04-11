@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h5 class="mb-0">Confirmar Exclusão</h5>
+        </div>
+        <div class="card-body">
+            <h5>Você tem certeza que deseja excluir este indicador de investimento?</h5>
+            <p>
+                <strong>Operadora:</strong> {{ object.get_operadora_display }}<br>
+                <strong>Período:</strong> {{ object.get_mes_display }}/{{ object.ano }}<br>
+                <strong>Total Geral:</strong> {{ object.calcular_total_geral|floatformat:2 }} FCFA
+            </p>
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                Esta ação não pode ser desfeita!
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Confirmar Exclusão
+                </button>
+                <a href="{% url \'\'questionarios:investimento_list\'\' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

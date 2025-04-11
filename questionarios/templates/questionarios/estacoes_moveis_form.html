@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/estacoes_moveis.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Estações Móveis</h2>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Informações Gerais
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.operadora.label_tag }}
+                        {{ form.operadora }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.ano.label_tag }}
+                        {{ form.ano }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.mes.label_tag }}
+                        {{ form.mes }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Número total de estações móveis activos
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.afectos_planos_pos_pagos.label_tag }}
+                        {{ form.afectos_planos_pos_pagos }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.afectos_planos_pos_pagos_utilizacao.label_tag }}
+                        {{ form.afectos_planos_pos_pagos_utilizacao }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.afectos_planos_pre_pagos.label_tag }}
+                        {{ form.afectos_planos_pre_pagos }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.afectos_planos_pre_pagos_utilizacao.label_tag }}
+                        {{ form.afectos_planos_pre_pagos_utilizacao }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.associados_situacoes_especificas.label_tag }}
+                        {{ form.associados_situacoes_especificas }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.outros_residuais.label_tag }}
+                        {{ form.outros_residuais }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Utilizadores de serviço
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        {{ form.sms.label_tag }}
+                        {{ form.sms }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.mms.label_tag }}
+                        {{ form.mms }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.mobile_tv.label_tag }}
+                        {{ form.mobile_tv }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.roaming_internacional_out_parc_roaming_out.label_tag }}
+                        {{ form.roaming_internacional_out_parc_roaming_out }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        {{ form.banda_larga_movel.label_tag }}
+                        {{ form.banda_larga_movel }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.utilizadores_5g_upgrades.label_tag }}
+                        {{ form.utilizadores_5g_upgrades }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.utilizadores_servico_acesso_internet_banda_larga.label_tag }}
+                        {{ form.utilizadores_servico_acesso_internet_banda_larga }}
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        {{ form.utilizadores_placas_box.label_tag }}
+                        {{ form.utilizadores_placas_box }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.utilizadores_placas_usb.label_tag }}
+                        {{ form.utilizadores_placas_usb }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.utilizadores_servico_4g.label_tag }}
+                        {{ form.utilizadores_servico_4g }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Serviços de Mobile Money
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.numero_utilizadores.label_tag }}
+                        {{ form.numero_utilizadores }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.numero_utilizadores_mulher.label_tag }}
+                        {{ form.numero_utilizadores_mulher }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.numero_utilizadores_homem.label_tag }}
+                        {{ form.numero_utilizadores_homem }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.total_carregamentos.label_tag }}
+                        {{ form.total_carregamentos }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.total_carregamentos_mulher.label_tag }}
+                        {{ form.total_carregamentos_mulher }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.total_carregamentos_homem.label_tag }}
+                        {{ form.total_carregamentos_homem }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.total_levantamentos.label_tag }}
+                        {{ form.total_levantamentos }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.total_levantamentos_mulher.label_tag }}
+                        {{ form.total_levantamentos_mulher }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.total_levantamentos_homem.label_tag }}
+                        {{ form.total_levantamentos_homem }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.total_transferencias.label_tag }}
+                        {{ form.total_transferencias }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.total_transferencias_mulher.label_tag }}
+                        {{ form.total_transferencias_mulher }}
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        {{ form.total_transferencias_homem.label_tag }}
+                        {{ form.total_transferencias_homem }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/estacoes_moveis_form_validation.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/estacoes_moveis.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalhes do Indicador de Estações Móveis</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Informações Gerais
+        </div>
+        <div class="card-body">
+            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
+            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
+            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Número total de estações móveis activos
+        </div>
+        <div class="card-body">
+            <p><strong>Afectos a planos Pós-pagos:</strong> {{ indicador.afectos_planos_pos_pagos }}</p>
+            <p><strong>Afectos a planos Pós-pagos (utilização):</strong> {{ indicador.afectos_planos_pos_pagos_utilizacao }}</p>
+            <p><strong>Afectos a planos Pré-pagos:</strong> {{ indicador.afectos_planos_pre_pagos }}</p>
+            <p><strong>Afectos a planos Pré-pagos (utilização):</strong> {{ indicador.afectos_planos_pre_pagos_utilizacao }}</p>
+            <p><strong>Associados a situações específicas:</strong> {{ indicador.associados_situacoes_especificas|default_if_none:"N/A" }}</p>
+            <p><strong>Outros (residuais):</strong> {{ indicador.outros_residuais|default_if_none:"N/A" }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Utilizadores de serviço
+        </div>
+        <div class="card-body">
+            <p><strong>SMS:</strong> {{ indicador.sms }}</p>
+            <p><strong>MMS:</strong> {{ indicador.mms|default_if_none:"N/A" }}</p>
+            <p><strong>Mobile TV:</strong> {{ indicador.mobile_tv|default_if_none:"N/A" }}</p>
+            <p><strong>Roaming Internacional - OUT (PARC ROMING OUT):</strong> {{ indicador.roaming_internacional_out_parc_roaming_out }}</p>
+            <p><strong>Banda larga móvel:</strong> {{ indicador.banda_larga_movel }}</p>
+            <p><strong>Utilizadores 5G e upgrades:</strong> {{ indicador.utilizadores_5g_upgrades }}</p>
+            <p><strong>Utilizadores de serviço de acesso à Internet em banda larga:</strong> {{ indicador.utilizadores_servico_acesso_internet_banda_larga }}</p>
+            <p><strong>Utilizadores com ligação através de Placas (Box):</strong> {{ indicador.utilizadores_placas_box }}</p>
+            <p><strong>Utilizadores com ligação através de Placas (USB):</strong> {{ indicador.utilizadores_placas_usb }}</p>
+            <p><strong>Utilizadores do serviço 4G:</strong> {{ indicador.utilizadores_servico_4g }}</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            Serviços de Mobile Money
+        </div>
+        <div class="card-body">
+            <p><strong>Número de utilizadores:</strong> {{ indicador.numero_utilizadores }}</p>
+            <p><strong>Número de utilizadores (Mulher):</strong> {{ indicador.numero_utilizadores_mulher }}</p>
+            <p><strong>Número de utilizadores (Homem):</strong> {{ indicador.numero_utilizadores_homem }}</p>
+            <p><strong>Total de carregamentos:</strong> {{ indicador.total_carregamentos }}</p>
+            <p><strong>Total de carregamentos (Mulher):</strong> {{ indicador.total_carregamentos_mulher }}</p>
+            <p><strong>Total de carregamentos (Homem):</strong> {{ indicador.total_carregamentos_homem }}</p>
+            <p><strong>Total de levantamentos:</strong> {{ indicador.total_levantamentos }}</p>
+            <p><strong>Total de levantamentos (Mulher):</strong> {{ indicador.total_levantamentos_mulher }}</p>
+            <p><strong>Total de levantamentos (Homem):</strong> {{ indicador.total_levantamentos_homem }}</p>
+            <p><strong>Total de transferências:</strong> {{ indicador.total_transferencias }}</p>
+            <p><strong>Total de transferências (Mulher):</strong> {{ indicador.total_transferencias_mulher }}</p>
+            <p><strong>Total de transferências (Homem):</strong> {{ indicador.total_transferencias_homem }}</p>
+        </div>
+    </div>
+
+    <a href="{% url 'questionarios:estacoes_moveis_update' indicador.pk %}" class="btn btn-primary">Editar</a>
+    <a href="{% url 'questionarios:estacoes_moveis_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
+</div>
+{% endblock %}

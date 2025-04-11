@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/estacoes_moveis.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Indicadores de Estações Móveis</h2>
+        <a href="{% url 'questionarios:estacoes_moveis_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Adicionar Novo
+        </a>
+    </div>
+
+    {% include 'questionarios/partials/indicator_filters.html' %}
+
+    <!-- Tabela de Dados -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Resultados</h5>
+        </div>
+         <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Operadora</th>
+                            <th>Ano</th>
+                            <th>Mês</th>
+                            <th>Total Utilizadores</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for indicador in object_list %}
+                        <tr>
+                            <td>{{ indicador.get_operadora_display }}</td>
+                            <td>{{ indicador.ano }}</td>
+                            <td>{{ indicador.get_mes_display }}</td>
+                            <td>{{ indicador.numero_utilizadores|default:"-" }}</td>
+                            <td>
+                                <a href="{% url 'questionarios:estacoes_moveis_detail' indicador.pk %}" class="btn btn-info btn-sm" title="Detalhes">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'questionarios:estacoes_moveis_update' indicador.pk %}" class="btn btn-warning btn-sm" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'questionarios:estacoes_moveis_delete' indicador.pk %}" class="btn btn-danger btn-sm" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-3">Nenhum indicador encontrado com os filtros aplicados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

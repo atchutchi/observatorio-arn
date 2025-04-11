@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Tarifário TELECEL</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Informações Gerais
+            </div>
+            <div class="card-body">
+                 <div class="row">
+                     <div class="col-md-6 mb-3">
+                        {{ form.ano.label_tag }}
+                        {{ form.ano }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.mes.label_tag }}
+                        {{ form.mes }}
+                    </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-6 mb-3">
+                        {{ form.taxa_imposto.label_tag }}
+                        {{ form.taxa_imposto }}
+                    </div>
+                     <div class="col-md-6 mb-3">
+                        {{ form.link_plano.label_tag }}
+                        {{ form.link_plano }}
+                    </div>
+                 </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Equipamentos
+            </div>
+            <div class="card-body">
+                 <div class="row">
+                     <div class="col-md-6 mb-3">
+                        {{ form.huawei_4g_lte.label_tag }}
+                        {{ form.huawei_4g_lte }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.huawei_mobile_wifi_4g.label_tag }}
+                        {{ form.huawei_mobile_wifi_4g }}
+                    </div>
+                 </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Pacotes Diários
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">{{ form.pacote_30mb.label_tag }} {{ form.pacote_30mb }}</div>
+                    <div class="col-md-3 mb-3">{{ form.pacote_100mb.label_tag }} {{ form.pacote_100mb }}</div>
+                    <div class="col-md-3 mb-3">{{ form.pacote_300mb.label_tag }} {{ form.pacote_300mb }}</div>
+                    <div class="col-md-3 mb-3">{{ form.pacote_1gb.label_tag }} {{ form.pacote_1gb }}</div>
+                </div>
+            </div>
+        </div>
+
+        {# Add cards for Semanais, Mensais, Yello, Ilimitados similarly #}
+
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="{% url 'questionarios:tarifario_telecel_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %} 

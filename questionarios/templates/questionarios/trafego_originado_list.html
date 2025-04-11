@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h2 class="mb-4">Lista de Indicadores de Tráfego Originado</h2>
+    <a href="{% url 'questionarios:trafego_originado_create' %}" class="btn btn-primary mb-3">Adicionar Novo Indicador</a>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Operadora</th>
+                    <th>Ano</th>
+                    <th>Mês</th>
+                    <th>Tráfego de Dados 3G</th>
+                    <th>Tráfego de Dados 4G</th>
+                    <th>SMS Total</th>
+                    <th>Voz Total</th>
+                    <th>Chamadas Total</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for indicador in trafego_originado_list %}
+                <tr>
+                    <td>{{ indicador.get_operadora_display }}</td>
+                    <td>{{ indicador.ano }}</td>
+                    <td>{{ indicador.mes }}</td>
+                    <td>{{ indicador.trafego_dados_3g_upgrade }} Mbit/s</td>
+                    <td>{{ indicador.trafego_dados_4g }} Mbit/s</td>
+                    <td>{{ indicador.sms_total }}</td>
+                    <td>{{ indicador.voz_total }} minutos</td>
+                    <td>{{ indicador.chamadas_total }}</td>
+                    <td>
+                        <a href="{% url 'questionarios:trafego_originado_detail' indicador.pk %}" class="btn btn-info btn-sm">Detalhes</a>
+                        <a href="{% url 'questionarios:trafego_originado_update' indicador.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="{% url 'questionarios:trafego_originado_delete' indicador.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">Nenhum indicador cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'questionarios/js/trafego_originado_list.js' %}"></script>
+{% endblock %}
