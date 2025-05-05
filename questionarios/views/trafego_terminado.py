@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 from ..models.trafego_terminado import TrafegoTerminadoIndicador
 from ..forms.trafego_terminado import TrafegoTerminadoForm
+from .base_views import FilteredListView
 
 class TrafegoTerminadoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = TrafegoTerminadoIndicador
@@ -15,18 +16,11 @@ class TrafegoTerminadoCreateView(LoginRequiredMixin, PermissionRequiredMixin, Cr
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class TrafegoTerminadoListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TrafegoTerminadoListView(FilteredListView):
     model = TrafegoTerminadoIndicador
     template_name = 'questionarios/trafego_terminado_list.html'
-    context_object_name = 'trafego_terminado_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_trafegoterminadoindicador'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
 
 class TrafegoTerminadoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = TrafegoTerminadoIndicador

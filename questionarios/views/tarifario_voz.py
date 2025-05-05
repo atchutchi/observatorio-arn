@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from ..models.tarifario_voz import TarifarioVozOrangeIndicador, TarifarioVozMTNIndicador
 from ..forms.tarifario_voz import TarifarioVozOrangeForm, TarifarioVozMTNForm
+from .base_views import FilteredListView
 
 # Views para Orange
 class TarifarioVozOrangeCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -16,10 +17,10 @@ class TarifarioVozOrangeCreateView(LoginRequiredMixin, PermissionRequiredMixin, 
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class TarifarioVozOrangeListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TarifarioVozOrangeListView(FilteredListView):
     model = TarifarioVozOrangeIndicador
     template_name = 'questionarios/tarifario_orange_list.html'
-    context_object_name = 'tarifario_orange_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_tarifariovozorangeindicador'
 
 class TarifarioVozOrangeUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
@@ -120,10 +121,10 @@ class TarifarioVozMTNCreateView(LoginRequiredMixin, PermissionRequiredMixin, Cre
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class TarifarioVozMTNListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TarifarioVozMTNListView(FilteredListView):
     model = TarifarioVozMTNIndicador
     template_name = 'questionarios/tarifario_mtn_list.html'
-    context_object_name = 'tarifario_mtn_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_tarifariovozmtnindicador'
 
 class TarifarioVozMTNUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):

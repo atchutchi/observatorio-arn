@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from ..models import TarifarioVozTelecelIndicador
 from ..forms import TarifarioVozTelecelForm
+from .base_views import FilteredListView
 
 # Views para TELECEL (mirrored from MTN)
 class TarifarioVozTelecelCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -16,10 +17,10 @@ class TarifarioVozTelecelCreateView(LoginRequiredMixin, PermissionRequiredMixin,
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class TarifarioVozTelecelListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TarifarioVozTelecelListView(FilteredListView):
     model = TarifarioVozTelecelIndicador
     template_name = 'questionarios/tarifario_telecel_list.html' # Use specific template
-    context_object_name = 'tarifario_telecel_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_tarifariovoztelecelindicador' # Needs new permission
 
 class TarifarioVozTelecelUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):

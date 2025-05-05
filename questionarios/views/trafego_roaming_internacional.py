@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from ..models.trafego_roaming_internacional import TrafegoRoamingInternacionalIndicador
 from ..forms.trafego_roaming_internacional import TrafegoRoamingInternacionalForm
+from .base_views import FilteredListView
 
 class TrafegoRoamingInternacionalCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = TrafegoRoamingInternacionalIndicador
@@ -15,18 +16,11 @@ class TrafegoRoamingInternacionalCreateView(LoginRequiredMixin, PermissionRequir
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class TrafegoRoamingInternacionalListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TrafegoRoamingInternacionalListView(FilteredListView):
     model = TrafegoRoamingInternacionalIndicador
     template_name = 'questionarios/trafego_roaming_internacional_list.html'
-    context_object_name = 'trafego_roaming_internacional_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_trafegoroaminginternacionalindicador'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
 
 class TrafegoRoamingInternacionalUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = TrafegoRoamingInternacionalIndicador

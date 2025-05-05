@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from ..models.trafego_originado import TrafegoOriginadoIndicador
 from ..forms.trafego_originado import TrafegoOriginadoForm
+from .base_views import FilteredListView
 
 class TrafegoOriginadoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = TrafegoOriginadoIndicador
@@ -15,18 +16,11 @@ class TrafegoOriginadoCreateView(LoginRequiredMixin, PermissionRequiredMixin, Cr
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class TrafegoOriginadoListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TrafegoOriginadoListView(FilteredListView):
     model = TrafegoOriginadoIndicador
     template_name = 'questionarios/trafego_originado_list.html'
-    context_object_name = 'trafego_originado_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_trafegooriginadoindicador'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

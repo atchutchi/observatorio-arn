@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView, FormView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, FormView, ListView
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.views.generic.detail import SingleObjectMixin
@@ -8,6 +8,7 @@ from ..models.trafego_internet import TrafegoInternetIndicador
 from ..forms.trafego_internet import TrafegoInternetForm
 from ..forms.upload import ExcelUploadForm
 from ..excel_parser import process_excel_file
+from .base_views import FilteredListView
 
 class TrafegoInternetCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = TrafegoInternetIndicador
@@ -20,19 +21,12 @@ class TrafegoInternetCreateView(LoginRequiredMixin, PermissionRequiredMixin, Cre
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class TrafegoInternetListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class TrafegoInternetListView(FilteredListView):
     model = TrafegoInternetIndicador
     template_name = 'questionarios/trafego_internet_list.html'
-    context_object_name = 'trafego_internet_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_trafegointernettindicador'
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
-    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['upload_form'] = ExcelUploadForm()

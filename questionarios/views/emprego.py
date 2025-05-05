@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from ..models.emprego import EmpregoIndicador
 from ..forms.emprego import EmpregoForm
+from .base_views import FilteredListView
 
 class EmpregoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = EmpregoIndicador
@@ -15,18 +16,11 @@ class EmpregoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class EmpregoListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class EmpregoListView(FilteredListView):
     model = EmpregoIndicador
     template_name = 'questionarios/emprego_list.html'
-    context_object_name = 'emprego_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_empregoindicador'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
 
 class EmpregoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = EmpregoIndicador

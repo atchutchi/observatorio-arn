@@ -17,8 +17,15 @@
             </div>
             <div class="col-md-3">
                 <label for="ano" class="form-label">Ano</label>
-                {# Ideally, populate this dynamically based on available data #}
-                <input type="number" name="ano" id="ano" class="form-control form-control-sm" value="{{ request.GET.ano }}" placeholder="Ex: 2024">
+                <div class="input-group input-group-sm">
+                    <button type="button" class="btn btn-outline-secondary" onclick="decrementYear()">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="number" name="ano" id="ano" class="form-control" value="{{ request.GET.ano }}" placeholder="Ex: 2024" min="2000" max="2099">
+                    <button type="button" class="btn btn-outline-secondary" onclick="incrementYear()">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
             </div>
             <div class="col-md-3">
                 <label for="mes" class="form-label">Mês</label>
@@ -39,4 +46,20 @@
              {% endif %}
         </form>
     </div>
-</div> 
+</div>
+
+<script>
+function incrementYear() {
+    var anoInput = document.getElementById('ano');
+    var value = parseInt(anoInput.value) || 2024;
+    anoInput.value = value + 1;
+}
+
+function decrementYear() {
+    var anoInput = document.getElementById('ano');
+    var value = parseInt(anoInput.value) || 2024;
+    if (value > 2000) {
+        anoInput.value = value - 1;
+    }
+}
+</script> 

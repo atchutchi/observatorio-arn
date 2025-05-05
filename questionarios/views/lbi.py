@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from ..models.lbi import LBIIndicador
 from ..forms.lbi import LBIForm
+from .base_views import FilteredListView
 
 class LBICreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = LBIIndicador
@@ -15,18 +16,11 @@ class LBICreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class LBIListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class LBIListView(FilteredListView):
     model = LBIIndicador
     template_name = 'questionarios/lbi_list.html'
-    context_object_name = 'lbi_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_lbiindicador'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
 
 class LBIUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = LBIIndicador

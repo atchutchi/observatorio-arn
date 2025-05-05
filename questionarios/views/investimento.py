@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from ..models.investimento import InvestimentoIndicador  # Importação específica do modelo
 from ..forms.investimento import InvestimentoForm
+from .base_views import FilteredListView
 
 
 class InvestimentoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -16,18 +17,11 @@ class InvestimentoCreateView(LoginRequiredMixin, PermissionRequiredMixin, Create
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class InvestimentoListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class InvestimentoListView(FilteredListView):
     model = InvestimentoIndicador
     template_name = 'questionarios/investimento_list.html'
-    context_object_name = 'investimento_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_investimentoindicador'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
 
 class InvestimentoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = InvestimentoIndicador

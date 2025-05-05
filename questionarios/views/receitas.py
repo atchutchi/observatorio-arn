@@ -1,9 +1,10 @@
 # views/receitas.py
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 from ..models.receitas import ReceitasIndicador
 from ..forms.receitas import ReceitasForm
+from .base_views import FilteredListView
 
 class ReceitasCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = ReceitasIndicador
@@ -16,18 +17,11 @@ class ReceitasCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class ReceitasListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class ReceitasListView(FilteredListView):
     model = ReceitasIndicador
     template_name = 'questionarios/receitas_list.html'
-    context_object_name = 'receitas_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_receitasindicador'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
 
 class ReceitasUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = ReceitasIndicador

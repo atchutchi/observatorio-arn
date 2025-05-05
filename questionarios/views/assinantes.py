@@ -1,8 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView
 from ..models import AssinantesIndicador
 from ..forms import AssinantesIndicadorForm
+from .base_views import FilteredListView
 
 class AssinantesCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = AssinantesIndicador
@@ -16,18 +17,11 @@ class AssinantesCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateVi
     #     form.instance.criado_por = self.request.user
     #     return super().form_valid(form)
 
-class AssinantesListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class AssinantesListView(FilteredListView):
     model = AssinantesIndicador
     template_name = 'questionarios/assinantes_list.html'
-    context_object_name = 'assinantes_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_assinantesindicador'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
 
 class AssinantesUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = AssinantesIndicador

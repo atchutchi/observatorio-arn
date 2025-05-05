@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from ..models import InternetFixoIndicador
 from ..forms import InternetFixoForm
+from .base_views import FilteredListView
 
 class InternetFixoCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = InternetFixoIndicador
@@ -15,18 +16,11 @@ class InternetFixoCreateView(LoginRequiredMixin, PermissionRequiredMixin, Create
         form.instance.criado_por = self.request.user
         return super().form_valid(form)
 
-class InternetFixoListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class InternetFixoListView(FilteredListView):
     model = InternetFixoIndicador
     template_name = 'questionarios/internet_fixo_list.html'
-    context_object_name = 'internet_fixo_list'
+    context_object_name = 'object_list'
     permission_required = 'questionarios.view_internetfixoindicador'
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        operadora = self.request.GET.get('operadora')
-        if operadora:
-            queryset = queryset.filter(operadora=operadora)
-        return queryset.order_by('-ano', '-mes')
 
 class InternetFixoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = InternetFixoIndicador
