@@ -20,10 +20,11 @@ import json
 import decimal
 from datetime import datetime
 from django.db.models.functions import TruncMonth, TruncQuarter, ExtractYear, ExtractMonth
-from django.db.models import FloatField, Case, When, Value
+from django.db.models import FloatField, Case, When, Value, DecimalField
 from decimal import Decimal
 from django.db.models.functions import Cast
 from django.core.exceptions import FieldDoesNotExist
+from django.db import models
 
 logger = logging.getLogger(__name__)
 
@@ -663,16 +664,8 @@ def get_quarterly_data(model, year, operadora=None, aggregate_fields={}):
                     valid_aggregates[f'total_{field}'] = agg_func(field)
                 except FieldDoesNotExist:
                     logger.warning(f"Field '{field}' does not exist on model {model.__name__}. Skipping aggregation.")
-                    # Use Value(0) or appropriate default like Value(Decimal('0.0'))
-                    # Check field type for appropriate default
-                    try: 
-                        field_type = model._meta.get_field(field).get_internal_type()
-                        if field_type in ('DecimalField', 'FloatField'):
-                             valid_aggregates[f'total_{field}'] = Value(Decimal('0.0'), output_field=DecimalField())
-                        else:
-                             valid_aggregates[f'total_{field}'] = Value(0) 
-                    except FieldDoesNotExist: # Should not happen if caught above, but for safety
-                         valid_aggregates[f'total_{field}'] = Value(0)
+                    # Use a default value since we don't know the field type
+                    valid_aggregates[f'total_{field}'] = Value(Decimal('0.0'), output_field=DecimalField())
             
             if valid_aggregates:
                 try:
@@ -711,8 +704,8 @@ def get_annual_data(model, year, operadora=None, aggregate_fields={}):
                      valid_aggregates[f'total_{field}'] = agg_func(field)
             except FieldDoesNotExist:
                 logger.warning(f"Field '{field}' does not exist on model {model.__name__}. Skipping aggregation.")
-                # Provide appropriate zero value based on expected type
-                valid_aggregates[f'total_{field}'] = Value(Decimal('0.0')) if isinstance(model._meta.get_field(field), (models.DecimalField, models.FloatField)) else Value(0) 
+                # Provide appropriate zero value since we don't know the field type
+                valid_aggregates[f'total_{field}'] = Value(Decimal('0.0'))
         
         if valid_aggregates:
             try:
@@ -930,8 +923,13 @@ class LBIAnalysisView(BaseAnalysisView):
     analysis_title = "Análise LBI (Links Banda Larga Internacional)"
     indicator_model = LBIIndicador
     aggregate_fields = {
-        'capacidade_contratada_mbps': Sum,
-        'trafego_medio_semanal_mbps': Avg,
+        'contratada_down': Sum,
+        'contratada_up': Sum,
+        'utilizada_down': Sum,
+        'utilizada_up': Sum,
+        'satelite': Sum,
+        'cabo_fibra_optica': Sum,
+        'feixe_hertziano': Sum,
     }
     template_name = 'questionarios/analise/analise_lbi.html'
 
