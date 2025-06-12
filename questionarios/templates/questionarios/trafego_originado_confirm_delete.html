@@ -8,6 +8,6 @@
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
     </form>
-    <a href="{% url \'\'questionarios:trafego_originado_list\'\' %}" class="btn btn-secondary mt-2">Cancelar</a>
+    <a href="{% url 'questionarios:trafego_originado_list' %}" class="btn btn-secondary mt-2">Cancelar</a>
 </div>
 {% endblock %}
