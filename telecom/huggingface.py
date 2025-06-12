@@ -70,7 +70,7 @@ def get_fallback_response(inputs):
     
     # Respostas padrão baseadas em palavras-chave
     if any(word in question_lower for word in ["operadora", "empresa", "orange", "mtn", "telecel"]):
-        return "O mercado de telecomunicações da Guiné-Bissau é composto principalmente por três operadoras: Orange, MTN e TELECEL. Cada uma possui diferentes níveis de penetração no mercado."
+        return "O mercado de telecomunicações da Guiné-Bissau é composto principalmente por duas operadoras: Orange e TELECEL. Cada uma possui diferentes níveis de penetração no mercado."
     
     elif any(word in question_lower for word in ["assinante", "usuário", "cliente", "subscritores"]):
         return "Os dados de assinantes variam por operadora e são atualizados periodicamente através dos questionários. Para dados específicos, verifique os relatórios disponíveis."

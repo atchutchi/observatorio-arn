@@ -26,21 +26,36 @@ def get_latest_year(model):
     return model.objects.aggregate(latest_year=Max('ano')).get('latest_year')
 
 def index(request):
-    # Fetch basic stats for the homepage cards
-    total_operadoras = Operadora.objects.filter(ativo=True).count()
-    servicos = TipoServico.objects.all()
-    
-    # Placeholder data for other cards until specific logic is defined
-    total_questionarios = 13 # Count of distinct indicator types managed
-    total_relatorios = 4 # Placeholder
-    
-    context = {
-        'total_operadoras': total_operadoras,
-        'servicos': servicos,
-        'total_questionarios': total_questionarios,
-        'total_relatorios': total_relatorios,
-    }
-    return render(request, 'home/index.html', context)
+    try:
+        # Fetch basic stats for the homepage cards
+        total_operadoras = Operadora.objects.filter(ativo=True).count()
+        servicos = TipoServico.objects.all()
+        
+        # Placeholder data for other cards until specific logic is defined
+        total_questionarios = 13 # Count of distinct indicator types managed
+        total_relatorios = 4 # Placeholder
+        
+        context = {
+            'total_operadoras': total_operadoras,
+            'servicos': servicos,
+            'total_questionarios': total_questionarios,
+            'total_relatorios': total_relatorios,
+        }
+        
+        logger.info(f"Index page loaded successfully. Operadoras: {total_operadoras}, Servicos: {servicos.count()}")
+        return render(request, 'home/index.html', context)
+        
+    except Exception as e:
+        logger.error(f"Erro ao carregar página inicial: {e}")
+        # Fallback context in case of database errors
+        context = {
+            'total_operadoras': 0,
+            'servicos': [],
+            'total_questionarios': 0,
+            'total_relatorios': 0,
+            'error_message': 'Erro ao carregar dados. Tente novamente mais tarde.'
+        }
+        return render(request, 'home/index.html', context)
 
 @login_required
 def dashboard(request):
