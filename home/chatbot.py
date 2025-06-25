@@ -10,7 +10,7 @@ from django.db.models import Q, Sum, Avg, Max # Import aggregators
 from decimal import Decimal
 
 # Import Hugging Face client
-from huggingface_hub import InferenceClient
+from huggingface_hub import InferenceApi
 
 # Import your actual indicator models 
 # (Ensure all necessary models are imported)
@@ -139,16 +139,16 @@ class Chatbot:
             # --- Chamada à API Hugging Face --- 
             logger.info(f"Enviando para API Hugging Face. Histórico: {len(conversation_history)} mensagens.")
             try:
-                client = InferenceClient(model=self.model, token=self.api_token)
+                client = InferenceApi(repo_id=self.model, token=self.api_token)
                 formatted_prompt = self._format_history_for_mistral(conversation_history)
                 
-                api_response_raw = client.text_generation(
-                    formatted_prompt,
-                    max_new_tokens=self.max_tokens,
-                    temperature=self.temperature,
-                    do_sample=True,
-                    # top_p=0.9, # Optional: add nucleus sampling 
-                    # repetition_penalty=1.1 # Optional: reduce repetition
+                api_response_raw = client(
+                    inputs=formatted_prompt,
+                    parameters={
+                        "max_new_tokens": self.max_tokens,
+                        "temperature": self.temperature,
+                        "do_sample": True,
+                    }
                 )
                 
                 assistant_message = self._process_mistral_response(api_response_raw)
@@ -271,10 +271,19 @@ class Chatbot:
 
         return prompt
 
-    def _process_mistral_response(self, response: str) -> str:
+    def _process_mistral_response(self, response) -> str:
         """Limpa a resposta bruta do modelo Mistral."""
+        # A InferenceApi retorna uma lista de dicionários ou um dicionário
+        if isinstance(response, list) and len(response) > 0:
+            # Pega o primeiro resultado
+            text = response[0].get('generated_text', '')
+        elif isinstance(response, dict):
+            text = response.get('generated_text', '')
+        else:
+            text = str(response)
+        
         # Remove tags and potential artifacts
-        cleaned = response.replace("<s>", "").replace("</s>", "")
+        cleaned = text.replace("<s>", "").replace("</s>", "")
         
         # Mistral often repeats the last instruction/user message.
         # We try to remove this if the response starts with '[INST]' or the last user message.

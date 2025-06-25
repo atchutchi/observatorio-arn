@@ -65,7 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # Middleware do allauth
+    # 'allauth.account.middleware.AccountMiddleware',  # Middleware do allauth - Comentado para versão 0.54.0
     
     # Logging middleware
     'observatorio.utils.middleware.RequestLoggingMiddleware',  # Log de requisições
