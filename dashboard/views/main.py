@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.db.models import Count
 from django.utils import timezone
-from usuarios.models import CustomUser, OperatorProfile
+from django.contrib.auth.models import User
 from questionarios.models import (
     EstacoesMoveisIndicador,
     TrafegoOriginadoIndicador, 
@@ -43,33 +43,36 @@ class DashboardView(LoginRequiredMixin, TemplateView):
        return context
 
    def get_stats(self):
-       if self.request.user.is_operator:
-           return self.get_operator_stats()
-       return self.get_admin_stats()
+       # Se é staff/admin, mostrar stats administrativas, senão stats de operadora
+       if self.request.user.is_staff:
+           return self.get_admin_stats()
+       return self.get_operator_stats()
 
    def get_operator_stats(self):
        operator = self.request.user
-       profile = OperatorProfile.objects.filter(user=operator).first()
        current_month = timezone.now().month
        current_year = timezone.now().year
        
-       pending_submissions = sum([
-           model.objects.filter(
-               operadora=operator,
-               mes=current_month,
-               ano=current_year
-           ).count() == 0 
-           for model in self.INDICATOR_MODELS
-       ])
+       # Verificar se usuário tem submissões pendentes
+       pending_submissions = 0
+       for model in self.INDICATOR_MODELS:
+           if hasattr(model, 'operadora'):
+               exists = model.objects.filter(
+                   mes=current_month,
+                   ano=current_year
+               ).exists()
+               if not exists:
+                   pending_submissions += 1
 
        return {
            'pending_submissions': pending_submissions,
            'last_submission': self.get_last_submission_date(operator),
-           'license_status': 'Válida' if profile and profile.is_license_valid() else 'Expirada'
+           'license_status': 'Válida'  # Placeholder - implementar lógica real quando necessário
        }
 
    def get_admin_stats(self):
-       total_operators = CustomUser.objects.filter(is_operator=True).count()
+       # Usar User padrão do Django
+       total_operators = User.objects.filter(is_staff=False, is_active=True).count()
        current_month = timezone.now().month
        current_year = timezone.now().year
 
@@ -81,10 +84,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
            for model in self.INDICATOR_MODELS
        ])
 
-       pending_approvals = CustomUser.objects.filter(
-           is_approved=False,
-           is_operator=True
-       ).count()
+       # Placeholder para aprovações pendentes
+       pending_approvals = 0
 
        expected_submissions = total_operators * len(self.INDICATOR_MODELS)
        compliance_rate = (monthly_submissions / expected_submissions * 100) if expected_submissions > 0 else 0

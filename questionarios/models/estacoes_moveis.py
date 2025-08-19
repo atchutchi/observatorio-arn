@@ -22,17 +22,56 @@ class EstacoesMoveisIndicador(IndicadorBase):
     total_transferencias_mulher = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     total_transferencias_homem = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
-    # Utilizadores de serviço
-    sms = models.IntegerField(default=0)
-    mms = models.IntegerField(null=True, blank=True)
-    mobile_tv = models.IntegerField(null=True, blank=True)
-    roaming_internacional_out_parc_roaming_out = models.IntegerField(default=0)
-    banda_larga_movel = models.IntegerField(default=0)
-    utilizadores_5g_upgrades = models.IntegerField(default=0)
-    utilizadores_servico_acesso_internet_banda_larga = models.IntegerField(default=0)
-    utilizadores_placas_box = models.IntegerField(default=0)
-    utilizadores_placas_usb = models.IntegerField(default=0)
-    utilizadores_servico_4g = models.IntegerField(default=0)
+    # Utilizadores de serviço básicos
+    sms = models.IntegerField(verbose_name="SMS", default=0)
+    mms = models.IntegerField(verbose_name="MMS", null=True, blank=True)
+    mobile_tv = models.IntegerField(verbose_name="Mobile TV", null=True, blank=True)
+    roaming_internacional_out_parc_roaming_out = models.IntegerField(
+        verbose_name="Roaming Internacional Out", default=0)
+
+    # Banda larga (3G + 4G) - Secção 3G
+    utilizadores_servico_3g_upgrades = models.IntegerField(
+        verbose_name="Utilizadores de serviço de 3G e upgrades", 
+        default=0,
+        help_text="Utilizadores de serviço de 3G e upgrades"
+    )
+    utilizadores_acesso_internet_3g = models.IntegerField(
+        verbose_name="Utilizadores acesso Internet banda larga (3G)", 
+        default=0,
+        help_text="Utilizadores de serviço de acesso à Internet em banda larga (3G)"
+    )
+    utilizadores_3g_placas_box = models.IntegerField(
+        verbose_name="3G - Placas (Box)", 
+        default=0,
+        help_text="dos quais com ligação através de Placas (Box) - 3G"
+    )
+    utilizadores_3g_placas_usb = models.IntegerField(
+        verbose_name="3G - Placas (USB)", 
+        default=0,
+        help_text="dos quais com ligação através de Placas (USB) - 3G"
+    )
+
+    # Banda larga (3G + 4G) - Secção 4G
+    utilizadores_servico_4g = models.IntegerField(
+        verbose_name="Utilizadores de serviço de 4G", 
+        default=0,
+        help_text="Utilizadores de serviço de 4G"
+    )
+    utilizadores_acesso_internet_4g = models.IntegerField(
+        verbose_name="Utilizadores acesso Internet banda larga (4G)", 
+        default=0,
+        help_text="Utilizadores do serviço de acesso à Internet em banda larga (4G)"
+    )
+    utilizadores_4g_placas_box = models.IntegerField(
+        verbose_name="4G - Placas (Box)", 
+        default=0,
+        help_text="dos quais com ligação através de Placas (Box) - 4G"
+    )
+    utilizadores_4g_placas_usb = models.IntegerField(
+        verbose_name="4G - Placas (USB)", 
+        default=0,
+        help_text="dos quais com ligação através de Placas (USB) - 4G"
+    )
 
     # Número total de estações móveis activos
     afectos_planos_pos_pagos = models.IntegerField(default=0)
@@ -58,6 +97,20 @@ class EstacoesMoveisIndicador(IndicadorBase):
 
     def calcular_total_transferencias(self):
         return self.total_transferencias
+
+    def calcular_total_3g(self):
+        """Calcula o total de utilizadores 3G"""
+        return (self.utilizadores_servico_3g_upgrades + 
+                self.utilizadores_acesso_internet_3g)
+
+    def calcular_total_4g(self):
+        """Calcula o total de utilizadores 4G"""
+        return (self.utilizadores_servico_4g + 
+                self.utilizadores_acesso_internet_4g)
+
+    def calcular_total_banda_larga(self):
+        """Calcula o total de utilizadores banda larga (3G + 4G)"""
+        return self.calcular_total_3g() + self.calcular_total_4g()
 
     def calcular_total_estacoes_moveis(self):
         return (self.afectos_planos_pos_pagos + 

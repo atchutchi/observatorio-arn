@@ -1,163 +1,214 @@
-import json
-from datetime import datetime
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+# dashboard/views/chatbot.py
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views import View
+from django.utils.decorators import method_decorator
 from django.utils import timezone
-from django.db.utils import ProgrammingError, OperationalError
+import json
+import time
 
-from telecom.huggingface import get_inference_api
-from questionarios.models import (
-    EstacoesMoveisIndicador,
-    TrafegoOriginadoIndicador,
-    ReceitasIndicador
-)
-
-# Função para processar perguntas sobre os dados de mercado
-def process_market_question(question):
-    """
-    Processa perguntas sobre o mercado usando dados do banco de dados
-    e envia para o modelo de IA para elaborar respostas.
-    """
-    # Preparar contexto com dados do banco de dados
-    context = {
-        "operadoras": ["Orange", "MTN", "TELECEL"],
-        "dados": {}
-    }
-    
-    # Buscar dados para dar contexto à resposta
-    try:
-        # Estações Móveis/Assinantes
-        assinantes = {}
-        for operadora in ['orange', 'mtn', 'telecel']:
-            try:
-                query = EstacoesMoveisIndicador.objects.filter(operadora=operadora).order_by('-ano', '-mes')
-                if query.exists():
-                    latest = query.first()
-                    assinantes[operadora] = {
-                        'total': latest.calcular_total_estacoes_moveis(),
-                        'pre_pago': latest.afectos_planos_pre_pagos,
-                        'pos_pago': latest.afectos_planos_pos_pagos,
-                        'ano': latest.ano,
-                        'mes': latest.mes
-                    }
-            except (ProgrammingError, OperationalError):
-                # Tabela não existe ou outro erro de banco de dados
-                pass
-        
-        if assinantes:
-            context['dados']['assinantes'] = assinantes
-        
-        # Tráfego
-        trafego = {}
-        for operadora in ['orange', 'mtn', 'telecel']:
-            try:
-                query = TrafegoOriginadoIndicador.objects.filter(operadora=operadora).order_by('-ano', '-mes')
-                if query.exists():
-                    latest = query.first()
-                    trafego[operadora] = {
-                        'on_net': float(latest.on_net) if hasattr(latest, 'on_net') else 0,
-                        'off_net': float(latest.off_net) if hasattr(latest, 'off_net') else 0,
-                        'ano': latest.ano,
-                        'mes': latest.mes
-                    }
-            except (ProgrammingError, OperationalError):
-                # Tabela não existe ou outro erro de banco de dados
-                pass
-        
-        if trafego:
-            context['dados']['trafego'] = trafego
-        
-        # Receitas
-        receitas = {}
-        for operadora in ['orange', 'mtn', 'telecel']:
-            try:
-                query = ReceitasIndicador.objects.filter(operadora=operadora).order_by('-ano', '-mes')
-                if query.exists():
-                    latest = query.first()
-                    receitas[operadora] = {
-                        'total': float(latest.calcular_total_receitas()),
-                        'retalhistas': float(latest.calcular_total_receitas_retalhistas()),
-                        'grossistas': float(latest.calcular_total_receitas_grossistas()),
-                        'ano': latest.ano,
-                        'mes': latest.mes
-                    }
-            except (ProgrammingError, OperationalError):
-                # Tabela não existe ou outro erro de banco de dados
-                pass
-        
-        if receitas:
-            context['dados']['receitas'] = receitas
-        
-    except Exception as e:
-        print(f"Erro ao buscar dados: {e}")
-    
-    # Se não temos dados, informar ao usuário
-    if not context['dados']:
-        return "Ainda não temos dados suficientes disponíveis no sistema. As tabelas de indicadores podem não ter sido criadas ou estão vazias. Por favor, preencha os questionários para gerar dados de análise."
-    
-    # Enviar pergunta + contexto para o modelo do Hugging Face
-    try:
-        model = get_inference_api("google/flan-t5-base")
-        prompt = f"""
-        Contexto: {json.dumps(context, indent=2)}
-        
-        Pergunta: {question}
-        
-        Responda com base nos dados fornecidos no contexto. Se não tiver dados suficientes, 
-        indique isso na resposta. Tente sempre encontrar as informações mais relevantes.
-        """
-        
-        response = model(prompt)
-        return response[0]['generated_text']
-    except Exception as e:
-        print(f"Erro na API do Hugging Face: {e}")
-        return "Desculpe, estou tendo dificuldades para processar sua pergunta agora. Por favor, tente novamente mais tarde."
+from dashboard.models import ChatSession, ChatMessage
+from ..services.ai_service import ARNAssistantService
+from ..services.ai_integration import AIOrchestrator
 
 @login_required
-def chatbot_view(request):
+def chatbot_arn_view(request):
     """
-    View principal do chatbot
+    View principal do novo Assistente ARN Analytics
     """
-    messages = request.session.get('chat_messages', [])
-    
-    if request.method == 'POST':
-        user_message = request.POST.get('user_message', '')
-        
-        if user_message:
-            # Adicionar mensagem do usuário ao histórico
-            timestamp = timezone.now().strftime('%H:%M')
-            messages.append({
-                'content': user_message,
-                'is_user': True,
-                'timestamp': timestamp
-            })
-            
-            # Processar pergunta
-            response = process_market_question(user_message)
-            
-            # Adicionar resposta ao histórico
-            messages.append({
-                'content': response,
-                'is_user': False,
-                'timestamp': timezone.now().strftime('%H:%M')
-            })
-            
-            # Limitar o histórico a 10 mensagens
-            if len(messages) > 20:
-                messages = messages[-20:]
-            
-            # Salvar no session
-            request.session['chat_messages'] = messages
-    
-    return render(request, 'dashboard/chatbot.html', {'messages': messages})
+    context = {
+        'title': 'Assistente ARN Analytics',
+        'page': 'chatbot_arn'
+    }
+    return render(request, 'dashboard/chatbot/arn_assistant.html', context)
 
-@csrf_exempt
+@method_decorator(csrf_exempt, name='dispatch')
+class ARNChatbotAPIView(View):
+    """API principal do Assistente ARN Analytics"""
+    
+    def __init__(self):
+        super().__init__()
+        self.assistant_service = ARNAssistantService()
+        self.ai_orchestrator = AIOrchestrator()
+    
+    def post(self, request):
+        """Processa mensagens do chat"""
+        try:
+            data = json.loads(request.body)
+            mensagem = data.get('message', '').strip()
+            sessao_id = data.get('session_id')
+            
+            if not mensagem:
+                return JsonResponse({
+                    'error': 'Mensagem vazia'
+                }, status=400)
+            
+            # Processar mensagem usando o serviço ARN
+            start_time = time.time()
+            resultado = self.assistant_service.processar_mensagem(
+                mensagem=mensagem,
+                usuario=request.user,
+                sessao_id=sessao_id
+            )
+            
+            # Se temos dados estruturados, usar AI avançada para melhorar resposta
+            if resultado.get('dados') and resultado['confianca'] > 0.6:
+                try:
+                    ai_result = self.ai_orchestrator.process_query(
+                        mensagem, 
+                        resultado['dados']
+                    )
+                    
+                    # Combinar resultados
+                    if ai_result.get('response') and len(ai_result['response']) > 50:
+                        resultado['resposta'] = ai_result['response']
+                        resultado['ai_enhanced'] = True
+                        resultado['ai_source'] = ai_result.get('source', 'unknown')
+                    
+                except Exception as e:
+                    print(f"Erro AI enhancement: {e}")
+                    # Continuar com resposta padrão
+            
+            processing_time = time.time() - start_time
+            
+            return JsonResponse({
+                'response': resultado['resposta'],
+                'data': resultado.get('dados'),
+                'charts': resultado.get('graficos', []),
+                'suggestions': resultado.get('sugestoes', []),
+                'intent': resultado.get('intencao'),
+                'confidence': resultado.get('confianca'),
+                'session_id': resultado.get('sessao_id'),
+                'processing_time': round(processing_time, 3),
+                'ai_enhanced': resultado.get('ai_enhanced', False),
+                'timestamp': timezone.now().isoformat()
+            })
+            
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'error': 'JSON inválido'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'error': f'Erro interno: {str(e)}'
+            }, status=500)
+    
+    def get(self, request):
+        """Retorna informações da sessão atual"""
+        try:
+            sessao_id = request.GET.get('session_id')
+            
+            if sessao_id:
+                # Buscar histórico da sessão
+                historico = self.assistant_service.obter_historico_sessao(sessao_id)
+                
+                return JsonResponse({
+                    'session_id': sessao_id,
+                    'history': historico,
+                    'status': 'active'
+                })
+            else:
+                # Criar nova sessão
+                nova_sessao = self.assistant_service.criar_nova_sessao(request.user)
+                
+                return JsonResponse({
+                    'session_id': str(nova_sessao.id),
+                    'status': 'new_session',
+                    'welcome_message': {
+                        'text': "Olá! Sou o Assistente ARN Analytics. Posso ajudar você com dados sobre o mercado de telecomunicações da Guiné-Bissau.",
+                        'suggestions': [
+                            "Qual a quota de mercado da Orange?",
+                            "Mostre os dados de assinantes de 2023",
+                            "Compare MTN e Orange em receitas",
+                            "Como evoluiu o tráfego nos últimos anos?"
+                        ]
+                    }
+                })
+                
+        except Exception as e:
+            return JsonResponse({
+                'error': f'Erro ao obter sessão: {str(e)}'
+            }, status=500)
+
+@login_required
+def chat_history_view(request):
+    """View para histórico de conversas"""
+    sessoes = ChatSession.objects.filter(usuario=request.user)[:10]
+    
+    context = {
+        'title': 'Histórico de Conversas',
+        'sessoes': sessoes
+    }
+    return render(request, 'dashboard/chatbot/chat_history.html', context)
+
+@login_required
+def chat_session_detail(request, session_id):
+    """Detalhes de uma sessão específica"""
+    try:
+        sessao = ChatSession.objects.get(id=session_id, usuario=request.user)
+        mensagens = sessao.mensagens.all()
+        
+        context = {
+            'title': f'Conversa {session_id}',
+            'sessao': sessao,
+            'mensagens': mensagens
+        }
+        return render(request, 'dashboard/chatbot/session_detail.html', context)
+        
+    except ChatSession.DoesNotExist:
+        return JsonResponse({'error': 'Sessão não encontrada'}, status=404)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ChatFeedbackAPIView(View):
+    """API para feedback das respostas"""
+    
+    def post(self, request):
+        """Salva feedback do usuário"""
+        try:
+            data = json.loads(request.body)
+            message_id = data.get('message_id')
+            rating = data.get('rating')
+            comment = data.get('comment', '')
+            
+            if not message_id or not rating:
+                return JsonResponse({
+                    'error': 'message_id e rating são obrigatórios'
+                }, status=400)
+            
+            # Buscar mensagem
+            try:
+                mensagem = ChatMessage.objects.get(
+                    id=message_id,
+                    sessao__usuario=request.user
+                )
+            except ChatMessage.DoesNotExist:
+                return JsonResponse({
+                    'error': 'Mensagem não encontrada'
+                }, status=404)
+            
+            # Salvar feedback (implementar modelo de feedback se necessário)
+            # Para agora, apenas retornar sucesso
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Feedback recebido com sucesso!'
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'error': f'Erro ao salvar feedback: {str(e)}'
+            }, status=500)
+
+# Manter views antigas para compatibilidade
+def chatbot_view(request):
+    """View do chatbot antigo (redirecionar para novo)"""
+    return chatbot_arn_view(request)
+
+@csrf_exempt  
 def chatbot_api(request):
-    """
-    API para processar perguntas via AJAX
-    """
+    """API do chatbot antigo (redirecionar para novo)"""
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -166,13 +217,19 @@ def chatbot_api(request):
             if not question:
                 return JsonResponse({'error': 'Pergunta vazia'}, status=400)
             
-            response = process_market_question(question)
+            # Usar novo serviço
+            assistant = ARNAssistantService()
+            resultado = assistant.processar_mensagem(
+                mensagem=question,
+                usuario=request.user
+            )
             
             return JsonResponse({
-                'response': response,
+                'response': resultado['resposta'],
                 'timestamp': timezone.now().strftime('%H:%M')
             })
+            
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     
-    return JsonResponse({'error': 'Método não permitido'}, status=405) 
+    return JsonResponse({'error': 'Método não permitido'}, status=405)

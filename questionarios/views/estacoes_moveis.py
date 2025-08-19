@@ -1,3 +1,6 @@
+"""
+Views para Estações Móveis usando as views genéricas base.
+"""
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
@@ -71,11 +74,18 @@ class EstacoesMoveisResumoView(LoginRequiredMixin, PermissionRequiredMixin, List
             meses = range((trimestre - 1) * 3 + 1, trimestre * 3 + 1)
             dados_trimestre = indicadores.filter(mes__in=meses)
             
+            # Totais existentes
             total_utilizadores = sum(dado.calcular_total_utilizadores() for dado in dados_trimestre)
             total_carregamentos = sum(dado.calcular_total_carregamentos() for dado in dados_trimestre)
             total_levantamentos = sum(dado.calcular_total_levantamentos() for dado in dados_trimestre)
             total_transferencias = sum(dado.calcular_total_transferencias() for dado in dados_trimestre)
             total_estacoes_moveis = sum(dado.calcular_total_estacoes_moveis() for dado in dados_trimestre)
+            
+            # Novos totais para 3G e 4G
+            total_3g = sum(dado.calcular_total_3g() for dado in dados_trimestre)
+            total_4g = sum(dado.calcular_total_4g() for dado in dados_trimestre)
+            total_banda_larga = sum(dado.calcular_total_banda_larga() for dado in dados_trimestre)
+            total_sms = sum(dado.sms for dado in dados_trimestre)
             
             totais_trimestrais.append({
                 'trimestre': trimestre,
@@ -83,7 +93,11 @@ class EstacoesMoveisResumoView(LoginRequiredMixin, PermissionRequiredMixin, List
                 'total_carregamentos': total_carregamentos,
                 'total_levantamentos': total_levantamentos,
                 'total_transferencias': total_transferencias,
-                'total_estacoes_moveis': total_estacoes_moveis
+                'total_estacoes_moveis': total_estacoes_moveis,
+                'total_3g': total_3g,
+                'total_4g': total_4g,
+                'total_banda_larga': total_banda_larga,
+                'total_sms': total_sms
             })
 
         # Cálculos anuais
@@ -92,6 +106,12 @@ class EstacoesMoveisResumoView(LoginRequiredMixin, PermissionRequiredMixin, List
         total_levantamentos_anual = sum(dado.calcular_total_levantamentos() for dado in indicadores)
         total_transferencias_anual = sum(dado.calcular_total_transferencias() for dado in indicadores)
         total_estacoes_moveis_anual = sum(dado.calcular_total_estacoes_moveis() for dado in indicadores)
+        
+        # Novos totais anuais para 3G e 4G
+        total_3g_anual = sum(dado.calcular_total_3g() for dado in indicadores)
+        total_4g_anual = sum(dado.calcular_total_4g() for dado in indicadores)
+        total_banda_larga_anual = sum(dado.calcular_total_banda_larga() for dado in indicadores)
+        total_sms_anual = sum(dado.sms for dado in indicadores)
 
         context['ano'] = ano
         context['operadora_selecionada'] = operadora
@@ -101,5 +121,9 @@ class EstacoesMoveisResumoView(LoginRequiredMixin, PermissionRequiredMixin, List
         context['total_levantamentos_anual'] = total_levantamentos_anual
         context['total_transferencias_anual'] = total_transferencias_anual
         context['total_estacoes_moveis_anual'] = total_estacoes_moveis_anual
+        context['total_3g_anual'] = total_3g_anual
+        context['total_4g_anual'] = total_4g_anual
+        context['total_banda_larga_anual'] = total_banda_larga_anual
+        context['total_sms_anual'] = total_sms_anual
 
         return context

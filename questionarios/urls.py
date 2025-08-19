@@ -14,12 +14,16 @@ from .views import (
     investimento,
     analise_mercado,
     assinantes,
-    upload
+    upload,
+    data_management_view
 )
 
 app_name = 'questionarios'
 
 urlpatterns = [
+    # Página principal de gestão de dados
+    path('', data_management_view, name='data_management'),
+    
     # Estações Móveis
     path('estacoes-moveis/', estacoes_moveis.EstacoesMoveisListView.as_view(), name='estacoes_moveis_list'),
     path('estacoes-moveis/criar/', estacoes_moveis.EstacoesMoveisCreateView.as_view(), name='estacoes_moveis_create'),
@@ -50,6 +54,7 @@ urlpatterns = [
     path('trafego-roaming-internacional/<int:pk>/', trafego_roaming_internacional.TrafegoRoamingInternacionalDetailView.as_view(), name='trafego_roaming_internacional_detail'),
     path('trafego-roaming-internacional/<int:pk>/editar/', trafego_roaming_internacional.TrafegoRoamingInternacionalUpdateView.as_view(), name='trafego_roaming_internacional_update'),
     path('trafego-roaming-internacional/<int:pk>/excluir/', trafego_roaming_internacional.TrafegoRoamingInternacionalDeleteView.as_view(), name='trafego_roaming_internacional_delete'),
+    path('trafego-roaming-internacional/resumo/<int:ano>/', trafego_roaming_internacional.TrafegoRoamingInternacionalResumoView.as_view(), name='trafego_roaming_internacional_resumo'),
 
     #lbi
     path('lbi/', lbi.LBIListView.as_view(), name='lbi_list'),
@@ -141,6 +146,7 @@ urlpatterns = [
     path('assinantes/<int:pk>/', assinantes.AssinantesDetailView.as_view(), name='assinantes_detail'),
     path('assinantes/<int:pk>/editar/', assinantes.AssinantesUpdateView.as_view(), name='assinantes_update'),
     path('assinantes/<int:pk>/excluir/', assinantes.AssinantesDeleteView.as_view(), name='assinantes_delete'),
+    path('assinantes/resumo/<int:ano>/', assinantes.AssinantesResumoView.as_view(), name='assinantes_resumo'),
 
     # Excel Upload
     path('upload/excel/', upload.upload_excel_view, name='upload_excel'),

@@ -744,7 +744,8 @@ class BaseAnalysisView(TemplateView):
             return context # Return early if config is bad
 
         anos_disponiveis = get_available_years(self.indicator_model)
-        operadoras = [choice[0] for choice in IndicadorBase.OPERADORAS_CHOICES if choice[0]]
+        from .base_views import OPERADORAS_CHOICES
+        operadoras = [choice[0] for choice in OPERADORAS_CHOICES if choice[0]]
         
         context['anos_disponiveis'] = anos_disponiveis
         context['operadoras'] = [op.upper() for op in operadoras]

@@ -14,42 +14,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <style>
-        body { font-family: 'Roboto', sans-serif; }
-        .navbar {
-            box-shadow: 0 2px 4px rgba(0,0,0,.1);
-            padding-top: 0.8rem;
-            padding-bottom: 0.8rem;
-        }
-        .navbar-brand {
-             font-family: 'Poppins', sans-serif;
-             font-weight: 600;
-        }
-        .navbar .nav-link {
-            font-weight: 500;
-            font-size: 0.95rem;
-            padding-left: 0.8rem;
-            padding-right: 0.8rem;
-        }
-        .navbar .nav-link.active {
-            font-weight: 700;
-        }
-        .dropdown-item {
-             font-size: 0.9rem;
-        }
-        .navbar .btn {
-            font-size: 0.9rem;
-        }
-        /* Add more custom styles if needed */
-    </style>
+    
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- Navbar padrão (apenas para páginas antigas) -->
+    {% block navbar %}
+    {% if not hide_default_navbar %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="fas fa-broadcast-tower me-2 text-primary"></i> {# Changed icon #}
+                <i class="fas fa-broadcast-tower me-2 text-primary"></i>
                 Observatório Telecom GB
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
@@ -57,12 +32,13 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> {# Use ms-auto to push items right #}
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">
                             Início
                         </a>
                     </li>
+                    
                     <!-- Dropdown for Data Management -->
                     {% if user.is_authenticated and user.is_staff %}
                     <li class="nav-item dropdown">
@@ -70,7 +46,6 @@
                            Gerenciar Dados
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="gerenciarDropdown">
-                             {# Links remain the same #}
                             <li><a class="dropdown-item" href="{% url 'questionarios:estacoes_moveis_list' %}">Estações Móveis</a></li>
                             <li><a class="dropdown-item" href="{% url 'questionarios:assinantes_list' %}">Assinantes</a></li>
                             <li><a class="dropdown-item" href="{% url 'questionarios:receitas_list' %}">Receitas</a></li>
@@ -83,21 +58,17 @@
                             <li><a class="dropdown-item" href="{% url 'questionarios:investimento_list' %}">Investimento</a></li>
                             <li><a class="dropdown-item" href="{% url 'questionarios:emprego_list' %}">Emprego</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'questionarios:tarifario_orange_list' %}">Tarifário Voz (Orange)</a></li>
-                            <li><a class="dropdown-item" href="{% url 'questionarios:tarifario_mtn_list' %}">Tarifário Voz (MTN)</a></li>
-                            <li><a class="dropdown-item" href="{% url 'questionarios:tarifario_telecel_list' %}">Tarifário Voz (TELECEL)</a></li>
-                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'questionarios:upload_excel' %}"><i class="fas fa-file-excel me-2"></i>Upload Dados Excel</a></li>
                         </ul>
                     </li>
                     {% endif %}
+                    
                     <!-- Analysis Dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {% if '/analise/' in request.path %}active{% endif %}" href="#" id="analiseDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Análises
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="analiseDropdown">
-                             {# Links remain the same #}
                             <li><a class="dropdown-item" href="{% url 'questionarios:analise_assinantes' %}">Assinantes</a></li>
                             <li><a class="dropdown-item" href="{% url 'questionarios:analise_receitas' %}">Receitas</a></li>
                             <li><a class="dropdown-item" href="{% url 'questionarios:analise_investimento' %}">Investimento</a></li>
@@ -110,7 +81,8 @@
                             <li><a class="dropdown-item" href="{% url 'questionarios:analise_internet_fixo' %}">Internet Fixo</a></li>
                         </ul>
                     </li>
-                     <li class="nav-item">
+                    
+                    <li class="nav-item">
                         <a class="nav-link {% if 'estatisticas' in request.path %}active{% endif %}" href="/estatisticas/">
                            Estatísticas
                         </a>
@@ -131,6 +103,7 @@
                         </a>
                     </li>
                 </ul>
+                
                 <div class="d-flex align-items-center ms-lg-3">
                     {% if user.is_authenticated %}
                     <div class="dropdown">
@@ -142,9 +115,9 @@
                             {% if user.is_staff %}
                             <li><a class="dropdown-item" href="/admin/"><i class="fas fa-cog fa-fw me-2"></i>Admin Django</a></li>
                             {% endif %}
-                            <li><a class="dropdown-item" href="/accounts/profile/"><i class="fas fa-id-card fa-fw me-2"></i>Perfil</a></li>
+                            <li><a class="dropdown-item" href="/accounts/profile/"><i class="fas fa-user fa-fw me-2"></i>Perfil</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/accounts/logout/"><i class="fas fa-sign-out-alt fa-fw me-2"></i>Sair</a></li>
+                            <li><a class="dropdown-item" href="/accounts/logout/"><i class="fas fa-sign-out-alt fa-fw me-2"></i>Logout</a></li>
                         </ul>
                     </div>
                     {% else %}
@@ -159,8 +132,11 @@
             </div>
         </div>
     </nav>
+    {% endif %}
+    {% endblock %}
 
     <!-- Conteúdo principal -->
+    {% block main_container %}
     <main class="container py-4">
         {% if messages %}
         <div class="messages">
@@ -175,8 +151,11 @@
 
         {% block content %}{% endblock %}
     </main>
+    {% endblock %}
 
-    <!-- Rodapé -->
+    <!-- Rodapé padrão (apenas para páginas não-Binance) -->
+    {% block footer %}
+    {% if not hide_default_footer %}
     <footer class="bg-dark text-light py-4 mt-5">
         <div class="container">
             <div class="row">
@@ -214,67 +193,15 @@
             </div>
         </div>
     </footer>
+    {% endif %}
+    {% endblock %}
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Script personalizado -->
-    <script src="/static/js/main.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
-
-    <!-- Floating Chatbot Button -->
-    <button type="button" class="btn btn-primary rounded-circle shadow fab-chatbot" id="open-chatbot-fab" 
-            data-bs-toggle="modal" data-bs-target="#chatbotModal" aria-label="Abrir assistente virtual">
-        <i class="fas fa-comments"></i>
-    </button>
-
-    <!-- Chat Bot Modal -->
-    <div class="modal fade" id="chatbotModal" tabindex="-1" aria-labelledby="chatbotModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            {# Apply new styling to modal-content #}
-            <div class="modal-content chatbot-modal-content">
-                {# New Header Style #}
-                <div class="modal-header chatbot-modal-header">
-                    <h5 class="modal-title" id="chatbotModalLabel">
-                        <i class="fas fa-robot me-2"></i> Assistente Virtual
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                {# Chat messages area #}
-                <div class="modal-body chatbot-modal-body">
-                    <div class="chat-container" id="chat-messages">
-                         {# Initial Bot Message - Structure might change based on JS #}
-                         <div class="chat-message bot">
-                            <div class="chat-avatar">
-                                <i class="fas fa-robot"></i>
-                            </div>
-                            <div class="chat-text">
-                                Olá! Sou o assistente virtual do Observatório de Telecomunicações da Guiné-Bissau. 
-                                Como posso ajudar você hoje?
-                            </div>
-                        </div>
-                        {# Messages will be added here by JS #}
-                    </div>
-                </div>
-                 {# New Footer/Input Area #}
-                <div class="modal-footer chatbot-modal-footer">
-                    <div class="chat-input-area">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control chat-input-field" id="chat-input" placeholder="Digite sua mensagem...">
-                            <button class="btn btn-primary chat-send-btn" type="button" id="send-message">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                        {# Optional: New conversation button #}
-                        <button class="btn btn-link btn-sm new-conversation-btn" id="new-conversation-btn" type="button">
-                            Iniciar nova conversa
-                        </button>
-                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </body>
-</html> 
+</html>

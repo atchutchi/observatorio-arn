@@ -1,74 +1,30 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "questionarios/partials/base_list.html" %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/assinantes.css' %}">
+{% block indicator_title %}Indicadores de Assinantes{% endblock %}
+{% block indicator_subtitle %}Gestão e controle de dados de assinantes por operadora{% endblock %}
+
+{% block create_url %}{% url 'questionarios:assinantes_create' %}{% endblock %}
+
+{% block table_headers %}
+<th>Pré-pago</th>
+<th>Pós-pago</th>
+<th>Fixo</th>
+<th>Internet Móvel</th>
+<th>Internet Fixo</th>
 {% endblock %}
 
-{% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Indicadores de Assinantes</h2>
-        <a href="{% url 'questionarios:assinantes_create' %}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Adicionar Novo
-        </a>
-    </div>
+{% block table_row_data %}
+<td>{{ indicador.assinantes_pre_pago|default:"-" }}</td>
+<td>{{ indicador.assinantes_pos_pago|default:"-" }}</td>
+<td>{{ indicador.assinantes_fixo|default:"-" }}</td>
+<td>{{ indicador.assinantes_internet_movel|default:"-" }}</td>
+<td>{{ indicador.assinantes_internet_fixa|default:"-" }}</td>
+{% endblock %}
 
-    {% include 'questionarios/partials/indicator_filters.html' %}
+{% block detail_url %}{% url 'questionarios:assinantes_detail' indicador.pk %}{% endblock %}
+{% block update_url %}{% url 'questionarios:assinantes_update' indicador.pk %}{% endblock %}
+{% block delete_url %}{% url 'questionarios:assinantes_delete' indicador.pk %}{% endblock %}
 
-    <!-- Tabela de Dados -->
-    <div class="card">
-        <div class="card-header bg-light">
-            <h5 class="mb-0">Resultados</h5>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Operadora</th>
-                            <th>Ano</th>
-                            <th>Mês</th>
-                            <th>Pré-pago</th>
-                            <th>Pós-pago</th>
-                            <th>Fixo</th>
-                            <th>Internet Móvel</th>
-                            <th>Internet Fixo</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for indicador in object_list %}
-                        <tr>
-                            <td>{{ indicador.get_operadora_display }}</td>
-                            <td>{{ indicador.ano }}</td>
-                            <td>{{ indicador.get_mes_display }}</td>
-                            <td>{{ indicador.assinantes_pre_pago|default:"-" }}</td>
-                            <td>{{ indicador.assinantes_pos_pago|default:"-" }}</td>
-                            <td>{{ indicador.assinantes_fixo|default:"-" }}</td>
-                            <td>{{ indicador.assinantes_internet_movel|default:"-" }}</td>
-                            <td>{{ indicador.assinantes_internet_fixa|default:"-" }}</td>
-                            <td>
-                                <a href="{% url 'questionarios:assinantes_detail' indicador.pk %}" class="btn btn-info btn-sm" title="Detalhes">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{% url 'questionarios:assinantes_update' indicador.pk %}" class="btn btn-warning btn-sm" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="{% url 'questionarios:assinantes_delete' indicador.pk %}" class="btn btn-danger btn-sm" title="Excluir">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="9" class="text-center text-muted py-3">Nenhum indicador encontrado com os filtros aplicados.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %} 
+{% block table_colspan %}9{% endblock %}
+
+{% block resumo_url %}{% url 'questionarios:assinantes_resumo' 2024 %}{% endblock %} 

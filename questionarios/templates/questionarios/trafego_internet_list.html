@@ -1,123 +1,28 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "questionarios/partials/base_list.html" %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/trafego_internet.css' %}">
+{% block indicator_title %}Indicadores de Tráfego Internet{% endblock %}
+{% block indicator_subtitle %}Gestão e controle de dados de tráfego internet por operadora{% endblock %}
+
+{% block create_url %}{% url 'questionarios:trafego_internet_create' %}{% endblock %}
+
+{% block table_headers %}
+<th>Upload Nacional</th>
+<th>Download Nacional</th>
+<th>Upload Internacional</th>
+<th>Download Internacional</th>
 {% endblock %}
 
-{% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Indicadores de Tráfego de Internet</h2>
-        <div>
-            <a href="{% url 'questionarios:trafego_internet_create' %}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Adicionar Novo
-            </a>
-            <button class="btn btn-success ms-2" type="button" data-toggle="collapse" data-target="#collapseUploadForm">
-                <i class="fas fa-file-excel"></i> Importar Excel
-            </button>
-        </div>
-    </div>
-    
-    <div class="collapse mb-4" id="collapseUploadForm">
-        <div class="card card-body">
-            <h5>Importar dados de Tráfego de Internet via Excel</h5>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="{{ upload_form.excel_file.id_for_label }}">{{ upload_form.excel_file.label }}</label>
-                            {{ upload_form.excel_file }}
-                            <small class="form-text text-muted">{{ upload_form.excel_file.help_text }}</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="{{ upload_form.operadora.id_for_label }}">{{ upload_form.operadora.label }}</label>
-                            {{ upload_form.operadora }}
-                            <small class="form-text text-muted">{{ upload_form.operadora.help_text }}</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="{{ upload_form.ano.id_for_label }}">{{ upload_form.ano.label }}</label>
-                            {{ upload_form.ano }}
-                            <small class="form-text text-muted">{{ upload_form.ano.help_text }}</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> O arquivo Excel deve conter uma aba chamada <strong>'Internet_Trafico'</strong> com a estrutura esperada.
-                </div>
-                <button type="submit" class="btn btn-primary">Processar Arquivo</button>
-            </form>
-        </div>
-    </div>
-
-    {% if messages %}
-    <div class="messages mb-4">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags|default:'info' }} {% if 'small' in message.extra_tags %}small{% endif %}">
-            {{ message }}
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    {% include 'questionarios/partials/indicator_filters.html' %}
-
-    <!-- Tabela de Dados -->
-    <div class="card">
-        <div class="card-header bg-light">
-            <h5 class="mb-0">Resultados</h5>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Operadora</th>
-                            <th>Ano</th>
-                            <th>Mês</th>
-                            <th>Tráfego Total</th>
-                            <th>Banda Larga Total</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for indicador in object_list %}
-                        <tr>
-                            <td>{{ indicador.get_operadora_display }}</td>
-                            <td>{{ indicador.ano }}</td>
-                            <td>{{ indicador.get_mes_display }}</td>
-                            <td>{{ indicador.trafego_total }}</td>
-                            <td>{{ indicador.banda_larga_total }}</td>
-                            <td>
-                                <a href="{% url 'questionarios:trafego_internet_detail' indicador.pk %}" class="btn btn-info btn-sm" title="Detalhes">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{% url 'questionarios:trafego_internet_update' indicador.pk %}" class="btn btn-warning btn-sm" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="{% url 'questionarios:trafego_internet_delete' indicador.pk %}" class="btn btn-danger btn-sm" title="Excluir">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" class="text-center text-muted py-3">Nenhum indicador encontrado com os filtros aplicados.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+{% block table_row_data %}
+<td>{{ indicador.upload_nacional|default:"-" }}</td>
+<td>{{ indicador.download_nacional|default:"-" }}</td>
+<td>{{ indicador.upload_internacional|default:"-" }}</td>
+<td>{{ indicador.download_internacional|default:"-" }}</td>
 {% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'js/trafego_internet.js' %}"></script>
-{% endblock %}
+{% block detail_url %}{% url 'questionarios:trafego_internet_detail' indicador.pk %}{% endblock %}
+{% block update_url %}{% url 'questionarios:trafego_internet_update' indicador.pk %}{% endblock %}
+{% block delete_url %}{% url 'questionarios:trafego_internet_delete' indicador.pk %}{% endblock %}
+
+{% block table_colspan %}8{% endblock %}
+
+{% block resumo_url %}{% url 'questionarios:trafego_internet_resumo' 2024 %}{% endblock %}

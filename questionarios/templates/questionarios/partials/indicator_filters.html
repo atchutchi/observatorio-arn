@@ -8,7 +8,7 @@
                 <label for="operadora" class="form-label">Operadora</label>
                 <select name="operadora" id="operadora" class="form-select form-select-sm">
                     <option value="">Todas</option>
-                    {% for code, name in view.model.OPERADORAS_CHOICES %}
+                    {% for code, name in operadoras_choices %}
                         {% if code %} {# Exclude potential empty choice if defined in model #}
                             <option value="{{ code }}" {% if request.GET.operadora == code %}selected{% endif %}>{{ name }}</option>
                         {% endif %}

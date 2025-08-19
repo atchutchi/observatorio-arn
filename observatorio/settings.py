@@ -70,6 +70,9 @@ MIDDLEWARE = [
     # Logging middleware
     'observatorio.utils.middleware.RequestLoggingMiddleware',  # Log de requisições
     'observatorio.utils.middleware.DatabaseLoggingMiddleware',  # Log de operações de banco de dados
+    
+    # Platform middleware
+    'observatorio.utils.middleware.PlatformAuthMiddleware',  # Autenticação obrigatória para plataforma
 ]
 
 ROOT_URLCONF = 'observatorio.urls'
@@ -111,7 +114,7 @@ SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 HUGGINGFACE_TOKEN = os.getenv('HUGGINGFACE_TOKEN')
 
 # Configuração do chatbot
-CHATBOT_MODEL = "facebook/blenderbot-400M-distill"  # Modelo a ser usado com Hugging Face
+CHATBOT_MODEL = "facebook/blenderbot-400M-distill"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -145,7 +148,7 @@ SITE_ID = 1
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # Desabilitado para desenvolvimento
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_SESSION_REMEMBER = True
 
@@ -332,3 +335,18 @@ LOGGING = {
         },
     },
 }
+
+# Configurações de Email para Desenvolvimento
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Para produção, você pode usar um serviço como Gmail:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'ferreira.atchutchi@arn.gw'
+# EMAIL_HOST_PASSWORD = 'ARN/2025'
+# DEFAULT_FROM_EMAIL = 'ferreira.atchutchi@arn.gw'
+
+# Ou desabilitar completamente a verificação de email:
+# ACCOUNT_EMAIL_VERIFICATION = 'none'

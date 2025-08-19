@@ -151,4 +151,35 @@ class PublicInternetFixoListView(ListView):
             
         context['totais_regioes'] = totais_regioes
         
-        return context 
+        return context
+
+
+# ===== NOVA VIEW DE GESTÃO DE DADOS =====
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.utils.decorators import method_decorator
+
+@method_decorator(login_required, name='dispatch')
+class DataManagementView(TemplateView):
+    """
+    View principal da gestão de dados - lista todos os indicadores
+    """
+    template_name = 'questionarios/data_management.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Central de Gestão de Dados'
+        context['current_year'] = timezone.now().year
+        
+        return context
+
+# Function-based view para compatibilidade com urls.py
+@login_required
+def data_management_view(request):
+    """View principal da gestão de dados - lista todos os indicadores"""
+    context = {
+        'title': 'Central de Gestão de Dados',
+        'current_year': timezone.now().year
+    }
+    return render(request, 'questionarios/data_management.html', context) 

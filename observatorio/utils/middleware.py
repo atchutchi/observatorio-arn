@@ -96,4 +96,38 @@ class SQLDebugMiddleware:
                 print(f"\n[SQL Query {i+1}] {query.get('sql', '')}")
                 print(f"Time: {query.get('time', '0')}s\n")
                 
-        return response 
+        return response
+
+
+class PlatformAuthMiddleware:
+    """
+    Middleware que força autenticação para toda a plataforma
+    Redireciona usuários não autenticados para login
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+        # Páginas que não precisam de autenticação
+        self.whitelist = [
+            '/accounts/login/',
+            '/accounts/signup/',
+            '/accounts/password/reset/',
+            '/accounts/password/reset/done/',
+            '/accounts/password/reset/key/',
+            '/accounts/confirm-email/',
+            '/admin/',  # Para o Django admin
+            '/static/',
+            '/media/',
+        ]
+
+    def __call__(self, request):
+        # Verificar se é uma página na whitelist
+        if any(request.path.startswith(path) for path in self.whitelist):
+            return self.get_response(request)
+        
+        # Se usuário não está autenticado, redirecionar para login
+        if not request.user.is_authenticated:
+            from django.shortcuts import redirect
+            from django.urls import reverse
+            return redirect(reverse('account_login'))
+            
+        return self.get_response(request)

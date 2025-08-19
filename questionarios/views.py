@@ -5,6 +5,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Sum, Avg
+from django.utils import timezone
 
 from .models.estacoes_moveis import EstacoesMoveisIndicador
 from .forms import EstacoesMoveisForm
@@ -94,4 +95,13 @@ def estacoes_moveis_delete(request, pk):
     return render(request, 'questionarios/estacoes_moveis_confirm_delete.html', {
         'estacoes_moveis': estacoes_moveis,
         'title': 'Confirmar Exclusão'
-    }) 
+    })
+
+@login_required
+def data_management_view(request):
+    """View principal da gestão de dados - lista todos os indicadores"""
+    context = {
+        'title': 'Central de Gestão de Dados',
+        'current_year': timezone.now().year
+    }
+    return render(request, 'questionarios/data_management.html', context) 

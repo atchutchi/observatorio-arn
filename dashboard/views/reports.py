@@ -1,25 +1,24 @@
 # dashboard/views/reports.py
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView, View
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.db.models import Sum, Count, Avg
+from django.shortcuts import render
 import csv
+import json
 
 from questionarios.models import (
-   EstacoesMoveisIndicador,
-   TrafegoOriginadoIndicador, 
-   TrafegoTerminadoIndicador,
-   TrafegoRoamingInternacionalIndicador,
-   LBIIndicador,
-   TrafegoInternetIndicador,
-   InternetFixoIndicador,
-   TarifarioVozMTNIndicador,
-   TarifarioVozOrangeIndicador,
-   ReceitasIndicador,
-   EmpregoIndicador,
-   InvestimentoIndicador
+   EstacoesMoveisIndicador, AssinantesIndicador,
+   TrafegoOriginadoIndicador, TrafegoTerminadoIndicador,
+   TrafegoRoamingInternacionalIndicador, LBIIndicador,
+   TrafegoInternetIndicador, InternetFixoIndicador,
+   TarifarioVozMTNIndicador, TarifarioVozOrangeIndicador,
+   ReceitasIndicador, EmpregoIndicador, InvestimentoIndicador
 )
+
+from dashboard.models import ReportTemplate, GeneratedReport, ReportSchedule
+from ..utils.report_generator import ARNReportGenerator
 
 class ReportsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
    template_name = 'dashboard/reports.html'
@@ -205,3 +204,231 @@ class ExportReportView(LoginRequiredMixin, UserPassesTestMixin, View):
        self.write_mobile_report(writer, year)
        writer.writerow([])  # Empty row for separation
        self.write_traffic_report(writer, year)
+
+
+# ===== NOVAS VIEWS COM SISTEMA DE RELATÓRIOS ARN =====
+
+class MarketReportView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    """Relatório completo do mercado de telecomunicações"""
+    template_name = 'dashboard/reports/market_report.html'
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = int(self.request.GET.get('year', timezone.now().year))
+        
+        # Usar o gerador de relatórios
+        generator = ARNReportGenerator(year=year)
+        market_data = generator.generate_market_report()
+        
+        context.update({
+            'report_data': market_data,
+            'year': year,
+            'anos_disponiveis': self.get_available_years(),
+            'chart_configs': self.get_chart_configurations(market_data)
+        })
+        
+        return context
+    
+    def get_available_years(self):
+        """Anos disponíveis nos dados"""
+        years = set()
+        models = [AssinantesIndicador, ReceitasIndicador, TrafegoOriginadoIndicador]
+        
+        for model in models:
+            years.update(model.objects.values_list('ano', flat=True).distinct())
+        
+        return sorted(years, reverse=True)
+    
+    def get_chart_configurations(self, data):
+        """Configurações dos gráficos para o template"""
+        generator = ARNReportGenerator()
+        
+        return {
+            'market_share': generator.get_chart_config('pie', data.get('panorama_geral', {})),
+            'revenue_evolution': generator.get_chart_config('line', data.get('receitas', {})),
+            'traffic_distribution': generator.get_chart_config('doughnut', data.get('trafego_voz', {}))
+        }
+
+class DashboardExecutiveView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    """Dashboard executivo com KPIs principais"""
+    template_name = 'dashboard/reports/executive_dashboard.html'
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = int(self.request.GET.get('year', timezone.now().year))
+        
+        generator = ARNReportGenerator(year=year)
+        dashboard_data = generator.generate_dashboard_data()
+        
+        context.update({
+            'dashboard_data': dashboard_data,
+            'year': year,
+            'last_update': timezone.now()
+        })
+        
+        return context
+
+class ComparativeReportView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    """Análise comparativa entre operadoras"""
+    template_name = 'dashboard/reports/comparative_report.html'
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = int(self.request.GET.get('year', timezone.now().year))
+        
+        generator = ARNReportGenerator(year=year)
+        comparative_data = generator.generate_comparative_report()
+        
+        context.update({
+            'comparative_data': comparative_data,
+            'year': year,
+            'anos_disponiveis': self.get_available_years()
+        })
+        
+        return context
+    
+    def get_available_years(self):
+        """Anos disponíveis nos dados"""
+        years = set()
+        models = [AssinantesIndicador, ReceitasIndicador]
+        
+        for model in models:
+            years.update(model.objects.values_list('ano', flat=True).distinct())
+        
+        return sorted(years, reverse=True)
+
+class ReportAPIView(LoginRequiredMixin, UserPassesTestMixin, View):
+    """API para dados dos relatórios (para gráficos dinâmicos)"""
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def get(self, request, *args, **kwargs):
+        report_type = kwargs.get('report_type', 'market')
+        year = int(request.GET.get('year', timezone.now().year))
+        
+        generator = ARNReportGenerator(year=year)
+        
+        if report_type == 'market':
+            data = generator.generate_market_report()
+        elif report_type == 'dashboard':
+            data = generator.generate_dashboard_data()
+        elif report_type == 'comparative':
+            data = generator.generate_comparative_report()
+        else:
+            return JsonResponse({'error': 'Tipo de relatório inválido'}, status=400)
+        
+        return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})
+
+class GenerateReportView(LoginRequiredMixin, UserPassesTestMixin, View):
+    """Gerar relatório personalizado"""
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            # Parâmetros do relatório
+            report_type = request.POST.get('report_type', 'market')
+            year = int(request.POST.get('year', timezone.now().year))
+            format_type = request.POST.get('format', 'json')
+            
+            # Gerar dados
+            generator = ARNReportGenerator(year=year)
+            
+            if report_type == 'market':
+                data = generator.generate_market_report()
+                title = f"Relatório de Mercado {year}"
+            elif report_type == 'dashboard':
+                data = generator.generate_dashboard_data()
+                title = f"Dashboard Executivo {year}"
+            elif report_type == 'comparative':
+                data = generator.generate_comparative_report()
+                title = f"Análise Comparativa {year}"
+            else:
+                return JsonResponse({'error': 'Tipo de relatório inválido'}, status=400)
+            
+            # Salvar no histórico
+            generated_report = GeneratedReport.objects.create(
+                template=None,  # Template personalizado
+                usuario=request.user,
+                titulo=title,
+                periodo_inicio=timezone.datetime(year, 1, 1),
+                periodo_fim=timezone.datetime(year, 12, 31),
+                parametros={'report_type': report_type, 'year': year, 'format': format_type},
+                status='completed',
+                completed_at=timezone.now()
+            )
+            
+            # Retornar dados baseado no formato
+            if format_type == 'csv':
+                return self.export_csv(data, title)
+            elif format_type == 'excel':
+                return self.export_excel(data, title)
+            else:
+                return JsonResponse({
+                    'success': True,
+                    'report_id': generated_report.id,
+                    'data': data
+                }, json_dumps_params={'ensure_ascii': False})
+                
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    def export_csv(self, data, title):
+        """Exportar para CSV"""
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response['Content-Disposition'] = f'attachment; filename="{title}.csv"'
+        
+        writer = csv.writer(response)
+        writer.writerow([title])
+        writer.writerow(['Gerado em:', timezone.now().strftime('%d/%m/%Y %H:%M')])
+        writer.writerow([])  # Linha vazia
+        
+        # Escrever dados de forma simples
+        if isinstance(data, dict):
+            for key, value in data.items():
+                writer.writerow([key, str(value)])
+        elif isinstance(data, list):
+            for item in data:
+                if isinstance(item, dict):
+                    writer.writerow(item.values())
+                else:
+                    writer.writerow([item])
+        
+        return response
+    
+    def export_excel(self, data, title):
+        """Exportar para Excel (implementação futura)"""
+        # Implementar com openpyxl quando necessário
+        return JsonResponse({'error': 'Exportação Excel em desenvolvimento'}, status=501)
+
+class ReportHistoryView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    """Histórico de relatórios gerados"""
+    template_name = 'dashboard/reports/report_history.html'
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Últimos 50 relatórios
+        reports = GeneratedReport.objects.all()[:50]
+        
+        context.update({
+            'reports': reports,
+            'templates': ReportTemplate.objects.filter(ativo=True),
+            'schedules': ReportSchedule.objects.filter(ativo=True)
+        })
+        
+        return context

@@ -17,12 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from home import views as home_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),  # URLs para autenticação
+    path('accounts/profile/', home_views.profile, name='account_profile'),
     path('', include('home.urls')),  # URLs para a aplicação home
     path('questionarios/', include('questionarios.urls', namespace='questionarios')),  # URLs para a aplicação questionarios
+    path('dashboard/', include('dashboard.urls', namespace='dashboard')),  # URLs para a aplicação dashboard
 ]
 
 # Adicionar URLs para servir arquivos estáticos e de mídia durante o desenvolvimento

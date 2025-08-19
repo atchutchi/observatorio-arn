@@ -44,6 +44,27 @@ class AssinantesIndicador(IndicadorBase):
         default=0
     )
     
+    def calcular_total_assinantes(self):
+        """Calcula o total de assinantes ativos"""
+        return (
+            (self.assinantes_pre_pago or 0) +
+            (self.assinantes_pos_pago or 0) +
+            (self.assinantes_fixo or 0) +
+            (self.assinantes_internet_movel or 0) +
+            (self.assinantes_internet_fixa or 0)
+        )
+    
+    def calcular_total_movel(self):
+        """Calcula total de assinantes móveis"""
+        return (self.assinantes_pre_pago or 0) + (self.assinantes_pos_pago or 0)
+    
+    def calcular_total_internet(self):
+        """Calcula total de assinantes de internet"""
+        return (self.assinantes_internet_movel or 0) + (self.assinantes_internet_fixa or 0)
+    
+    def __str__(self):
+        return f"Assinantes - {self.operadora} {self.ano}/{self.trimestre}"
+    
     class Meta:
         verbose_name = _("Indicador de Assinantes")
         verbose_name_plural = _("Indicadores de Assinantes") 

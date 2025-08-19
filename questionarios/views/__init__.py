@@ -46,3 +46,6 @@ from .emprego import (
     EmpregoDetailView,
     EmpregoResumoView,
 )
+
+# Nova view de gestão de dados
+from .public import data_management_view

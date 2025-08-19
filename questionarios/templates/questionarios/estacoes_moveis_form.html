@@ -3,6 +3,43 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/estacoes_moveis.css' %}">
+<style>
+    .banda-larga-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-weight: bold;
+        text-align: center;
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .technology-section {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background: #f8f9fa;
+    }
+    .technology-title {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-weight: bold;
+        text-align: center;
+    }
+    .subsection-header {
+        background: #e9ecef;
+        padding: 8px 12px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #495057;
+        border-left: 4px solid #007bff;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -11,9 +48,10 @@
     <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
         
+        <!-- Informações Gerais -->
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
-                Informações Gerais
+                <i class="fas fa-info-circle me-2"></i>Informações Gerais
             </div>
             <div class="card-body">
                 <div class="row">
@@ -33,45 +71,10 @@
             </div>
         </div>
 
+        <!-- Utilizadores de serviço básicos -->
         <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Número total de estações móveis activos
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.afectos_planos_pos_pagos.label_tag }}
-                        {{ form.afectos_planos_pos_pagos }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.afectos_planos_pos_pagos_utilizacao.label_tag }}
-                        {{ form.afectos_planos_pos_pagos_utilizacao }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.afectos_planos_pre_pagos.label_tag }}
-                        {{ form.afectos_planos_pre_pagos }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.afectos_planos_pre_pagos_utilizacao.label_tag }}
-                        {{ form.afectos_planos_pre_pagos_utilizacao }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.associados_situacoes_especificas.label_tag }}
-                        {{ form.associados_situacoes_especificas }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.outros_residuais.label_tag }}
-                        {{ form.outros_residuais }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Utilizadores de serviço
+            <div class="card-header bg-success text-white">
+                <i class="fas fa-users me-2"></i>Utilizadores de serviço
             </div>
             <div class="card-body">
                 <div class="row">
@@ -92,43 +95,139 @@
                         {{ form.roaming_internacional_out_parc_roaming_out }}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        {{ form.banda_larga_movel.label_tag }}
-                        {{ form.banda_larga_movel }}
+            </div>
+        </div>
+
+        <!-- Banda larga (3G + 4G) -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <div class="banda-larga-header">
+                    <i class="fas fa-signal me-2"></i>Banda larga (3G + 4G)
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Secção 3G -->
+                <div class="technology-section">
+                    <div class="technology-title">
+                        <i class="fas fa-broadcast-tower me-2"></i>Tecnologia 3G
                     </div>
-                    <div class="col-md-3 mb-3">
-                        {{ form.utilizadores_5g_upgrades.label_tag }}
-                        {{ form.utilizadores_5g_upgrades }}
+                    
+                    <div class="subsection-header">
+                        Utilizadores de serviço de 3G e upgrades
                     </div>
-                    <div class="col-md-3 mb-3">
-                        {{ form.utilizadores_servico_acesso_internet_banda_larga.label_tag }}
-                        {{ form.utilizadores_servico_acesso_internet_banda_larga }}
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            {{ form.utilizadores_servico_3g_upgrades.label_tag }}
+                            {{ form.utilizadores_servico_3g_upgrades }}
+                        </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        {{ form.utilizadores_placas_box.label_tag }}
-                        {{ form.utilizadores_placas_box }}
+                    
+                    <div class="subsection-header">
+                        Utilizadores de serviço de acesso à Internet em banda larga (3G)
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            {{ form.utilizadores_acesso_internet_3g.label_tag }}
+                            {{ form.utilizadores_acesso_internet_3g }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.utilizadores_3g_placas_box.label_tag }}
+                            {{ form.utilizadores_3g_placas_box }}
+                            <small class="text-muted">dos quais com ligação através de Placas (Box)</small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.utilizadores_3g_placas_usb.label_tag }}
+                            {{ form.utilizadores_3g_placas_usb }}
+                            <small class="text-muted">dos quais com ligação através de Placas (USB)</small>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.utilizadores_placas_usb.label_tag }}
-                        {{ form.utilizadores_placas_usb }}
+
+                <!-- Secção 4G -->
+                <div class="technology-section">
+                    <div class="technology-title">
+                        <i class="fas fa-broadcast-tower me-2"></i>Tecnologia 4G
                     </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.utilizadores_servico_4g.label_tag }}
-                        {{ form.utilizadores_servico_4g }}
+                    
+                    <div class="subsection-header">
+                        Utilizadores de serviço de 4G
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            {{ form.utilizadores_servico_4g.label_tag }}
+                            {{ form.utilizadores_servico_4g }}
+                        </div>
+                    </div>
+                    
+                    <div class="subsection-header">
+                        Utilizadores do serviço de acesso à Internet em banda larga (4G)
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            {{ form.utilizadores_acesso_internet_4g.label_tag }}
+                            {{ form.utilizadores_acesso_internet_4g }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.utilizadores_4g_placas_box.label_tag }}
+                            {{ form.utilizadores_4g_placas_box }}
+                            <small class="text-muted">dos quais com ligação através de Placas (Box)</small>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.utilizadores_4g_placas_usb.label_tag }}
+                            {{ form.utilizadores_4g_placas_usb }}
+                            <small class="text-muted">dos quais com ligação através de Placas (USB)</small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Número total de estações móveis activos -->
         <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Serviços de Mobile Money
+            <div class="card-header bg-info text-white">
+                <i class="fas fa-mobile-alt me-2"></i>Número total de estações móveis activos
             </div>
             <div class="card-body">
                 <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.afectos_planos_pos_pagos.label_tag }}
+                        {{ form.afectos_planos_pos_pagos }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.afectos_planos_pos_pagos_utilizacao.label_tag }}
+                        {{ form.afectos_planos_pos_pagos_utilizacao }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.afectos_planos_pre_pagos.label_tag }}
+                        {{ form.afectos_planos_pre_pagos }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.afectos_planos_pre_pagos_utilizacao.label_tag }}
+                        {{ form.afectos_planos_pre_pagos_utilizacao }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.associados_situacoes_especificas.label_tag }}
+                        {{ form.associados_situacoes_especificas }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        {{ form.outros_residuais.label_tag }}
+                        {{ form.outros_residuais }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Serviços de Mobile Money -->
+        <div class="card mb-4">
+            <div class="card-header bg-warning text-dark">
+                <i class="fas fa-money-bill-wave me-2"></i>Serviços de Mobile Money
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
                     <div class="col-md-4 mb-3">
                         {{ form.numero_utilizadores.label_tag }}
                         {{ form.numero_utilizadores }}
@@ -142,7 +241,9 @@
                         {{ form.numero_utilizadores_homem }}
                     </div>
                 </div>
-                <div class="row">
+                
+                <h6 class="text-primary mb-3">Total de Carregamentos</h6>
+                <div class="row mb-4">
                     <div class="col-md-4 mb-3">
                         {{ form.total_carregamentos.label_tag }}
                         {{ form.total_carregamentos }}
@@ -156,7 +257,9 @@
                         {{ form.total_carregamentos_homem }}
                     </div>
                 </div>
-                <div class="row">
+                
+                <h6 class="text-primary mb-3">Total de Levantamentos</h6>
+                <div class="row mb-4">
                     <div class="col-md-4 mb-3">
                         {{ form.total_levantamentos.label_tag }}
                         {{ form.total_levantamentos }}
@@ -170,6 +273,8 @@
                         {{ form.total_levantamentos_homem }}
                     </div>
                 </div>
+                
+                <h6 class="text-primary mb-3">Total de Transferências</h6>
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         {{ form.total_transferencias.label_tag }}
@@ -187,7 +292,14 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-save me-2"></i>Salvar
+            </button>
+            <a href="{% url 'questionarios:estacoes_moveis_list' %}" class="btn btn-secondary btn-lg ms-2">
+                <i class="fas fa-times me-2"></i>Cancelar
+            </a>
+        </div>
     </form>
 </div>
 {% endblock %}

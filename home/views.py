@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Coalesce
 from decimal import Decimal
 
-from .models import Operadora, DadoEstatistico, TipoServico
+from .models import Operadora, DadoEstatistico, TipoServico, Notification, UserActivity
 from .chatbot import Chatbot
 from questionarios.models import (
     AssinantesIndicador, ReceitasIndicador, InvestimentoIndicador
@@ -26,88 +26,81 @@ def get_latest_year(model):
     return model.objects.aggregate(latest_year=Max('ano')).get('latest_year')
 
 def index(request):
+    """View principal da home page com estatísticas do mercado."""
+    context = {
+        'title': 'Observatório do Mercado de Telecomunicações',
+        'page': 'home'
+    }
+    
     try:
-        # Fetch basic stats for the homepage cards
-        total_operadoras = Operadora.objects.filter(ativo=True).count()
-        servicos = TipoServico.objects.all()
+        # Obter dados de assinantes
+        latest_year = get_latest_year(AssinantesIndicador)
+        if latest_year:
+            assinantes_data = AssinantesIndicador.objects.filter(ano=latest_year)
+            total_assinantes = assinantes_data.aggregate(
+                total=Sum('assinantes_activos')
+            )['total'] or 0
+            context['total_assinantes'] = total_assinantes
+            
+            # Preparar dados para gráficos
+            context['assinantes_por_operadora'] = [
+                {
+                    'operadora': item.operadora,
+                    'assinantes': item.assinantes_activos
+                }
+                for item in assinantes_data
+            ]
         
-        # Placeholder data for other cards until specific logic is defined
-        total_questionarios = 13 # Count of distinct indicator types managed
-        total_relatorios = 4 # Placeholder
+        # Obter dados de receitas
+        latest_year_receitas = get_latest_year(ReceitasIndicador)
+        if latest_year_receitas:
+            receitas_data = ReceitasIndicador.objects.filter(ano=latest_year_receitas)
+            total_receitas = receitas_data.aggregate(
+                total=Sum('receita_total')
+            )['total'] or Decimal('0')
+            context['total_receitas'] = total_receitas
         
-        context = {
-            'total_operadoras': total_operadoras,
-            'servicos': servicos,
-            'total_questionarios': total_questionarios,
-            'total_relatorios': total_relatorios,
-        }
+        # Obter dados de investimento
+        latest_year_invest = get_latest_year(InvestimentoIndicador)
+        if latest_year_invest:
+            investimento_data = InvestimentoIndicador.objects.filter(ano=latest_year_invest)
+            total_investimento = investimento_data.aggregate(
+                total=Sum('investimento_total')
+            )['total'] or Decimal('0')
+            context['total_investimento'] = total_investimento
         
-        logger.info(f"Index page loaded successfully. Operadoras: {total_operadoras}, Servicos: {servicos.count()}")
-        return render(request, 'home/index.html', context)
+        # Estatísticas complementares
+        if latest_year:
+            context['latest_year'] = latest_year
+            context['num_operadoras'] = assinantes_data.count() if 'assinantes_data' in locals() else 0
         
     except Exception as e:
-        logger.error(f"Erro ao carregar página inicial: {e}")
-        # Fallback context in case of database errors
-        context = {
-            'total_operadoras': 0,
-            'servicos': [],
-            'total_questionarios': 0,
-            'total_relatorios': 0,
-            'error_message': 'Erro ao carregar dados. Tente novamente mais tarde.'
-        }
-        return render(request, 'home/index.html', context)
+        logger.error(f"Erro ao carregar dados da home: {e}")
+        context.update({
+            'total_assinantes': 0,
+            'total_receitas': Decimal('0'),
+            'total_investimento': Decimal('0'),
+            'num_operadoras': 0
+        })
+    
+    # Usar template diferente se usuário estiver autenticado
+    template = 'home/dashboard.html' if request.user.is_authenticated else 'home/index.html'
+    return render(request, template, context)
 
 @login_required
-def dashboard(request):
-    # Totals for dashboard cards
-    total_operadoras = Operadora.objects.filter(ativo=True).count()
-    total_servicos = TipoServico.objects.count()
-    total_indicadores_count = 13 # Static count for now
-
-    # --- Calculate Key Metrics --- 
-    latest_year_assinantes = get_latest_year(AssinantesIndicador)
-    latest_year_investimento = get_latest_year(InvestimentoIndicador)
-    
-    total_assinantes_geral = 0
-    if latest_year_assinantes:
-        assinantes_agg = AssinantesIndicador.objects.filter(ano=latest_year_assinantes).aggregate(
-            total_sum=Sum( 
-                Coalesce(F('assinantes_pre_pago'), 0) + 
-                Coalesce(F('assinantes_pos_pago'), 0) + 
-                Coalesce(F('assinantes_fixo'), 0) 
-            )
-        )
-        total_assinantes_geral = assinantes_agg.get('total_sum') or 0
-        
-    total_investimento_geral = Decimal('0.00') # Use Decimal
-    if latest_year_investimento:
-        investimento_agg = InvestimentoIndicador.objects.filter(ano=latest_year_investimento).aggregate(
-             total_sum=Sum(
-                 Coalesce(F('servicos_telecomunicacoes'), Decimal('0.0')) + 
-                 Coalesce(F('servicos_internet'), Decimal('0.0')) + 
-                 Coalesce(F('servicos_telecomunicacoes_incorporeo'), Decimal('0.0')) + 
-                 Coalesce(F('servicos_internet_incorporeo'), Decimal('0.0'))
-             , output_field=DecimalField())
-        )
-        total_investimento_geral = investimento_agg.get('total_sum') or Decimal('0.00')
-
-    # Placeholder for other metrics
-    market_share_leader = "Orange (Exemplo)"
-    market_share_value = "49.3% (Exemplo)"
-    avg_qos = "4.0/5 (Exemplo)"
-
+def profile(request):
+    """View para a página de perfil do usuário."""
     context = {
-        'total_operadoras': total_operadoras,
-        'total_servicos': total_servicos,
-        'total_indicadores': total_indicadores_count,
-        'total_assinantes_geral': total_assinantes_geral,
-        'latest_year_assinantes': latest_year_assinantes,
-        'total_investimento_geral': total_investimento_geral,
-        'latest_year_investimento': latest_year_investimento,
-        'market_share_leader': market_share_leader,
-        'market_share_value': market_share_value,
-        'avg_qos': avg_qos,
-        'is_dashboard': True # Flag for active link styling
+        'title': 'Perfil',
+        'page': 'profile'
+    }
+    return render(request, 'account/profile.html', context)
+
+def dashboard(request):
+    """View para o dashboard principal."""
+    context = {
+        'title': 'Dashboard',
+        'page': 'dashboard'
     }
     return render(request, 'home/dashboard.html', context)
 
@@ -119,43 +112,11 @@ def estatisticas(request):
     }
     return render(request, 'home/estatisticas.html', context)
 
-@login_required
 def operadoras(request):
-    operadoras_list = Operadora.objects.filter(ativo=True)
-    operadoras_data = []
-    latest_year = get_latest_year(AssinantesIndicador)
-
-    for op in operadoras_list:
-        assinantes_count = 0
-        if latest_year:
-            agg = AssinantesIndicador.objects.filter(operadora=op.codigo, ano=latest_year).aggregate(
-                 total_sum=Sum( 
-                    Coalesce(F('assinantes_pre_pago'), 0) + 
-                    Coalesce(F('assinantes_pos_pago'), 0) + 
-                    Coalesce(F('assinantes_fixo'), 0) 
-                )
-            )
-            assinantes_count = agg.get('total_sum') or 0
-            
-        operadoras_data.append({
-            'nome': op.nome,
-            'descricao': op.descricao,
-            'logo_url': op.logo.url if op.logo else '/static/img/default-logo.png',
-            'assinantes': assinantes_count, 
-            'servicos': "Móvel, Internet, TV", # Placeholder - needs dynamic logic
-            'ativo_desde': 2005 # Placeholder
-        })
-
-    # Placeholder data for comparison table
-    comparativo_data = [
-        {'operadora': 'Orange', 'assinantes': 750000, 'market_share': '49.3%', 'cobertura': '87%', 'qualidade': '4.2/5', 'licenca': 2030},
-        {'operadora': 'MTN', 'assinantes': 650000, 'market_share': '42.8%', 'cobertura': '82%', 'qualidade': '3.8/5', 'licenca': 2029},
-        {'operadora': 'Guinetel', 'assinantes': 120000, 'market_share': '7.9%', 'cobertura': '45%', 'qualidade': '3.2/5', 'licenca': 2027},
-    ]
-    
+    """View para a página de operadoras."""
     context = {
-        'operadoras': operadoras_data,
-        'comparativo_data': comparativo_data # Pass placeholder data
+        'title': 'Operadoras',
+        'page': 'operadoras'
     }
     return render(request, 'home/operadoras.html', context)
 
@@ -163,12 +124,7 @@ def relatorios(request):
     """View para a página de relatórios."""
     context = {
         'title': 'Relatórios',
-        'page': 'relatorios',
-        'relatorios': [
-            {'titulo': 'Relatório Anual 2024', 'data': '15/01/2025', 'tipo': 'PDF'},
-            {'titulo': 'Relatório Trimestral Q3-2024', 'data': '15/10/2024', 'tipo': 'XLSX'},
-            {'titulo': 'Análise de Mercado 2023-2024', 'data': '30/06/2024', 'tipo': 'PDF'}
-        ]
+        'page': 'relatorios'
     }
     return render(request, 'home/relatorios.html', context)
 
@@ -180,13 +136,50 @@ def sobre(request):
     }
     return render(request, 'home/sobre.html', context)
 
-def profile(request):
-    """View para a página de perfil do usuário."""
+def chatbot_page_view(request):
+    """View para a página do chatbot - renderiza a página de chatbot com contexto adequado."""
     context = {
-        'title': 'Perfil',
-        'page': 'profile'
+        'title': 'Chatbot ARN',
+        'page': 'chatbot'
     }
-    return render(request, 'home/profile.html', context)
+    return render(request, 'home/chatbot.html', context)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ChatbotAPIView(View):
+    """API endpoint para interações com o chatbot."""
+    
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            user_message = data.get('message', '').strip()
+            
+            if not user_message:
+                return JsonResponse({
+                    'error': 'Mensagem vazia'
+                }, status=400)
+            
+            # Process message through chatbot
+            bot_response = chatbot_instance.get_response(user_message)
+            
+            return JsonResponse({
+                'response': bot_response,
+                'status': 'success'
+            })
+            
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'error': 'JSON inválido'
+            }, status=400)
+        except Exception as e:
+            logger.error(f"Erro no chatbot: {e}")
+            return JsonResponse({
+                'error': 'Erro interno do servidor'
+            }, status=500)
+    
+    def get(self, request):
+        return JsonResponse({
+            'error': 'Método não permitido'
+        }, status=405)
 
 def chatbot(request):
     """View para a página do chatbot."""
@@ -196,41 +189,59 @@ def chatbot(request):
     }
     return render(request, 'home/chatbot.html', context)
 
-@method_decorator(csrf_exempt, name='dispatch')
-class ChatbotAPIView(View):
+@login_required
+def notifications_api(request):
+    """API para buscar notificações do usuário"""
+    if request.method == 'GET':
+        notifications = Notification.objects.filter(user=request.user)[:10]
+        data = []
+        for notification in notifications:
+            data.append({
+                'id': notification.id,
+                'title': notification.title,
+                'message': notification.message,
+                'type': notification.notification_type,
+                'is_read': notification.is_read,
+                'created_at': notification.created_at.strftime('%d/%m/%Y %H:%M')
+            })
+        
+        unread_count = Notification.objects.filter(user=request.user, is_read=False).count()
+        
+        return JsonResponse({
+            'notifications': data,
+            'unread_count': unread_count
+        })
     
-    def post(self, request, *args, **kwargs):
-        try:
-            data = json.loads(request.body)
-            user_message = data.get('message')
-            session_id = request.session.get('chatbot_session_id')
-            
-            if not user_message:
-                return JsonResponse({"error": "Mensagem não fornecida."}, status=400)
-                
-            session_id = chatbot_instance.get_session_id(session_id)
-            request.session['chatbot_session_id'] = session_id
-            
-            if user_message.lower().strip() == "/reset":
-                 chatbot_instance.reset_conversation(session_id)
-                 response_data = {
-                     "message": "A conversa foi reiniciada.",
-                     "session_id": session_id,
-                     "status": "success"
-                 }
-            else:
-                response_data = chatbot_instance.get_response(user_message, session_id)
-            
-            request.session.modified = True 
-            
-            return JsonResponse(response_data)
-            
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Dados JSON inválidos."}, status=400)
-        except Exception as e:
-            logger.error(f"Erro na API do Chatbot: {e}", exc_info=True)
-            return JsonResponse({"error": "Erro interno no servidor."}, status=500)
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
 
-def chatbot_page_view(request):
-    context = {}
-    return render(request, 'home/chatbot.html', context) 
+@login_required
+def mark_notification_read(request, notification_id):
+    """API para marcar notificação como lida"""
+    if request.method == 'POST':
+        try:
+            notification = Notification.objects.get(id=notification_id, user=request.user)
+            notification.is_read = True
+            notification.save()
+            return JsonResponse({'success': True})
+        except Notification.DoesNotExist:
+            return JsonResponse({'error': 'Notificação não encontrada'}, status=404)
+    
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
+
+@login_required
+def mark_all_notifications_read(request):
+    """API para marcar todas as notificações como lidas"""
+    if request.method == 'POST':
+        Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+        return JsonResponse({'success': True})
+    
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
+
+def create_welcome_notification(user):
+    """Criar notificação de boas-vindas para novos usuários"""
+    Notification.create_notification(
+        user=user,
+        title="Bem-vindo à ARN Platform!",
+        message="Explore os dados e análises do mercado de telecomunicações da Guiné-Bissau.",
+        notification_type='success'
+    ) 
