@@ -1,195 +1,32 @@
-{% extends "base.html" %}
-{% load static %}
+{%% extends "questionarios/partials/base_form.html" %%}
+{%% load static %%}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/trafego_terminado.css' %}">
-{% endblock %}
+{%% block form_title %%}{%% if form.instance.pk %%}Editar{%% else %%}Criar{%% endif %%} Indicador de Trafego Terminado{%% endblock %%}
+{%% block form_subtitle %%}Gestão de dados de trafego terminado por operadora{%% endblock %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Tráfego Terminado</h2>
-    <form method="post" class="needs-validation" novalidate>
-        {% csrf_token %}
+{%% block list_url %%}{%% url 'questionarios:trafego_terminado_list' %%}{%% endblock %%}
+
+{%% block form_fields %%}
+<!-- Campos específicos do formulário -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-edit me-2"></i>
+            Dados do Indicador
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="alert-questionario alert-questionario-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Template gerado automaticamente. Personalize os campos conforme necessário.</span>
+        </div>
         
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Informações Gerais
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.operadora.label_tag }}
-                        {{ form.operadora }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.ano.label_tag }}
-                        {{ form.ano }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.mes.label_tag }}
-                        {{ form.mes }}
-                    </div>
-                </div>
-            </div>
+        <!-- Campos do formulário aqui -->
+        <div class="row">
+            {{ form.as_p }}
         </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Comunicações de Voz
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_outros_op_moveis_nacionais.label_tag }}
-                        {{ form.chamadas_outros_op_moveis_nacionais }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_mtn.label_tag }}
-                        {{ form.chamadas_mtn }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_operador_b.label_tag }}
-                        {{ form.chamadas_operador_b }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_outros.label_tag }}
-                        {{ form.chamadas_outros }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_operador_rede_fixa.label_tag }}
-                        {{ form.chamadas_operador_rede_fixa }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_cedeao.label_tag }}
-                        {{ form.chamadas_cedeao }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_cplp.label_tag }}
-                        {{ form.chamadas_cplp }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_palop.label_tag }}
-                        {{ form.chamadas_palop }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_resto_africa.label_tag }}
-                        {{ form.chamadas_resto_africa }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_resto_mundo.label_tag }}
-                        {{ form.chamadas_resto_mundo }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_numeros_curtos.label_tag }}
-                        {{ form.chamadas_numeros_curtos }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Minutos de Voz
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_outros_op_moveis_nacionais.label_tag }}
-                        {{ form.minutos_outros_op_moveis_nacionais }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_mtn.label_tag }}
-                        {{ form.minutos_mtn }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_operador_b.label_tag }}
-                        {{ form.minutos_operador_b }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_outros.label_tag }}
-                        {{ form.minutos_outros }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_operador_rede_fixa.label_tag }}
-                        {{ form.minutos_operador_rede_fixa }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_cedeao.label_tag }}
-                        {{ form.minutos_cedeao }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_cplp.label_tag }}
-                        {{ form.minutos_cplp }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_palop.label_tag }}
-                        {{ form.minutos_palop }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_resto_africa.label_tag }}
-                        {{ form.minutos_resto_africa }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_resto_mundo.label_tag }}
-                        {{ form.minutos_resto_mundo }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_numeros_curtos.label_tag }}
-                        {{ form.minutos_numeros_curtos }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Tráfego de Mensagens
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.sms_outras_redes_moveis_nacionais.label_tag }}
-                        {{ form.sms_outras_redes_moveis_nacionais }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.sms_outras_redes_internacionais.label_tag }}
-                        {{ form.sms_outras_redes_internacionais }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.sms_outros.label_tag }}
-                        {{ form.sms_outros }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Salvar</button>
-    </form>
+    </div>
 </div>
-{% endblock %}
+{%% endblock %%}
 
-{% block extra_js %}
-<script src="{% static 'js/trafego_terminado_form_validation.js' %}"></script>
-{% endblock %}
+{%% block submit_text %%}{%% if form.instance.pk %%}Atualizar{%% else %%}Criar{%% endif %%} Trafego Terminado{%% endblock %%}

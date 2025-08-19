@@ -1,78 +1,296 @@
-{% extends "base.html" %}
+{% extends "questionarios/partials/base_detail.html" %}
 {% load static %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/estacoes_moveis.css' %}">
-{% endblock %}
+{% block detail_title %}Detalhes de Estações Móveis{% endblock %}
+{% block detail_subtitle %}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{% endblock %}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Detalhes do Indicador de Estações Móveis</h2>
+{% block list_url %}{% url 'questionarios:estacoes_moveis_list' %}{% endblock %}
+{% block edit_url %}{% url 'questionarios:estacoes_moveis_update' object.pk %}{% endblock %}
+{% block delete_url %}{% url 'questionarios:estacoes_moveis_delete' object.pk %}{% endblock %}
+
+{% block detail_content %}
+<!-- Totais Calculados -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="detail-info-item">
+            <div class="detail-info-icon">
+                <i class="fas fa-signal"></i>
+            </div>
+            <div class="detail-info-content">
+                <strong>Total 3G</strong>
+                <p class="detail-value" data-value="{{ object.calcular_total_3g }}">{{ object.calcular_total_3g|floatformat:0 }}</p>
+            </div>
+        </div>
+    </div>
     
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Informações Gerais
+    <div class="col-md-3">
+        <div class="detail-info-item">
+            <div class="detail-info-icon">
+                <i class="fas fa-broadcast-tower"></i>
+            </div>
+            <div class="detail-info-content">
+                <strong>Total 4G</strong>
+                <p class="detail-value" data-value="{{ object.calcular_total_4g }}">{{ object.calcular_total_4g|floatformat:0 }}</p>
+            </div>
         </div>
-        <div class="card-body">
-            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
-            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
-            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="detail-info-item">
+            <div class="detail-info-icon">
+                <i class="fas fa-globe"></i>
+            </div>
+            <div class="detail-info-content">
+                <strong>Banda Larga</strong>
+                <p class="detail-value" data-value="{{ object.calcular_total_banda_larga }}">{{ object.calcular_total_banda_larga|floatformat:0 }}</p>
+            </div>
         </div>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Número total de estações móveis activos
+    <div class="col-md-3">
+        <div class="detail-info-item">
+            <div class="detail-info-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <div class="detail-info-content">
+                <strong>Estações Ativas</strong>
+                <p class="detail-value" data-value="{{ object.calcular_total_estacoes_moveis }}">{{ object.calcular_total_estacoes_moveis|floatformat:0 }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Utilizadores de Serviço -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-users me-2"></i>
+            Utilizadores de Serviço
+        </h4>
         </div>
         <div class="card-body">
-            <p><strong>Afectos a planos Pós-pagos:</strong> {{ indicador.afectos_planos_pos_pagos }}</p>
-            <p><strong>Afectos a planos Pós-pagos (utilização):</strong> {{ indicador.afectos_planos_pos_pagos_utilizacao }}</p>
-            <p><strong>Afectos a planos Pré-pagos:</strong> {{ indicador.afectos_planos_pre_pagos }}</p>
-            <p><strong>Afectos a planos Pré-pagos (utilização):</strong> {{ indicador.afectos_planos_pre_pagos_utilizacao }}</p>
-            <p><strong>Associados a situações específicas:</strong> {{ indicador.associados_situacoes_especificas|default_if_none:"N/A" }}</p>
-            <p><strong>Outros (residuais):</strong> {{ indicador.outros_residuais|default_if_none:"N/A" }}</p>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-sms"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>SMS</strong>
+                        <p>{{ object.sms|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>MMS</strong>
+                        <p>{{ object.mms|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>Mobile TV</strong>
+                        <p>{{ object.mobile_tv|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>Roaming Internacional</strong>
+                        <p>{{ object.roaming_internacional_out_parc_roaming_out|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Utilizadores de serviço
+<!-- Tecnologia 3G -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-signal me-2"></i>
+            Tecnologia 3G
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>Utilizadores 3G</strong>
+                        <p>{{ object.utilizadores_servico_3g_upgrades|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>Placas Box 3G</strong>
+                        <p>{{ object.utilizadores_3g_placas_box|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-usb"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>Placas USB 3G</strong>
+                        <p>{{ object.utilizadores_3g_placas_usb|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tecnologia 4G -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-broadcast-tower me-2"></i>
+            Tecnologia 4G
+        </h4>
         </div>
         <div class="card-body">
-            <p><strong>SMS:</strong> {{ indicador.sms }}</p>
-            <p><strong>MMS:</strong> {{ indicador.mms|default_if_none:"N/A" }}</p>
-            <p><strong>Mobile TV:</strong> {{ indicador.mobile_tv|default_if_none:"N/A" }}</p>
-            <p><strong>Roaming Internacional - OUT (PARC ROMING OUT):</strong> {{ indicador.roaming_internacional_out_parc_roaming_out }}</p>
-            <p><strong>Banda larga móvel:</strong> {{ indicador.banda_larga_movel }}</p>
-            <p><strong>Utilizadores 5G e upgrades:</strong> {{ indicador.utilizadores_5g_upgrades }}</p>
-            <p><strong>Utilizadores de serviço de acesso à Internet em banda larga:</strong> {{ indicador.utilizadores_servico_acesso_internet_banda_larga }}</p>
-            <p><strong>Utilizadores com ligação através de Placas (Box):</strong> {{ indicador.utilizadores_placas_box }}</p>
-            <p><strong>Utilizadores com ligação através de Placas (USB):</strong> {{ indicador.utilizadores_placas_usb }}</p>
-            <p><strong>Utilizadores do serviço 4G:</strong> {{ indicador.utilizadores_servico_4g }}</p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>Utilizadores 4G</strong>
+                        <p>{{ object.utilizadores_servico_4g|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>Placas Box 4G</strong>
+                        <p>{{ object.utilizadores_4g_placas_box|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-usb"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>Placas USB 4G</strong>
+                        <p>{{ object.utilizadores_4g_placas_usb|floatformat:0|default:"N/A" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Serviços de Mobile Money
+<!-- Mobile Money Detalhado -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-money-bill-wave me-2"></i>
+            Mobile Money - Detalhes
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h6 style="color: var(--binance-yellow);">👥 Utilizadores</h6>
+                <div class="detail-info-item">
+                    <div class="detail-info-content">
+                        <strong>Total:</strong> {{ object.numero_utilizadores|floatformat:0|default:"N/A" }}<br>
+                        <strong>Mulher:</strong> {{ object.numero_utilizadores_mulher|floatformat:0|default:"N/A" }}<br>
+                        <strong>Homem:</strong> {{ object.numero_utilizadores_homem|floatformat:0|default:"N/A" }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <h6 style="color: var(--binance-success);">💰 Carregamentos</h6>
+                <div class="detail-info-item">
+                    <div class="detail-info-content">
+                        <strong>Total:</strong> {{ object.total_carregamentos|floatformat:0|default:"N/A" }}<br>
+                        <strong>Mulher:</strong> {{ object.total_carregamentos_mulher|floatformat:0|default:"N/A" }}<br>
+                        <strong>Homem:</strong> {{ object.total_carregamentos_homem|floatformat:0|default:"N/A" }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <h6 style="color: var(--binance-info);">💸 Levantamentos</h6>
+                <div class="detail-info-item">
+                    <div class="detail-info-content">
+                        <strong>Total:</strong> {{ object.total_levantamentos|floatformat:0|default:"N/A" }}<br>
+                        <strong>Mulher:</strong> {{ object.total_levantamentos_mulher|floatformat:0|default:"N/A" }}<br>
+                        <strong>Homem:</strong> {{ object.total_levantamentos_homem|floatformat:0|default:"N/A" }}
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <p><strong>Número de utilizadores:</strong> {{ indicador.numero_utilizadores }}</p>
-            <p><strong>Número de utilizadores (Mulher):</strong> {{ indicador.numero_utilizadores_mulher }}</p>
-            <p><strong>Número de utilizadores (Homem):</strong> {{ indicador.numero_utilizadores_homem }}</p>
-            <p><strong>Total de carregamentos:</strong> {{ indicador.total_carregamentos }}</p>
-            <p><strong>Total de carregamentos (Mulher):</strong> {{ indicador.total_carregamentos_mulher }}</p>
-            <p><strong>Total de carregamentos (Homem):</strong> {{ indicador.total_carregamentos_homem }}</p>
-            <p><strong>Total de levantamentos:</strong> {{ indicador.total_levantamentos }}</p>
-            <p><strong>Total de levantamentos (Mulher):</strong> {{ indicador.total_levantamentos_mulher }}</p>
-            <p><strong>Total de levantamentos (Homem):</strong> {{ indicador.total_levantamentos_homem }}</p>
-            <p><strong>Total de transferências:</strong> {{ indicador.total_transferencias }}</p>
-            <p><strong>Total de transferências (Mulher):</strong> {{ indicador.total_transferencias_mulher }}</p>
-            <p><strong>Total de transferências (Homem):</strong> {{ indicador.total_transferencias_homem }}</p>
+        
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <h6 style="color: var(--binance-warning);">🔄 Transferências</h6>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="detail-info-item">
+                            <div class="detail-info-content">
+                                <strong>Total:</strong> {{ object.total_transferencias|floatformat:0|default:"N/A" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="detail-info-item">
+                            <div class="detail-info-content">
+                                <strong>Mulher:</strong> {{ object.total_transferencias_mulher|floatformat:0|default:"N/A" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="detail-info-item">
+                            <div class="detail-info-content">
+                                <strong>Homem:</strong> {{ object.total_transferencias_homem|floatformat:0|default:"N/A" }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <a href="{% url 'questionarios:estacoes_moveis_update' indicador.pk %}" class="btn btn-primary">Editar</a>
-    <a href="{% url 'questionarios:estacoes_moveis_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
 </div>
 {% endblock %}

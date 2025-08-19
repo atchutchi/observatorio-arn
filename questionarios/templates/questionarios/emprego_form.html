@@ -1,113 +1,32 @@
-{% extends "base.html" %}
-{% load static %}
+{%% extends "questionarios/partials/base_form.html" %%}
+{%% load static %%}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/emprego.css' %}">
-{% endblock %}
+{%% block form_title %%}{%% if form.instance.pk %%}Editar{%% else %%}Criar{%% endif %%} Indicador de Emprego{%% endblock %%}
+{%% block form_subtitle %%}Gestão de dados de emprego por operadora{%% endblock %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Emprego</h2>
-    <form method="post" class="needs-validation" novalidate>
-        {% csrf_token %}
+{%% block list_url %%}{%% url 'questionarios:emprego_list' %%}{%% endblock %%}
+
+{%% block form_fields %%}
+<!-- Campos específicos do formulário -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-edit me-2"></i>
+            Dados do Indicador
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="alert-questionario alert-questionario-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Template gerado automaticamente. Personalize os campos conforme necessário.</span>
+        </div>
         
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Informações Gerais
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.operadora.label_tag }}
-                        {{ form.operadora }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.ano.label_tag }}
-                        {{ form.ano }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.mes.label_tag }}
-                        {{ form.mes }}
-                    </div>
-                </div>
-            </div>
+        <!-- Campos do formulário aqui -->
+        <div class="row">
+            {{ form.as_p }}
         </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Emprego Direto
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        {{ form.emprego_direto_total.label_tag }}
-                        {{ form.emprego_direto_total }}
-                    </div>
-                </div>
-
-                <h5 class="mt-3">Nacionais</h5>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.nacionais_total.label_tag }}
-                        {{ form.nacionais_total }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.nacionais_homem.label_tag }}
-                        {{ form.nacionais_homem }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.nacionais_mulher.label_tag }}
-                        {{ form.nacionais_mulher }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Emprego Indireto
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        {{ form.emprego_indireto.label_tag }}
-                        {{ form.emprego_indireto }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Totais Calculados -->
-        <div class="card mb-4">
-            <div class="card-header bg-info text-white">
-                Totais Calculados (Automático)
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Total Geral:</strong> <span id="total-geral">0</span></p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Percentual por Gênero:</strong></p>
-                        <p>Homens: <span id="percentual-homens">0</span>%</p>
-                        <p>Mulheres: <span id="percentual-mulheres">0</span>%</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> Salvar
-            </button>
-            <a href="{% url 'questionarios:emprego_list' %}" class="btn btn-secondary">
-                <i class="fas fa-times"></i> Cancelar
-            </a>
-        </div>
-    </form>
+    </div>
 </div>
-{% endblock %}
+{%% endblock %%}
 
-{% block extra_js %}
-<script src="{% static 'js/emprego.js' %}"></script>
-{% endblock %}
+{%% block submit_text %%}{%% if form.instance.pk %%}Atualizar{%% else %%}Criar{%% endif %%} Emprego{%% endblock %%}

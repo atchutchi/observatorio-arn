@@ -1,77 +1,29 @@
-{% extends "base.html" %}
+{%% extends "questionarios/partials/base_detail.html" %%}
+{%% load static %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Detalhes do Indicador de Internet Fixo</h2>
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Informações Gerais
-        </div>
-        <div class="card-body">
-            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
-            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
-            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
-        </div>
-    </div>
+{%% block detail_title %%}Detalhes de Internet Fixo{%% endblock %%}
+{%% block detail_subtitle %%}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{%% endblock %%}
 
-    <div class="card mt-4">
-        <div class="card-header bg-primary text-white">
-            Número de assinantes de Internet fixo via rádio
-        </div>
-        <div class="card-body">
-            <p><strong>Cidade de Bissau:</strong> {{ indicador.cidade_bissau }}</p>
-            <p><strong>Bafatá:</strong> {{ indicador.bafata }}</p>
-            <p><strong>Biombo:</strong> {{ indicador.biombo }}</p>
-            <p><strong>Bolama-Bijagós:</strong> {{ indicador.bolama_bijagos }}</p>
-            <p><strong>Cacheu:</strong> {{ indicador.cacheu }}</p>
-            <p><strong>Gabú:</strong> {{ indicador.gabu }}</p>
-            <p><strong>Oio:</strong> {{ indicador.oio }}</p>
-            <p><strong>Quinara:</strong> {{ indicador.quinara }}</p>
-            <p><strong>Tombali:</strong> {{ indicador.tombali }}</p>
-        </div>
-    </div>
+{%% block list_url %%}{%% url 'questionarios:internet_fixo_list' %%}{%% endblock %%}
+{%% block edit_url %%}{%% url 'questionarios:internet_fixo_update' object.pk %%}{%% endblock %%}
+{%% block delete_url %%}{%% url 'questionarios:internet_fixo_delete' object.pk %%}{%% endblock %%}
 
-    <div class="card mt-4">
-        <div class="card-header bg-primary text-white">
-            Número de assinantes activos de Internet Fixo via Rádio
-        </div>
-        <div class="card-body">
-            <p><strong>Airbox:</strong> {{ indicador.airbox }}</p>
-            <p><strong>Sistema Hertziano Fixo de Terra:</strong> {{ indicador.sistema_hertziano_fixo_terra }}</p>
-            <p><strong>Outros (PROXIM):</strong> {{ indicador.outros_proxim }}</p>
-            <p><strong>Fibra Ótica:</strong> {{ indicador.fibra_otica }}</p>
-        </div>
-    </div>
-
-    <div class="card mt-4">
-        <div class="card-header bg-primary text-white">
-            Número de assinantes de Serviços de Internet por débito
-        </div>
-        <div class="card-body">
-            <p><strong>256 Kbit/s - 2 Mbit/s:</strong> {{ indicador.banda_larga_256kbits_2mbits }}</p>
-            <p><strong>2 Mbit/s - 4 Mbit/s:</strong> {{ indicador.banda_larga_2_4mbits }}</p>
-            <p><strong>5 Mbit/s - 10 Mbit/s:</strong> {{ indicador.banda_larga_5_10mbits }}</p>
-            <p><strong>Outros:</strong> {{ indicador.banda_larga_outros }}</p>
-        </div>
-    </div>
-
-    <div class="card mt-4">
-        <div class="card-header bg-primary text-white">
-            Número de assinantes de Internet por categoria
-        </div>
-        <div class="card-body">
-            <p><strong>Residencial:</strong> {{ indicador.residencial }}</p>
-            <p><strong>Corporativo/empresarial:</strong> {{ indicador.corporativo_empresarial }}</p>
-            <p><strong>Instituições Públicas:</strong> {{ indicador.instituicoes_publicas }}</p>
-            <p><strong>Instituições de Ensino:</strong> {{ indicador.instituicoes_ensino }}</p>
-            <p><strong>Instituições de Saúde:</strong> {{ indicador.instituicoes_saude }}</p>
-            <p><strong>ONG e outros:</strong> {{ indicador.ong_outros }}</p>
-        </div>
-    </div>
-
-    <div class="mt-4">
-        <a href="{% url 'questionarios:internet_fixo_update\' indicador.pk %}" class="btn btn-warning">Editar</a>
-        <a href="{% url 'questionarios:internet_fixo_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
-    </div>
+{%% block detail_content %%}
+<!-- Dados específicos do indicador -->
+<div class="alert-questionario alert-questionario-info">
+    <i class="fas fa-info-circle"></i>
+    <span>Template gerado automaticamente. Personalize a exibição dos dados conforme necessário.</span>
 </div>
-{% endblock %}
+
+<div class="table-responsive">
+    <table class="questionario-table">
+        <tbody>
+            <!-- Adicione aqui os campos específicos do modelo -->
+            <tr>
+                <td><strong>Dados:</strong></td>
+                <td>Personalize este template com os campos específicos do modelo</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{%% endblock %%}

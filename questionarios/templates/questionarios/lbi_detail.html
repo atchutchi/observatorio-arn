@@ -1,56 +1,29 @@
-{% extends "base.html" %}
+{%% extends "questionarios/partials/base_detail.html" %%}
+{%% load static %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Detalhes do Indicador de LBI</h2>
-    
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Informações Gerais
-        </div>
-        <div class="card-body">
-            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
-            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
-            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
-        </div>
-    </div>
+{%% block detail_title %%}Detalhes de Lbi{%% endblock %%}
+{%% block detail_subtitle %%}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{%% endblock %%}
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Largura de banda de Internet internacional por tecnologia
-        </div>
-        <div class="card-body">
-            <p><strong>Satélite:</strong> {{ indicador.satelite|default_if_none:"N/A" }}</p>
-            <p><strong>Cabo de Fibra Óptica:</strong> {{ indicador.cabo_fibra_optica }}</p>
-            <p><strong>Feixe Hertziano:</strong> {{ indicador.feixe_hertziano }}</p>
-        </div>
-    </div>
+{%% block list_url %%}{%% url 'questionarios:lbi_list' %%}{%% endblock %%}
+{%% block edit_url %%}{%% url 'questionarios:lbi_update' object.pk %%}{%% endblock %%}
+{%% block delete_url %%}{%% url 'questionarios:lbi_delete' object.pk %%}{%% endblock %%}
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Down link
-        </div>
-        <div class="card-body">
-            <p><strong>Disponível (Nominal):</strong> {{ indicador.disponivel_nominal_down }}</p>
-            <p><strong>Instalada/Equipada:</strong> {{ indicador.instalada_equipada_down }}</p>
-            <p><strong>Contratada:</strong> {{ indicador.contratada_down }}</p>
-            <p><strong>Utilizada:</strong> {{ indicador.utilizada_down }}</p>
-        </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Up link
-        </div>
-        <div class="card-body">
-            <p><strong>Disponível (Nominal):</strong> {{ indicador.disponivel_nominal_up }}</p>
-            <p><strong>Instalada/Equipada:</strong> {{ indicador.instalada_equipada_up }}</p>
-            <p><strong>Contratada:</strong> {{ indicador.contratada_up }}</p>
-            <p><strong>Utilizada:</strong> {{ indicador.utilizada_up }}</p>
-        </div>
-    </div>
-
-    <a href="{% url 'questionarios:lbi_update\' indicador.pk %}" class="btn btn-primary">Editar</a>
-    <a href="{% url 'questionarios:lbi_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
+{%% block detail_content %%}
+<!-- Dados específicos do indicador -->
+<div class="alert-questionario alert-questionario-info">
+    <i class="fas fa-info-circle"></i>
+    <span>Template gerado automaticamente. Personalize a exibição dos dados conforme necessário.</span>
 </div>
-{% endblock %}
+
+<div class="table-responsive">
+    <table class="questionario-table">
+        <tbody>
+            <!-- Adicione aqui os campos específicos do modelo -->
+            <tr>
+                <td><strong>Dados:</strong></td>
+                <td>Personalize este template com os campos específicos do modelo</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{%% endblock %%}

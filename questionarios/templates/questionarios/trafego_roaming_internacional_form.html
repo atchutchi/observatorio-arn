@@ -1,179 +1,32 @@
-{% extends "base.html" %}
-{% load static %}
+{%% extends "questionarios/partials/base_form.html" %%}
+{%% load static %%}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/trafego_roaming_internacional.css' %}">
-{% endblock %}
+{%% block form_title %%}{%% if form.instance.pk %%}Editar{%% else %%}Criar{%% endif %%} Indicador de Trafego Roaming Internacional{%% endblock %%}
+{%% block form_subtitle %%}Gestão de dados de trafego roaming internacional por operadora{%% endblock %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Tráfego de Roaming Internacional</h2>
-    <form method="post" class="needs-validation" novalidate>
-        {% csrf_token %}
+{%% block list_url %%}{%% url 'questionarios:trafego_roaming_internacional_list' %%}{%% endblock %%}
+
+{%% block form_fields %%}
+<!-- Campos específicos do formulário -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-edit me-2"></i>
+            Dados do Indicador
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="alert-questionario alert-questionario-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Template gerado automaticamente. Personalize os campos conforme necessário.</span>
+        </div>
         
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Informações Gerais
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.operadora.label_tag }}
-                        {{ form.operadora }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.ano.label_tag }}
-                        {{ form.ano }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.mes.label_tag }}
-                        {{ form.mes }}
-                    </div>
-                </div>
-            </div>
+        <!-- Campos do formulário aqui -->
+        <div class="row">
+            {{ form.as_p }}
         </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Chamadas de Roaming internacional - IN
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_originadas_rede.label_tag }}
-                        {{ form.chamadas_originadas_rede }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_terminadas_rede.label_tag }}
-                        {{ form.chamadas_terminadas_rede }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Minutos de Roaming internacional - IN
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_originados_rede.label_tag }}
-                        {{ form.minutos_originados_rede }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_terminados_rede.label_tag }}
-                        {{ form.minutos_terminados_rede }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Tráfego de dados em ROAMING internacional - IN
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.mensagens_escritas_enviadas.label_tag }}
-                        {{ form.mensagens_escritas_enviadas }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.mensagens_escritas_recebidas.label_tag }}
-                        {{ form.mensagens_escritas_recebidas }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.sessoes_acesso_internet.label_tag }}
-                        {{ form.sessoes_acesso_internet }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.volume_acesso_internet.label_tag }}
-                        {{ form.volume_acesso_internet }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Chamadas de Roaming Internacional - OUT
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_originadas_operador_roaming.label_tag }}
-                        {{ form.chamadas_originadas_operador_roaming }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.chamadas_terminadas_operador_roaming.label_tag }}
-                        {{ form.chamadas_terminadas_operador_roaming }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Minutos de Roaming Internacional - OUT
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_originados_operador_roaming.label_tag }}
-                        {{ form.minutos_originados_operador_roaming }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.minutos_terminados_operador_roaming.label_tag }}
-                        {{ form.minutos_terminados_operador_roaming }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Tráfego de dados em Roaming Internacional - OUT
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.mensagens_escritas_enviadas_out.label_tag }}
-                        {{ form.mensagens_escritas_enviadas_out }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.sessoes_acesso_internet_out.label_tag }}
-                        {{ form.sessoes_acesso_internet_out }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.volume_acesso_internet_out.label_tag }}
-                        {{ form.volume_acesso_internet_out }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Acordos de Roaming Internacional
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        {{ form.acordos_roaming_internacional.label_tag }}
-                        {{ form.acordos_roaming_internacional }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Salvar</button>
-    </form>
+    </div>
 </div>
-{% endblock %}
+{%% endblock %%}
 
-{% block extra_js %}
-<script src="{% static 'js/trafego_roaming_internacional_form_validation.js' %}"></script>
-{% endblock %}
+{%% block submit_text %%}{%% if form.instance.pk %%}Atualizar{%% else %%}Criar{%% endif %%} Trafego Roaming Internacional{%% endblock %%}

@@ -1,122 +1,29 @@
-{% extends "base.html" %}
+{%% extends "questionarios/partials/base_detail.html" %%}
+{%% load static %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Detalhes do Indicador de Tráfego Originado</h2>
-    
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Informações Gerais
-        </div>
-        <div class="card-body">
-            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
-            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
-            <p><strong>Mês:</strong> {{ indicador.mes }}</p>
-        </div>
-    </div>
+{%% block detail_title %%}Detalhes de Trafego Originado{%% endblock %%}
+{%% block detail_subtitle %%}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{%% endblock %%}
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Tráfego de Dados 3G e upgrade
-        </div>
-        <div class="card-body">
-            <p><strong>Tráfego de Dados 3G e upgrade:</strong> {{ indicador.trafego_dados_3g_upgrade }} Mbit/s</p>
-            <p><strong>Internet 3G:</strong> {{ indicador.internet_3g }} Mbit</p>
-            <p><strong>Internet 3G (Placas Modem):</strong> {{ indicador.internet_3g_placas_modem }} Mbit</p>
-            <p><strong>Internet 3G (Modem USB):</strong> {{ indicador.internet_3g_modem_usb }} Mbit</p>
-        </div>
-    </div>
+{%% block list_url %%}{%% url 'questionarios:trafego_originado_list' %%}{%% endblock %%}
+{%% block edit_url %%}{%% url 'questionarios:trafego_originado_update' object.pk %%}{%% endblock %%}
+{%% block delete_url %%}{%% url 'questionarios:trafego_originado_delete' object.pk %%}{%% endblock %%}
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Tráfego de Dados 4G
-        </div>
-        <div class="card-body">
-            <p><strong>Tráfego de Dados 4G:</strong> {{ indicador.trafego_dados_4g }} Mbit/s</p>
-            <p><strong>Internet 4G:</strong> {{ indicador.internet_4g }} Mbyte (Mo)</p>
-            <p><strong>Internet 4G (Placas Modem):</strong> {{ indicador.internet_4g_placas_modem }} Mbyte (Mo)</p>
-            <p><strong>Internet 4G (Modem USB):</strong> {{ indicador.internet_4g_modem_usb }} Mbyte (Mo)</p>
-        </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Tráfego de Dados 2G e Sessões
-        </div>
-        <div class="card-body">
-            <p><strong>Tráfego de Dados 2G:</strong> {{ indicador.trafego_dados_2g }} Sessões</p>
-            <p><strong>Tráfego de Dados 3G e upgrade (Sessões):</strong> {{ indicador.trafego_dados_3g_upgrade_sessoes }} Sessões</p>
-            <p><strong>Internet 3G (Sessões):</strong> {{ indicador.internet_3g_sessoes }} Sessões</p>
-            <p><strong>Internet 3G Placas Modem (Sessões):</strong> {{ indicador.internet_3g_placas_modem_sessoes }} Sessões</p>
-            <p><strong>Internet 3G Modem USB (Sessões):</strong> {{ indicador.internet_3g_modem_usb_sessoes }} Sessões</p>
-        </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Tráfego de Mensagens (SMS)
-        </div>
-        <div class="card-body">
-            <p><strong>Total SMS:</strong> {{ indicador.sms_total }}</p>
-            <p><strong>SMS On-net:</strong> {{ indicador.sms_on_net }}</p>
-            <p><strong>SMS Off-net:</strong> {{ indicador.sms_off_net }}</p>
-            <p><strong>SMS Internacional:</strong> {{ indicador.sms_internacional }}</p>
-            <p><strong>SMS CEDEAO:</strong> {{ indicador.sms_cedeao }}</p>
-            <p><strong>SMS PALOP:</strong> {{ indicador.sms_palop }}</p>
-            <p><strong>SMS CPLP:</strong> {{ indicador.sms_cplp }}</p>
-            <p><strong>SMS Resto de África:</strong> {{ indicador.sms_resto_africa }}</p>
-            <p><strong>SMS Resto do Mundo:</strong> {{ indicador.sms_resto_mundo }}</p>
-        </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Volume de Tráfegos de Voz
-        </div>
-        <div class="card-body">
-            <p><strong>Total Voz:</strong> {{ indicador.voz_total }} minutos</p>
-            <p><strong>Voz On-net:</strong> {{ indicador.voz_on_net }} minutos</p>
-            <p><strong>Voz Off-net:</strong> {{ indicador.voz_off_net }} minutos</p>
-            <p><strong>Voz MTN:</strong> {{ indicador.voz_mtn }} minutos</p>
-            <p><strong>Voz Internacional:</strong> {{ indicador.voz_internacional }} minutos</p>
-            <p><strong>Voz CEDEAO:</strong> {{ indicador.voz_cedeao }} minutos</p>
-            <p><strong>Voz CPLP:</strong> {{ indicador.voz_cplp }} minutos</p>
-            <p><strong>Voz PALOP:</strong> {{ indicador.voz_palop }} minutos</p>
-            <p><strong>Voz Resto de África:</strong> {{ indicador.voz_resto_africa }} minutos</p>
-            <p><strong>Voz Resto do Mundo:</strong> {{ indicador.voz_resto_mundo }} minutos</p>
-        </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Número de Comunicações de Voz
-        </div>
-        <div class="card-body">
-            <p><strong>Total Chamadas:</strong> {{ indicador.chamadas_total }}</p>
-            <p><strong>Chamadas On-net:</strong> {{ indicador.chamadas_on_net }}</p>
-            <p><strong>Chamadas Off-net:</strong> {{ indicador.chamadas_off_net }}</p>
-            <p><strong>Chamadas MTN:</strong> {{ indicador.chamadas_mtn }}</p>
-            <p><strong>Chamadas Internacional:</strong> {{ indicador.chamadas_internacional }}</p>
-            <p><strong>Chamadas CEDEAO:</strong> {{ indicador.chamadas_cedeao }}</p>
-            <p><strong>Chamadas CPLP:</strong> {{ indicador.chamadas_cplp }}</p>
-            <p><strong>Chamadas PALOP:</strong> {{ indicador.chamadas_palop }}</p>
-            <p><strong>Chamadas Resto de África:</strong> {{ indicador.chamadas_resto_africa }}</p>
-            <p><strong>Chamadas Resto do Mundo:</strong> {{ indicador.chamadas_resto_mundo }}</p>
-        </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Outros Indicadores
-        </div>
-        <div class="card-body">
-            <p><strong>Operador Móvel B:</strong> {{ indicador.operador_movel_b }}</p>
-            <p><strong>Operador Rede Fixa:</strong> {{ indicador.operador_rede_fixa }}</p>
-            <p><strong>Números Curtos:</strong> {{ indicador.numeros_curtos }}</p>
-        </div>
-    </div>
-
-    <a href="{% url 'questionarios:trafego_originado_update\' indicador.pk %}" class="btn btn-primary">Editar</a>
-    <a href="{% url 'questionarios:trafego_originado_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
+{%% block detail_content %%}
+<!-- Dados específicos do indicador -->
+<div class="alert-questionario alert-questionario-info">
+    <i class="fas fa-info-circle"></i>
+    <span>Template gerado automaticamente. Personalize a exibição dos dados conforme necessário.</span>
 </div>
-{% endblock %}
+
+<div class="table-responsive">
+    <table class="questionario-table">
+        <tbody>
+            <!-- Adicione aqui os campos específicos do modelo -->
+            <tr>
+                <td><strong>Dados:</strong></td>
+                <td>Personalize este template com os campos específicos do modelo</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{%% endblock %%}

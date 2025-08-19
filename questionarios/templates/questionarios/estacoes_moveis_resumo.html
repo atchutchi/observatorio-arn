@@ -1,105 +1,307 @@
-{% extends "base.html" %}
+{% extends "questionarios/base_questionarios.html" %}
+{% load static %}
+{% load humanize %}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Resumo de Estações Móveis - {{ ano }}</h2>
+{% block questionario_title %}Resumo de Estações Móveis{% endblock %}
 
-    <!-- Filtro de Operadora -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Filtrar por Operadora
+{% block questionario_content %}
+<!-- Header do Resumo -->
+<div class="questionario-header">
+    <div class="d-flex justify-content-between align-items-start">
+        <div>
+            <h1 class="questionario-title">Resumo de Estações Móveis - {{ ano }}</h1>
+            <p class="questionario-subtitle">Análise consolidada dos dados por operadora e período</p>
         </div>
-        <div class="card-body">
-            <form method="get" class="form-inline">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <select name="operadora" class="form-control">
-                            <option value="">Todas</option>
-                            <option value="orange" {% if request.GET.operadora == 'orange' %}selected{% endif %}>Orange</option>
-                            <option value="mtn" {% if request.GET.operadora == 'mtn' %}selected{% endif %}>MTN</option>
-                        </select>
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary">Filtrar</button>
-                    </div>
-                </div>
-            </form>
+        <div class="questionario-actions">
+            <a href="{% url 'questionarios:estacoes_moveis_list' %}" class="btn btn-outline">
+                <i class="fas fa-arrow-left me-2"></i>Voltar à Lista
+            </a>
         </div>
-    </div>
-
-    <!-- Operadora Selecionada -->
-    {% if operadora_selecionada %}
-    <div class="alert alert-info">
-        Mostrando dados da operadora: {{ operadora_selecionada|upper }}
-    </div>
-    {% endif %}
-
-    <h3>Totais Trimestrais</h3>
-    {% for trimestre in totais_trimestrais %}
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            {{ trimestre.trimestre }}º Trimestre
-        </div>
-        <div class="card-body">
-            <p><strong>Total de Utilizadores:</strong> {{ trimestre.total_utilizadores }}</p>
-            <p><strong>Total de Carregamentos:</strong> {{ trimestre.total_carregamentos }}</p>
-            <p><strong>Total de Levantamentos:</strong> {{ trimestre.total_levantamentos }}</p>
-            <p><strong>Total de Transferências:</strong> {{ trimestre.total_transferencias }}</p>
-            <p><strong>Total de Estações Móveis:</strong> {{ trimestre.total_estacoes_moveis }}</p>
-        </div>
-    </div>
-    {% endfor %}
-
-    <h3>Totais Anuais</h3>
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Ano {{ ano }}
-        </div>
-        <div class="card-body">
-            <p><strong>Total de Utilizadores:</strong> {{ total_utilizadores_anual }}</p>
-            <p><strong>Total de Carregamentos:</strong> {{ total_carregamentos_anual }}</p>
-            <p><strong>Total de Levantamentos:</strong> {{ total_levantamentos_anual }}</p>
-            <p><strong>Total de Transferências:</strong> {{ total_transferencias_anual }}</p>
-            <p><strong>Total de Estações Móveis:</strong> {{ total_estacoes_moveis_anual }}</p>
-        </div>
-    </div>
-
-    <h3>Detalhes Mensais</h3>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Mês</th>
-                    <th>Operadora</th>
-                    <th>Total de Utilizadores</th>
-                    <th>Total de Carregamentos</th>
-                    <th>Total de Levantamentos</th>
-                    <th>Total de Transferências</th>
-                    <th>Total de Estações Móveis</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for indicador in indicadores %}
-                <tr>
-                    <td>{{ indicador.get_mes_display }}</td>
-                    <td>{{ indicador.get_operadora_display }}</td>
-                    <td>{{ indicador.calcular_total_utilizadores }}</td>
-                    <td>{{ indicador.calcular_total_carregamentos }}</td>
-                    <td>{{ indicador.calcular_total_levantamentos }}</td>
-                    <td>{{ indicador.calcular_total_transferencias }}</td>
-                    <td>{{ indicador.calcular_total_estacoes_moveis }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Botões de Ação -->
-    <div class="mt-4 mb-4">
-        <a href="{% url 'questionarios:estacoes_moveis_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
-        <button class="btn btn-primary" onclick="window.print()">
-            <i class="fas fa-print"></i> Imprimir Relatório
-        </button>
     </div>
 </div>
+
+<!-- Filtros -->
+<div class="questionario-filters">
+    <h5 class="questionario-filters-title">
+        <i class="fas fa-filter me-2"></i>
+        Filtros de Análise
+    </h5>
+    <form method="get" class="questionario-filter-group">
+        <div class="form-group-questionario">
+            <label class="form-label-questionario">Operadora</label>
+            <select name="operadora" class="form-select-questionario">
+                <option value="">Todas as operadoras</option>
+                <option value="ORANGE" {% if request.GET.operadora == 'ORANGE' %}selected{% endif %}>Orange</option>
+                <option value="TELECEL" {% if request.GET.operadora == 'TELECEL' %}selected{% endif %}>TELECEL</option>
+            </select>
+        </div>
+        <div class="form-group-questionario">
+            <button type="submit" class="btn-binance">
+                <i class="fas fa-filter me-2"></i>Aplicar Filtro
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Filtro Ativo -->
+{% if operadora_selecionada %}
+<div class="alert-questionario alert-questionario-info mb-4">
+    <i class="fas fa-filter"></i>
+    <span>Mostrando dados da operadora: <strong>{{ operadora_selecionada|upper }}</strong></span>
+</div>
+{% endif %}
+
+<!-- Totais Anuais -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-chart-bar me-2"></i>
+            Totais Anuais - {{ ano }}
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-value">{{ total_utilizadores_anual|floatformat:0|default:"0" }}</div>
+                <div class="stat-label">Total Utilizadores</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="stat-value">{{ total_carregamentos_anual|floatformat:0|default:"0" }}</div>
+                <div class="stat-label">Total Carregamentos</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <div class="stat-value">{{ total_levantamentos_anual|floatformat:0|default:"0" }}</div>
+                <div class="stat-label">Total Levantamentos</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="stat-value">{{ total_transferencias_anual|floatformat:0|default:"0" }}</div>
+                <div class="stat-label">Total Transferências</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="stat-value">{{ total_estacoes_moveis_anual|floatformat:0|default:"0" }}</div>
+                <div class="stat-label">Estações Móveis</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Totais por Trimestre -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-chart-line me-2"></i>
+            Análise Trimestral
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {% for trimestre in totais_trimestrais %}
+            <div class="col-md-6 mb-4">
+                <div class="trimestre-card">
+                    <div class="trimestre-header">
+                        <h5>{{ trimestre.trimestre }}º Trimestre</h5>
+                    </div>
+                    <div class="trimestre-body">
+                        <div class="trimestre-stat">
+                            <span class="trimestre-label">Utilizadores:</span>
+                            <span class="trimestre-value">{{ trimestre.total_utilizadores|floatformat:0 }}</span>
+                        </div>
+                        <div class="trimestre-stat">
+                            <span class="trimestre-label">Carregamentos:</span>
+                            <span class="trimestre-value">{{ trimestre.total_carregamentos|floatformat:0 }}</span>
+                        </div>
+                        <div class="trimestre-stat">
+                            <span class="trimestre-label">Levantamentos:</span>
+                            <span class="trimestre-value">{{ trimestre.total_levantamentos|floatformat:0 }}</span>
+                        </div>
+                        <div class="trimestre-stat">
+                            <span class="trimestre-label">Transferências:</span>
+                            <span class="trimestre-value">{{ trimestre.total_transferencias|floatformat:0 }}</span>
+                        </div>
+                        <div class="trimestre-stat">
+                            <span class="trimestre-label">Estações Móveis:</span>
+                            <span class="trimestre-value">{{ trimestre.total_estacoes_moveis|floatformat:0 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Tabela Detalhada -->
+<div class="platform-card">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-table me-2"></i>
+            Detalhes por Período
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="questionario-table">
+                <thead>
+                    <tr>
+                        <th>Trimestre</th>
+                        <th>Operadora</th>
+                        <th>Utilizadores</th>
+                        <th>Carregamentos</th>
+                        <th>Levantamentos</th>
+                        <th>Transferências</th>
+                        <th>Estações Móveis</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for indicador in indicadores %}
+                    <tr>
+                        <td>{{ indicador.trimestre }}º Trim</td>
+                        <td>
+                            <div class="operadora-display">
+                                <div class="operadora-icon {{ indicador.operadora|lower }}">
+                                    {% if indicador.operadora == 'ORANGE' %}
+                                        <i class="fas fa-signal"></i>
+                                    {% elif indicador.operadora == 'TELECEL' %}
+                                        <i class="fas fa-broadcast-tower"></i>
+                                    {% else %}
+                                        <i class="fas fa-tower-cell"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="operadora-name">{{ indicador.operadora }}</div>
+                            </div>
+                        </td>
+                        <td>{{ indicador.calcular_total_utilizadores|floatformat:0 }}</td>
+                        <td>{{ indicador.calcular_total_carregamentos|floatformat:0 }}</td>
+                        <td>{{ indicador.calcular_total_levantamentos|floatformat:0 }}</td>
+                        <td>{{ indicador.calcular_total_transferencias|floatformat:0 }}</td>
+                        <td><strong>{{ indicador.calcular_total_estacoes_moveis|floatformat:0 }}</strong></td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{% url 'questionarios:estacoes_moveis_detail' indicador.pk %}" 
+                                   class="btn-questionario btn-questionario-info"
+                                   title="Ver detalhes">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'questionarios:estacoes_moveis_update' indicador.pk %}" 
+                                   class="btn-questionario btn-questionario-warning"
+                                   title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <div class="empty-state">
+                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                <h5>Nenhum dado encontrado</h5>
+                                <p>Não há indicadores para o ano {{ ano }}{% if operadora_selecionada %} da operadora {{ operadora_selecionada }}{% endif %}.</p>
+                                <a href="{% url 'questionarios:estacoes_moveis_create' %}" class="btn-binance mt-3">
+                                    <i class="fas fa-plus me-2"></i>Adicionar Indicador
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Ações Finais -->
+<div class="platform-card">
+    <div class="card-body">
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="{% url 'questionarios:estacoes_moveis_list' %}" class="btn btn-outline">
+                <i class="fas fa-list me-2"></i>Voltar para Lista
+            </a>
+            <button class="btn btn-outline" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>Imprimir Relatório
+            </button>
+            <a href="{% url 'questionarios:estacoes_moveis_create' %}" class="btn-binance">
+                <i class="fas fa-plus me-2"></i>Novo Indicador
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block questionario_js %}
+<script>
+// Estilos específicos para trimestres
+const styles = `
+.trimestre-card {
+    background-color: var(--binance-dark);
+    border: 1px solid var(--binance-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.trimestre-header {
+    background: linear-gradient(135deg, var(--binance-yellow) 0%, #D4A00A 100%);
+    color: var(--binance-dark);
+    padding: 1rem;
+    text-align: center;
+}
+
+.trimestre-header h5 {
+    margin: 0;
+    font-weight: 600;
+    color: var(--binance-dark) !important;
+}
+
+.trimestre-body {
+    padding: 1rem;
+}
+
+.trimestre-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--binance-border);
+}
+
+.trimestre-stat:last-child {
+    border-bottom: none;
+}
+
+.trimestre-label {
+    color: var(--binance-text-muted);
+    font-size: 0.9rem;
+}
+
+.trimestre-value {
+    color: var(--binance-text);
+    font-weight: 600;
+}
+`;
+
+// Adicionar estilos
+const styleSheet = document.createElement('style');
+styleSheet.textContent = styles;
+document.head.appendChild(styleSheet);
+</script>
 {% endblock %}

@@ -1,186 +1,32 @@
-{% extends "base.html" %}
-{% load static %}
+{%% extends "questionarios/partials/base_form.html" %%}
+{%% load static %%}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/internet_fixo.css' %}">
-{% endblock %}
+{%% block form_title %%}{%% if form.instance.pk %%}Editar{%% else %%}Criar{%% endif %%} Indicador de Internet Fixo{%% endblock %%}
+{%% block form_subtitle %%}Gestão de dados de internet fixo por operadora{%% endblock %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Internet Fixo</h2>
-    <form method="post" class="needs-validation" novalidate>
-        {% csrf_token %}
+{%% block list_url %%}{%% url 'questionarios:internet_fixo_list' %%}{%% endblock %%}
+
+{%% block form_fields %%}
+<!-- Campos específicos do formulário -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-edit me-2"></i>
+            Dados do Indicador
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="alert-questionario alert-questionario-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Template gerado automaticamente. Personalize os campos conforme necessário.</span>
+        </div>
         
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Informações Gerais
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.operadora.label_tag }}
-                        {{ form.operadora }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.ano.label_tag }}
-                        {{ form.ano }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.mes.label_tag }}
-                        {{ form.mes }}
-                    </div>
-                </div>
-            </div>
+        <!-- Campos do formulário aqui -->
+        <div class="row">
+            {{ form.as_p }}
         </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Número de assinantes de Internet fixo via rádio
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.cidade_bissau.label_tag }}
-                        {{ form.cidade_bissau }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.bafata.label_tag }}
-                        {{ form.bafata }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.biombo.label_tag }}
-                        {{ form.biombo }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.bolama_bijagos.label_tag }}
-                        {{ form.bolama_bijagos }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.cacheu.label_tag }}
-                        {{ form.cacheu }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.gabu.label_tag }}
-                        {{ form.gabu }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.oio.label_tag }}
-                        {{ form.oio }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.quinara.label_tag }}
-                        {{ form.quinara }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.tombali.label_tag }}
-                        {{ form.tombali }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Número de assinantes activos de Internet Fixo via Rádio
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.airbox.label_tag }}
-                        {{ form.airbox }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.sistema_hertziano_fixo_terra.label_tag }}
-                        {{ form.sistema_hertziano_fixo_terra }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.outros_proxim.label_tag }}
-                        {{ form.outros_proxim }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.fibra_otica.label_tag }}
-                        {{ form.fibra_otica }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Número de assinantes de Serviços de Internet por débito
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.banda_larga_256kbits_2mbits.label_tag }}
-                        {{ form.banda_larga_256kbits_2mbits }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.banda_larga_2_4mbits.label_tag }}
-                        {{ form.banda_larga_2_4mbits }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.banda_larga_5_10mbits.label_tag }}
-                        {{ form.banda_larga_5_10mbits }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.banda_larga_outros.label_tag }}
-                        {{ form.banda_larga_outros }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Número de assinantes de Internet por categoria
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.residencial.label_tag }}
-                        {{ form.residencial }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.corporativo_empresarial.label_tag }}
-                        {{ form.corporativo_empresarial }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.instituicoes_publicas.label_tag }}
-                        {{ form.instituicoes_publicas }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.instituicoes_ensino.label_tag }}
-                        {{ form.instituicoes_ensino }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.instituicoes_saude.label_tag }}
-                        {{ form.instituicoes_saude }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.ong_outros.label_tag }}
-                        {{ form.ong_outros }}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Salvar</button>
-        <a href="{% url 'questionarios:internet_fixo_list' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+    </div>
 </div>
-{% endblock %}
+{%% endblock %%}
 
-{% block extra_js %}
-<script src="{% static 'js/internet_fixo_form_validation.js' %}"></script>
-{% endblock %}
+{%% block submit_text %%}{%% if form.instance.pk %%}Atualizar{%% else %%}Criar{%% endif %%} Internet Fixo{%% endblock %%}

@@ -1,35 +1,29 @@
-{% extends "base.html" %}
+{%% extends "questionarios/partials/base_detail.html" %%}
+{%% load static %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Detalhes do Indicador de Tráfego de Internet</h2>
-    
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Informações Gerais
-        </div>
-        <div class="card-body">
-            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
-            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
-            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
-        </div>
-    </div>
+{%% block detail_title %%}Detalhes de Trafego Internet{%% endblock %%}
+{%% block detail_subtitle %%}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{%% endblock %%}
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Tráfego de Serviços de Internet fixo via rádio
-        </div>
-        <div class="card-body">
-            <p><strong>Tráfego Total:</strong> {{ indicador.trafego_total }} Mbit/s</p>
-            <p><strong>Por via Satélite:</strong> {{ indicador.por_via_satelite|default_if_none:"N/A" }} Mbit/s</p>
-            <p><strong>Por Sistema Hertziano Fixo de Terra:</strong> {{ indicador.por_sistema_hertziano_fixo_terra }} Mbit/s</p>
-            <p><strong>Fibra Ótica:</strong> {{ indicador.fibra_otica }} Mbit/s</p>
-        </div>
-    </div>
+{%% block list_url %%}{%% url 'questionarios:trafego_internet_list' %%}{%% endblock %%}
+{%% block edit_url %%}{%% url 'questionarios:trafego_internet_update' object.pk %%}{%% endblock %%}
+{%% block delete_url %%}{%% url 'questionarios:trafego_internet_delete' object.pk %%}{%% endblock %%}
 
-    <!-- Adicione mais seções para os outros grupos de campos -->
-
-    <a href="{% url 'questionarios:trafego_internet_update\' indicador.pk %}" class="btn btn-primary">Editar</a>
-    <a href="{% url 'questionarios:trafego_internet_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
+{%% block detail_content %%}
+<!-- Dados específicos do indicador -->
+<div class="alert-questionario alert-questionario-info">
+    <i class="fas fa-info-circle"></i>
+    <span>Template gerado automaticamente. Personalize a exibição dos dados conforme necessário.</span>
 </div>
-{% endblock %}
+
+<div class="table-responsive">
+    <table class="questionario-table">
+        <tbody>
+            <!-- Adicione aqui os campos específicos do modelo -->
+            <tr>
+                <td><strong>Dados:</strong></td>
+                <td>Personalize este template com os campos específicos do modelo</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{%% endblock %%}

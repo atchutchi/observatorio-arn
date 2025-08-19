@@ -1,75 +1,32 @@
-{% extends "base.html" %}
+{%% extends "questionarios/partials/base_form.html" %%}
+{%% load static %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Tarifário TELECEL</h2>
-    <form method="post">
-        {% csrf_token %}
+{%% block form_title %%}{%% if form.instance.pk %%}Editar{%% else %%}Criar{%% endif %%} Indicador de Tarifario Telecel{%% endblock %%}
+{%% block form_subtitle %%}Gestão de dados de tarifario telecel por operadora{%% endblock %%}
 
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Informações Gerais
-            </div>
-            <div class="card-body">
-                 <div class="row">
-                     <div class="col-md-6 mb-3">
-                        {{ form.ano.label_tag }}
-                        {{ form.ano }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.mes.label_tag }}
-                        {{ form.mes }}
-                    </div>
-                 </div>
-                 <div class="row">
-                     <div class="col-md-6 mb-3">
-                        {{ form.taxa_imposto.label_tag }}
-                        {{ form.taxa_imposto }}
-                    </div>
-                     <div class="col-md-6 mb-3">
-                        {{ form.link_plano.label_tag }}
-                        {{ form.link_plano }}
-                    </div>
-                 </div>
-            </div>
+{%% block list_url %%}{%% url 'questionarios:tarifario_telecel_list' %%}{%% endblock %%}
+
+{%% block form_fields %%}
+<!-- Campos específicos do formulário -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-edit me-2"></i>
+            Dados do Indicador
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="alert-questionario alert-questionario-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Template gerado automaticamente. Personalize os campos conforme necessário.</span>
         </div>
         
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Equipamentos
-            </div>
-            <div class="card-body">
-                 <div class="row">
-                     <div class="col-md-6 mb-3">
-                        {{ form.huawei_4g_lte.label_tag }}
-                        {{ form.huawei_4g_lte }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.huawei_mobile_wifi_4g.label_tag }}
-                        {{ form.huawei_mobile_wifi_4g }}
-                    </div>
-                 </div>
-            </div>
+        <!-- Campos do formulário aqui -->
+        <div class="row">
+            {{ form.as_p }}
         </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Pacotes Diários
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3 mb-3">{{ form.pacote_30mb.label_tag }} {{ form.pacote_30mb }}</div>
-                    <div class="col-md-3 mb-3">{{ form.pacote_100mb.label_tag }} {{ form.pacote_100mb }}</div>
-                    <div class="col-md-3 mb-3">{{ form.pacote_300mb.label_tag }} {{ form.pacote_300mb }}</div>
-                    <div class="col-md-3 mb-3">{{ form.pacote_1gb.label_tag }} {{ form.pacote_1gb }}</div>
-                </div>
-            </div>
-        </div>
-
-        {# Add cards for Semanais, Mensais, Yello, Ilimitados similarly #}
-
-        <button type="submit" class="btn btn-primary">Salvar</button>
-        <a href="{% url 'questionarios:tarifario_telecel_list' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+    </div>
 </div>
-{% endblock %} 
+{%% endblock %%}
+
+{%% block submit_text %%}{%% if form.instance.pk %%}Atualizar{%% else %%}Criar{%% endif %%} Tarifario Telecel{%% endblock %%}

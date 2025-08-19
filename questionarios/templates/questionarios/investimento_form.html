@@ -1,157 +1,32 @@
-{% extends "base.html" %}
-{% load static %}
+{%% extends "questionarios/partials/base_form.html" %%}
+{%% load static %%}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/investimento.css' %}">
-{% endblock %}
+{%% block form_title %%}{%% if form.instance.pk %%}Editar{%% else %%}Criar{%% endif %%} Indicador de Investimento{%% endblock %%}
+{%% block form_subtitle %%}Gestão de dados de investimento por operadora{%% endblock %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Investimento</h2>
-    
-    <form method="post" class="needs-validation" novalidate>
-        {% csrf_token %}
+{%% block list_url %%}{%% url 'questionarios:investimento_list' %%}{%% endblock %%}
+
+{%% block form_fields %%}
+<!-- Campos específicos do formulário -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-edit me-2"></i>
+            Dados do Indicador
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="alert-questionario alert-questionario-info">
+            <i class="fas fa-info-circle"></i>
+            <span>Template gerado automaticamente. Personalize os campos conforme necessário.</span>
+        </div>
         
-        <!-- Informações Gerais -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Informações Gerais</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.operadora.label_tag }}
-                        {{ form.operadora }}
-                        {% if form.operadora.errors %}
-                        <div class="invalid-feedback">
-                            {{ form.operadora.errors }}
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.ano.label_tag }}
-                        {{ form.ano }}
-                        {% if form.ano.errors %}
-                        <div class="invalid-feedback">
-                            {{ form.ano.errors }}
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.mes.label_tag }}
-                        {{ form.mes }}
-                        {% if form.mes.errors %}
-                        <div class="invalid-feedback">
-                            {{ form.mes.errors }}
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+        <!-- Campos do formulário aqui -->
+        <div class="row">
+            {{ form.as_p }}
         </div>
-
-        <!-- Investimento Corpóreo -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Investimento Corpóreo</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.servicos_telecomunicacoes.label_tag }}
-                        {{ form.servicos_telecomunicacoes }}
-                        {% if form.servicos_telecomunicacoes.errors %}
-                        <div class="invalid-feedback">
-                            {{ form.servicos_telecomunicacoes.errors }}
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.servicos_internet.label_tag }}
-                        {{ form.servicos_internet }}
-                        {% if form.servicos_internet.errors %}
-                        <div class="invalid-feedback">
-                            {{ form.servicos_internet.errors }}
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Investimento Incorpóreo -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Investimento Incorpóreo</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.servicos_telecomunicacoes_incorporeo.label_tag }}
-                        {{ form.servicos_telecomunicacoes_incorporeo }}
-                        {% if form.servicos_telecomunicacoes_incorporeo.errors %}
-                        <div class="invalid-feedback">
-                            {{ form.servicos_telecomunicacoes_incorporeo.errors }}
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.servicos_internet_incorporeo.label_tag }}
-                        {{ form.servicos_internet_incorporeo }}
-                        {% if form.servicos_internet_incorporeo.errors %}
-                        <div class="invalid-feedback">
-                            {{ form.servicos_internet_incorporeo.errors }}
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Outros Investimentos -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Outros Investimentos</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.novo_campo_nome.label_tag }}
-                        {{ form.novo_campo_nome }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.novo_campo_valor.label_tag }}
-                        {{ form.novo_campo_valor }}
-                    </div>
-                </div>
-                
-                <!-- Campos dinâmicos existentes -->
-                {% for field in form %}
-                    {% if field.name|startswith:'outro_investimento_' %}
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label>{{ field.name|cut:'outro_investimento_'|title }}</label>
-                            {{ field }}
-                        </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Botões de Ação -->
-        <div class="mb-4">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> Salvar
-            </button>
-            <a href="{% url 'questionarios:investimento_list' %}" class="btn btn-secondary">
-                <i class="fas fa-times"></i> Cancelar
-            </a>
-        </div>
-    </form>
+    </div>
 </div>
-{% endblock %}
+{%% endblock %%}
 
-{% block extra_js %}
-<script src="{% static 'js/investimento_form_validation.js' %}"></script>
-{% endblock %}
+{%% block submit_text %%}{%% if form.instance.pk %%}Atualizar{%% else %%}Criar{%% endif %%} Investimento{%% endblock %%}

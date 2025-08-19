@@ -1,127 +1,29 @@
-{% extends "base.html" %}
+{%% extends "questionarios/partials/base_detail.html" %%}
+{%% load static %%}
 
-{% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Detalhes do Investimento</h2>
-        <div>
-            <a href="{% url 'questionarios:investimento_update\' indicador.pk %}" class="btn btn-warning">
-                <i class="fas fa-edit"></i> Editar
-            </a>
-            <a href="{% url 'questionarios:investimento_list' %}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Voltar
-            </a>
-        </div>
-    </div>
+{%% block detail_title %%}Detalhes de Investimento{%% endblock %%}
+{%% block detail_subtitle %%}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{%% endblock %%}
 
-    <!-- Informações Gerais -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Informações Gerais</h5>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
-                </div>
-                <div class="col-md-4">
-                    <p><strong>Ano:</strong> {{ indicador.ano }}</p>
-                </div>
-                <div class="col-md-4">
-                    <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+{%% block list_url %%}{%% url 'questionarios:investimento_list' %%}{%% endblock %%}
+{%% block edit_url %%}{%% url 'questionarios:investimento_update' object.pk %%}{%% endblock %%}
+{%% block delete_url %%}{%% url 'questionarios:investimento_delete' object.pk %%}{%% endblock %%}
 
-    <!-- Investimento Corpóreo -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Investimento Corpóreo</h5>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <p><strong>Serviços de Telecomunicações:</strong> {{ indicador.servicos_telecomunicacoes|floatformat:2 }}</p>
-                </div>
-                <div class="col-md-6">
-                    <p><strong>Serviços de Internet:</strong> {{ indicador.servicos_internet|floatformat:2 }}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <p><strong>Total Corpóreo:</strong> {{ indicador.calcular_total_corporeo|floatformat:2 }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Investimento Incorpóreo -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Investimento Incorpóreo</h5>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <p><strong>Serviços de Telecomunicações:</strong> {{ indicador.servicos_telecomunicacoes_incorporeo|floatformat:2 }}</p>
-                </div>
-                <div class="col-md-6">
-                    <p><strong>Serviços de Internet:</strong> {{ indicador.servicos_internet_incorporeo|floatformat:2 }}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <p><strong>Total Incorpóreo:</strong> {{ indicador.calcular_total_incorporeo|floatformat:2 }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Outros Investimentos -->
-    {% if indicador.outros_investimentos %}
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Outros Investimentos</h5>
-        </div>
-        <div class="card-body">
-            {% for nome, valor in indicador.outros_investimentos.items %}
-            <div class="row">
-                <div class="col-md-6">
-                    <p><strong>{{ nome|title }}:</strong> {{ valor|floatformat:2 }}</p>
-                </div>
-            </div>
-            {% endfor %}
-            <div class="row">
-                <div class="col-md-12">
-                    <p><strong>Total Outros:</strong> {{ indicador.calcular_total_outros|floatformat:2 }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
-    <!-- Total Geral -->
-    <div class="card mb-4">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0">Total Geral</h5>
-        </div>
-        <div class="card-body">
-            <h3>{{ indicador.calcular_total_geral|floatformat:2 }} FCFA</h3>
-        </div>
-    </div>
-
-    <!-- Metadados -->
-    <div class="card mb-4">
-        <div class="card-header bg-secondary text-white">
-            <h5 class="mb-0">Informações do Registro</h5>
-        </div>
-        <div class="card-body">
-            <p><strong>Criado por:</strong> {{ indicador.criado_por }}</p>
-            <p><strong>Data de criação:</strong> {{ indicador.data_criacao }}</p>
-            <p><strong>Atualizado por:</strong> {{ indicador.atualizado_por }}</p>
-            <p><strong>Última atualização:</strong> {{ indicador.data_atualizacao }}</p>
-        </div>
-    </div>
+{%% block detail_content %%}
+<!-- Dados específicos do indicador -->
+<div class="alert-questionario alert-questionario-info">
+    <i class="fas fa-info-circle"></i>
+    <span>Template gerado automaticamente. Personalize a exibição dos dados conforme necessário.</span>
 </div>
-{% endblock %}
+
+<div class="table-responsive">
+    <table class="questionario-table">
+        <tbody>
+            <!-- Adicione aqui os campos específicos do modelo -->
+            <tr>
+                <td><strong>Dados:</strong></td>
+                <td>Personalize este template com os campos específicos do modelo</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{%% endblock %%}

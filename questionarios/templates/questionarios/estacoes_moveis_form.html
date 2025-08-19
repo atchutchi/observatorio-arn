@@ -1,309 +1,464 @@
-{% extends "base.html" %}
+{% extends "questionarios/partials/base_form.html" %}
 {% load static %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/estacoes_moveis.css' %}">
-<style>
-    .banda-larga-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        font-weight: bold;
-        text-align: center;
-        padding: 12px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .technology-section {
-        border: 2px solid #e9ecef;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        background: #f8f9fa;
-    }
-    .technology-title {
-        background: linear-gradient(45deg, #007bff, #0056b3);
-        color: white;
-        padding: 8px 16px;
-        border-radius: 6px;
-        margin-bottom: 15px;
-        font-weight: bold;
-        text-align: center;
-    }
-    .subsection-header {
-        background: #e9ecef;
-        padding: 8px 12px;
-        border-radius: 4px;
-        margin-bottom: 10px;
-        font-weight: bold;
-        color: #495057;
-        border-left: 4px solid #007bff;
-    }
-</style>
-{% endblock %}
+{% block form_title %}{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Estações Móveis{% endblock %}
+{% block form_subtitle %}Gestão de dados de estações móveis e banda larga por operadora{% endblock %}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">{% if form.instance.pk %}Editar{% else %}Criar{% endif %} Indicador de Estações Móveis</h2>
-    <form method="post" class="needs-validation" novalidate>
-        {% csrf_token %}
+{% block list_url %}{% url 'questionarios:estacoes_moveis_list' %}{% endblock %}
+
+{% block form_fields %}
+<!-- Utilizadores de Serviço -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-users me-2"></i>
+            Utilizadores de Serviço
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">SMS</label>
+                    {{ form.sms }}
+                    {% if form.sms.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.sms.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">MMS</label>
+                    {{ form.mms }}
+                    {% if form.mms.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.mms.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Mobile TV</label>
+                    {{ form.mobile_tv }}
+                    {% if form.mobile_tv.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.mobile_tv.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Roaming Internacional</label>
+                    {{ form.roaming_internacional_out_parc_roaming_out }}
+                    {% if form.roaming_internacional_out_parc_roaming_out.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.roaming_internacional_out_parc_roaming_out.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Banda Larga 3G -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-signal me-2"></i>
+            Tecnologia 3G
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Utilizadores de serviço de 3G e upgrades</label>
+                    {{ form.utilizadores_servico_3g_upgrades }}
+                    {% if form.utilizadores_servico_3g_upgrades.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.utilizadores_servico_3g_upgrades.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
         
-        <!-- Informações Gerais -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <i class="fas fa-info-circle me-2"></i>Informações Gerais
+        <h6 style="color: var(--binance-yellow);">Acesso à Internet 3G</h6>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Utilizadores acesso Internet 3G</label>
+                    {{ form.utilizadores_acesso_internet_3g }}
+                    {% if form.utilizadores_acesso_internet_3g.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.utilizadores_acesso_internet_3g.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.operadora.label_tag }}
-                        {{ form.operadora }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.ano.label_tag }}
-                        {{ form.ano }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.mes.label_tag }}
-                        {{ form.mes }}
-                    </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Placas (Box) 3G</label>
+                    {{ form.utilizadores_3g_placas_box }}
+                    {% if form.utilizadores_3g_placas_box.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.utilizadores_3g_placas_box.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Placas (USB) 3G</label>
+                    {{ form.utilizadores_3g_placas_usb }}
+                    {% if form.utilizadores_3g_placas_usb.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.utilizadores_3g_placas_usb.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Utilizadores de serviço básicos -->
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">
-                <i class="fas fa-users me-2"></i>Utilizadores de serviço
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        {{ form.sms.label_tag }}
-                        {{ form.sms }}
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        {{ form.mms.label_tag }}
-                        {{ form.mms }}
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        {{ form.mobile_tv.label_tag }}
-                        {{ form.mobile_tv }}
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        {{ form.roaming_internacional_out_parc_roaming_out.label_tag }}
-                        {{ form.roaming_internacional_out_parc_roaming_out }}
-                    </div>
+<!-- Banda Larga 4G -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-broadcast-tower me-2"></i>
+            Tecnologia 4G
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Utilizadores de serviço 4G</label>
+                    {{ form.utilizadores_servico_4g }}
+                    {% if form.utilizadores_servico_4g.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.utilizadores_servico_4g.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
-
-        <!-- Banda larga (3G + 4G) -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <div class="banda-larga-header">
-                    <i class="fas fa-signal me-2"></i>Banda larga (3G + 4G)
+        
+        <h6 style="color: var(--binance-yellow);">Acesso à Internet 4G</h6>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Utilizadores acesso Internet 4G</label>
+                    {{ form.utilizadores_acesso_internet_4g }}
+                    {% if form.utilizadores_acesso_internet_4g.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.utilizadores_acesso_internet_4g.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
-            <div class="card-body">
-                <!-- Secção 3G -->
-                <div class="technology-section">
-                    <div class="technology-title">
-                        <i class="fas fa-broadcast-tower me-2"></i>Tecnologia 3G
-                    </div>
-                    
-                    <div class="subsection-header">
-                        Utilizadores de serviço de 3G e upgrades
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            {{ form.utilizadores_servico_3g_upgrades.label_tag }}
-                            {{ form.utilizadores_servico_3g_upgrades }}
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Placas (Box) 4G</label>
+                    {{ form.utilizadores_4g_placas_box }}
+                    {% if form.utilizadores_4g_placas_box.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.utilizadores_4g_placas_box.errors %}{{ error }}{% endfor %}
                         </div>
-                    </div>
-                    
-                    <div class="subsection-header">
-                        Utilizadores de serviço de acesso à Internet em banda larga (3G)
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            {{ form.utilizadores_acesso_internet_3g.label_tag }}
-                            {{ form.utilizadores_acesso_internet_3g }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.utilizadores_3g_placas_box.label_tag }}
-                            {{ form.utilizadores_3g_placas_box }}
-                            <small class="text-muted">dos quais com ligação através de Placas (Box)</small>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.utilizadores_3g_placas_usb.label_tag }}
-                            {{ form.utilizadores_3g_placas_usb }}
-                            <small class="text-muted">dos quais com ligação através de Placas (USB)</small>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
-
-                <!-- Secção 4G -->
-                <div class="technology-section">
-                    <div class="technology-title">
-                        <i class="fas fa-broadcast-tower me-2"></i>Tecnologia 4G
-                    </div>
-                    
-                    <div class="subsection-header">
-                        Utilizadores de serviço de 4G
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            {{ form.utilizadores_servico_4g.label_tag }}
-                            {{ form.utilizadores_servico_4g }}
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Placas (USB) 4G</label>
+                    {{ form.utilizadores_4g_placas_usb }}
+                    {% if form.utilizadores_4g_placas_usb.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.utilizadores_4g_placas_usb.errors %}{{ error }}{% endfor %}
                         </div>
-                    </div>
-                    
-                    <div class="subsection-header">
-                        Utilizadores do serviço de acesso à Internet em banda larga (4G)
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            {{ form.utilizadores_acesso_internet_4g.label_tag }}
-                            {{ form.utilizadores_acesso_internet_4g }}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.utilizadores_4g_placas_box.label_tag }}
-                            {{ form.utilizadores_4g_placas_box }}
-                            <small class="text-muted">dos quais com ligação através de Placas (Box)</small>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.utilizadores_4g_placas_usb.label_tag }}
-                            {{ form.utilizadores_4g_placas_usb }}
-                            <small class="text-muted">dos quais com ligação através de Placas (USB)</small>
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Número total de estações móveis activos -->
-        <div class="card mb-4">
-            <div class="card-header bg-info text-white">
-                <i class="fas fa-mobile-alt me-2"></i>Número total de estações móveis activos
+<!-- Estações Móveis Ativas -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-mobile-alt me-2"></i>
+            Estações Móveis Ativas
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Afectos a planos Pós-pagos</label>
+                    {{ form.afectos_planos_pos_pagos }}
+                    {% if form.afectos_planos_pos_pagos.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.afectos_planos_pos_pagos.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.afectos_planos_pos_pagos.label_tag }}
-                        {{ form.afectos_planos_pos_pagos }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.afectos_planos_pos_pagos_utilizacao.label_tag }}
-                        {{ form.afectos_planos_pos_pagos_utilizacao }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.afectos_planos_pre_pagos.label_tag }}
-                        {{ form.afectos_planos_pre_pagos }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.afectos_planos_pre_pagos_utilizacao.label_tag }}
-                        {{ form.afectos_planos_pre_pagos_utilizacao }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        {{ form.associados_situacoes_especificas.label_tag }}
-                        {{ form.associados_situacoes_especificas }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        {{ form.outros_residuais.label_tag }}
-                        {{ form.outros_residuais }}
-                    </div>
+            <div class="col-md-6">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Utilização Pós-pagos</label>
+                    {{ form.afectos_planos_pos_pagos_utilizacao }}
+                    {% if form.afectos_planos_pos_pagos_utilizacao.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.afectos_planos_pos_pagos_utilizacao.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
-
-        <!-- Serviços de Mobile Money -->
-        <div class="card mb-4">
-            <div class="card-header bg-warning text-dark">
-                <i class="fas fa-money-bill-wave me-2"></i>Serviços de Mobile Money
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Afectos a planos Pré-pagos</label>
+                    {{ form.afectos_planos_pre_pagos }}
+                    {% if form.afectos_planos_pre_pagos.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.afectos_planos_pre_pagos.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row mb-4">
-                    <div class="col-md-4 mb-3">
-                        {{ form.numero_utilizadores.label_tag }}
-                        {{ form.numero_utilizadores }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.numero_utilizadores_mulher.label_tag }}
-                        {{ form.numero_utilizadores_mulher }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.numero_utilizadores_homem.label_tag }}
-                        {{ form.numero_utilizadores_homem }}
-                    </div>
-                </div>
-                
-                <h6 class="text-primary mb-3">Total de Carregamentos</h6>
-                <div class="row mb-4">
-                    <div class="col-md-4 mb-3">
-                        {{ form.total_carregamentos.label_tag }}
-                        {{ form.total_carregamentos }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.total_carregamentos_mulher.label_tag }}
-                        {{ form.total_carregamentos_mulher }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.total_carregamentos_homem.label_tag }}
-                        {{ form.total_carregamentos_homem }}
-                    </div>
-                </div>
-                
-                <h6 class="text-primary mb-3">Total de Levantamentos</h6>
-                <div class="row mb-4">
-                    <div class="col-md-4 mb-3">
-                        {{ form.total_levantamentos.label_tag }}
-                        {{ form.total_levantamentos }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.total_levantamentos_mulher.label_tag }}
-                        {{ form.total_levantamentos_mulher }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.total_levantamentos_homem.label_tag }}
-                        {{ form.total_levantamentos_homem }}
-                    </div>
-                </div>
-                
-                <h6 class="text-primary mb-3">Total de Transferências</h6>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        {{ form.total_transferencias.label_tag }}
-                        {{ form.total_transferencias }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.total_transferencias_mulher.label_tag }}
-                        {{ form.total_transferencias_mulher }}
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        {{ form.total_transferencias_homem.label_tag }}
-                        {{ form.total_transferencias_homem }}
-                    </div>
+            <div class="col-md-6">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Utilização Pré-pagos</label>
+                    {{ form.afectos_planos_pre_pagos_utilizacao }}
+                    {% if form.afectos_planos_pre_pagos_utilizacao.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.afectos_planos_pre_pagos_utilizacao.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary btn-lg">
-                <i class="fas fa-save me-2"></i>Salvar
-            </button>
-            <a href="{% url 'questionarios:estacoes_moveis_list' %}" class="btn btn-secondary btn-lg ms-2">
-                <i class="fas fa-times me-2"></i>Cancelar
-            </a>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Situações Específicas</label>
+                    {{ form.associados_situacoes_especificas }}
+                    {% if form.associados_situacoes_especificas.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.associados_situacoes_especificas.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Outros (Residuais)</label>
+                    {{ form.outros_residuais }}
+                    {% if form.outros_residuais.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.outros_residuais.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
+</div>
+
+<!-- Mobile Money -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-money-bill-wave me-2"></i>
+            Serviços de Mobile Money
+        </h4>
+    </div>
+    <div class="card-body">
+        <h6 style="color: var(--binance-yellow);">Número de Utilizadores</h6>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Total Utilizadores</label>
+                    {{ form.numero_utilizadores }}
+                    {% if form.numero_utilizadores.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.numero_utilizadores.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Utilizadores (Mulher)</label>
+                    {{ form.numero_utilizadores_mulher }}
+                    {% if form.numero_utilizadores_mulher.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.numero_utilizadores_mulher.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Utilizadores (Homem)</label>
+                    {{ form.numero_utilizadores_homem }}
+                    {% if form.numero_utilizadores_homem.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.numero_utilizadores_homem.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <h6 style="color: var(--binance-success);">Carregamentos</h6>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Total Carregamentos</label>
+                    {{ form.total_carregamentos }}
+                    {% if form.total_carregamentos.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.total_carregamentos.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Carregamentos (Mulher)</label>
+                    {{ form.total_carregamentos_mulher }}
+                    {% if form.total_carregamentos_mulher.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.total_carregamentos_mulher.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Carregamentos (Homem)</label>
+                    {{ form.total_carregamentos_homem }}
+                    {% if form.total_carregamentos_homem.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.total_carregamentos_homem.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <h6 style="color: var(--binance-info);">Levantamentos</h6>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Total Levantamentos</label>
+                    {{ form.total_levantamentos }}
+                    {% if form.total_levantamentos.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.total_levantamentos.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Levantamentos (Mulher)</label>
+                    {{ form.total_levantamentos_mulher }}
+                    {% if form.total_levantamentos_mulher.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.total_levantamentos_mulher.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Levantamentos (Homem)</label>
+                    {{ form.total_levantamentos_homem }}
+                    {% if form.total_levantamentos_homem.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.total_levantamentos_homem.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <h6 style="color: var(--binance-warning);">Transferências</h6>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Total Transferências</label>
+                    {{ form.total_transferencias }}
+                    {% if form.total_transferencias.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.total_transferencias.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Transferências (Mulher)</label>
+                    {{ form.total_transferencias_mulher }}
+                    {% if form.total_transferencias_mulher.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.total_transferencias_mulher.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group-questionario">
+                    <label class="form-label-questionario">Transferências (Homem)</label>
+                    {{ form.total_transferencias_homem }}
+                    {% if form.total_transferencias_homem.errors %}
+                        <div class="invalid-feedback">
+                            {% for error in form.total_transferencias_homem.errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'js/estacoes_moveis_form_validation.js' %}"></script>
+{% block submit_text %}{% if form.instance.pk %}Atualizar{% else %}Criar{% endif %} Indicador{% endblock %}
+
+{% block form_info %}
+<div class="platform-card mt-4">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-info-circle me-2"></i>
+            Informações Importantes
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="alert-questionario alert-questionario-info">
+            <i class="fas fa-lightbulb"></i>
+            <div>
+                <strong>Instruções de preenchimento:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>Preencha todos os campos com dados numéricos positivos</li>
+                    <li>Use 0 (zero) para campos que não se aplicam</li>
+                    <li>Dados de 3G e 4G devem refletir a realidade da infraestrutura</li>
+                    <li>Mobile Money inclui todos os serviços financeiros móveis</li>
+                    <li>Verifique os totais calculados automaticamente</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

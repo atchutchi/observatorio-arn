@@ -1,70 +1,29 @@
-{% extends "base.html" %}
+{%% extends "questionarios/partials/base_detail.html" %%}
+{%% load static %%}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Detalhes do Indicador de Tráfego Terminado</h2>
-    
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Informações Gerais
-        </div>
-        <div class="card-body">
-            <p><strong>Operadora:</strong> {{ indicador.get_operadora_display }}</p>
-            <p><strong>Ano:</strong> {{ indicador.ano }}</p>
-            <p><strong>Mês:</strong> {{ indicador.get_mes_display }}</p>
-        </div>
-    </div>
+{%% block detail_title %%}Detalhes de Trafego Terminado{%% endblock %%}
+{%% block detail_subtitle %%}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{%% endblock %%}
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Comunicações de Voz
-        </div>
-        <div class="card-body">
-            <p><strong>Outros operadores móveis nacionais:</strong> {{ indicador.chamadas_outros_op_moveis_nacionais }}</p>
-            <p><strong>MTN:</strong> {{ indicador.chamadas_mtn }}</p>
-            <p><strong>Operador B:</strong> {{ indicador.chamadas_operador_b|default_if_none:"-" }}</p>
-            <p><strong>Outros:</strong> {{ indicador.chamadas_outros|default_if_none:"-" }}</p>
-            <p><strong>Operador da rede fixa:</strong> {{ indicador.chamadas_operador_rede_fixa|default_if_none:"-" }}</p>
-            <p><strong>CEDEAO:</strong> {{ indicador.chamadas_cedeao }}</p>
-            <p><strong>CPLP:</strong> {{ indicador.chamadas_cplp }}</p>
-            <p><strong>PALOP:</strong> {{ indicador.chamadas_palop }}</p>
-            <p><strong>Resto de África:</strong> {{ indicador.chamadas_resto_africa }}</p>
-            <p><strong>Resto do mundo:</strong> {{ indicador.chamadas_resto_mundo }}</p>
-            <p><strong>Números curtos:</strong> {{ indicador.chamadas_numeros_curtos }}</p>
-        </div>
-    </div>
+{%% block list_url %%}{%% url 'questionarios:trafego_terminado_list' %%}{%% endblock %%}
+{%% block edit_url %%}{%% url 'questionarios:trafego_terminado_update' object.pk %%}{%% endblock %%}
+{%% block delete_url %%}{%% url 'questionarios:trafego_terminado_delete' object.pk %%}{%% endblock %%}
 
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Minutos de Voz
-        </div>
-        <div class="card-body">
-            <p><strong>Outros operadores móveis nacionais:</strong> {{ indicador.minutos_outros_op_moveis_nacionais }}</p>
-            <p><strong>MTN:</strong> {{ indicador.minutos_mtn }}</p>
-            <p><strong>Operador B:</strong> {{ indicador.minutos_operador_b|default_if_none:"-" }}</p>
-            <p><strong>Outros:</strong> {{ indicador.minutos_outros|default_if_none:"-" }}</p>
-            <p><strong>Operador da rede fixa:</strong> {{ indicador.minutos_operador_rede_fixa|default_if_none:"-" }}</p>
-            <p><strong>CEDEAO:</strong> {{ indicador.minutos_cedeao }}</p>
-            <p><strong>CPLP:</strong> {{ indicador.minutos_cplp }}</p>
-            <p><strong>PALOP:</strong> {{ indicador.minutos_palop }}</p>
-            <p><strong>Resto de África:</strong> {{ indicador.minutos_resto_africa }}</p>
-            <p><strong>Resto do mundo:</strong> {{ indicador.minutos_resto_mundo }}</p>
-            <p><strong>Números curtos:</strong> {{ indicador.minutos_numeros_curtos }}</p>
-        </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Tráfego de Mensagens
-        </div>
-        <div class="card-body">
-            <p><strong>Outras redes móveis nacionais:</strong> {{ indicador.sms_outras_redes_moveis_nacionais }}</p>
-            <p><strong>Outras redes internacionais:</strong> {{ indicador.sms_outras_redes_internacionais }}</p>
-            <p><strong>Outros:</strong> {{ indicador.sms_outros|default_if_none:"-" }}</p>
-        </div>
-    </div>
-
-    <a href="{% url 'questionarios:trafego_terminado_update\' indicador.pk %}" class="btn btn-primary">Editar</a>
-    <a href="{% url 'questionarios:trafego_terminado_list' %}" class="btn btn-secondary">Voltar para a Lista</a>
+{%% block detail_content %%}
+<!-- Dados específicos do indicador -->
+<div class="alert-questionario alert-questionario-info">
+    <i class="fas fa-info-circle"></i>
+    <span>Template gerado automaticamente. Personalize a exibição dos dados conforme necessário.</span>
 </div>
-{% endblock %}
+
+<div class="table-responsive">
+    <table class="questionario-table">
+        <tbody>
+            <!-- Adicione aqui os campos específicos do modelo -->
+            <tr>
+                <td><strong>Dados:</strong></td>
+                <td>Personalize este template com os campos específicos do modelo</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{%% endblock %%}

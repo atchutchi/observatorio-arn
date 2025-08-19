@@ -1,71 +1,29 @@
-{% extends "base.html" %}
+{%% extends "questionarios/partials/base_detail.html" %%}
+{%% load static %%}
 
-{% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Detalhes do Tarifário MTN</h2>
-        <div>
-            <a href="{% url 'questionarios:tarifario_mtn_update\' indicador.pk %}" class="btn btn-warning">
-                <i class="fas fa-edit"></i> Editar
-            </a>
-            <a href="{% url 'questionarios:tarifario_mtn_list' %}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Voltar
-            </a>
-        </div>
-    </div>
+{%% block detail_title %%}Detalhes de Tarifario Mtn{%% endblock %%}
+{%% block detail_subtitle %%}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{%% endblock %%}
 
-    <!-- Equipamentos Huawei -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Equipamentos Huawei
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <p><strong>Huawei 4G LTE:</strong> {{ indicador.huawei_4g_lte }}</p>
-                </div>
-                <div class="col-md-6">
-                    <p><strong>Huawei Mobile Wi-Fi 4G:</strong> {{ indicador.huawei_mobile_wifi_4g }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+{%% block list_url %%}{%% url 'questionarios:tarifario_mtn_list' %%}{%% endblock %%}
+{%% block edit_url %%}{%% url 'questionarios:tarifario_mtn_update' object.pk %%}{%% endblock %%}
+{%% block delete_url %%}{%% url 'questionarios:tarifario_mtn_delete' object.pk %%}{%% endblock %%}
 
-    <!-- Pacotes Diários -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Pacotes Diários
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <p><strong>30MB:</strong> {{ indicador.pacote_30mb }}</p>
-                </div>
-                <div class="col-md-3">
-                    <p><strong>100MB:</strong> {{ indicador.pacote_100mb }}</p>
-                </div>
-                <div class="col-md-3">
-                    <p><strong>300MB:</strong> {{ indicador.pacote_300mb }}</p>
-                </div>
-                <div class="col-md-3">
-                    <p><strong>1GB:</strong> {{ indicador.pacote_1gb }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Continue com os outros blocos de informação -->
-
-    <div class="card mb-4">
-        <div class="card-header bg-secondary text-white">
-            Informações do Registro
-        </div>
-        <div class="card-body">
-            <p><strong>Criado por:</strong> {{ indicador.criado_por }}</p>
-            <p><strong>Data de criação:</strong> {{ indicador.data_criacao|date:"d/m/Y H:i" }}</p>
-            <p><strong>Última atualização:</strong> {{ indicador.data_atualizacao|date:"d/m/Y H:i" }}</p>
-            <p><strong>Atualizado por:</strong> {{ indicador.atualizado_por }}</p>
-        </div>
-    </div>
+{%% block detail_content %%}
+<!-- Dados específicos do indicador -->
+<div class="alert-questionario alert-questionario-info">
+    <i class="fas fa-info-circle"></i>
+    <span>Template gerado automaticamente. Personalize a exibição dos dados conforme necessário.</span>
 </div>
-{% endblock %}
+
+<div class="table-responsive">
+    <table class="questionario-table">
+        <tbody>
+            <!-- Adicione aqui os campos específicos do modelo -->
+            <tr>
+                <td><strong>Dados:</strong></td>
+                <td>Personalize este template com os campos específicos do modelo</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{%% endblock %%}
