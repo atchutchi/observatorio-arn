@@ -203,7 +203,7 @@ def process_excel_file(uploaded_file, user, operadora_code=None, year=None, indi
     Args:
         uploaded_file: The uploaded Excel file
         user: The user uploading the file
-        operadora_code: The operadora code (orange, mtn, telecel)
+        operadora_code: The operadora code (orange, telecel, telecel)
         year: The year for the data (integer)
         indicator_type: Type of indicator to process ('trafego_internet', 'receitas', etc.)
     """

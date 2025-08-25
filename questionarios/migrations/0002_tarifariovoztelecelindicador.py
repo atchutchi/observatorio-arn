@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('ano', models.IntegerField(default=2025)),
                 ('mes', models.IntegerField(default=1)),
-                ('operadora', models.CharField(choices=[('orange', 'Orange'), ('mtn', 'MTN'), ('telecel', 'TELECEL')], default='telecel', editable=False, max_length=10)),
+                ('operadora', models.CharField(choices=[('orange', 'Orange'), ('telecel', 'TELECEL'), ('telecel', 'TELECEL')], default='telecel', editable=False, max_length=10)),
                 ('huawei_4g_lte', models.DecimalField(decimal_places=2, default=0, max_digits=10, validators=[django.core.validators.MinValueValidator(0)], verbose_name='Huawei 4G LTE (Preço)')),
                 ('huawei_mobile_wifi_4g', models.DecimalField(decimal_places=2, default=0, max_digits=10, validators=[django.core.validators.MinValueValidator(0)], verbose_name='Huawei Mobile Wi-Fi 4G (Preço)')),
                 ('pacote_30mb', models.DecimalField(decimal_places=2, default=0, max_digits=10, validators=[django.core.validators.MinValueValidator(0)])),

@@ -89,7 +89,7 @@ function initializeMarketShareChart() {
                 backgroundColor: [
                     '#F0B90B', // Binance Yellow
                     '#FF6600', // Orange
-                    '#0066CC', // Blue
+                    '#DC3545', // Blue
                     '#02C076', // Green
                 ],
                 borderColor: '#161A1E',
@@ -156,9 +156,9 @@ function initializeOperatorComparisonChart() {
                 label: 'Valores',
                 data: Object.values(data),
                 backgroundColor: [
-                    '#FFCC00', // MTN
+                    '#DC3545', // MTN
                     '#FF6600', // Orange
-                    '#0066CC', // Telecel
+                    '#DC3545', // Telecel
                 ],
                 borderColor: '#161A1E',
                 borderWidth: 2
@@ -244,7 +244,7 @@ function getDashboardChartOptions() {
 function getOperatorColor(operator, withAlpha = true) {
     const colors = {
         'ORANGE': withAlpha ? 'rgba(255, 102, 0, 0.8)' : '#FF6600',
-        'TELECEL': withAlpha ? 'rgba(0, 102, 204, 0.8)' : '#0066CC'
+        'TELECEL': withAlpha ? 'rgba(220, 53, 69, 0.8)' : '#DC3545'
     };
     return colors[operator.toUpperCase()] || (withAlpha ? 'rgba(240, 185, 11, 0.8)' : '#F0B90B');
 }

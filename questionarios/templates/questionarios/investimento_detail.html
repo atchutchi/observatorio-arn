@@ -1,14 +1,14 @@
-{%% extends "questionarios/partials/base_detail.html" %%}
-{%% load static %%}
+{% extends "questionarios/partials/base_detail.html" %}
+{% load static %}
 
-{%% block detail_title %%}Detalhes de Investimento{%% endblock %%}
-{%% block detail_subtitle %%}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{%% endblock %%}
+{% block detail_title %}Detalhes de Investimento{% endblock %}
+{% block detail_subtitle %}{{ object.operadora }} - {{ object.ano }}/{{ object.trimestre }}º Trimestre{% endblock %}
 
-{%% block list_url %%}{%% url 'questionarios:investimento_list' %%}{%% endblock %%}
-{%% block edit_url %%}{%% url 'questionarios:investimento_update' object.pk %%}{%% endblock %%}
-{%% block delete_url %%}{%% url 'questionarios:investimento_delete' object.pk %%}{%% endblock %%}
+{% block list_url %}{% url 'questionarios:investimento_list' %}{% endblock %}
+{% block edit_url %}{% url 'questionarios:investimento_update' object.pk %}{% endblock %}
+{% block delete_url %}{% url 'questionarios:investimento_delete' object.pk %}{% endblock %}
 
-{%% block detail_content %%}
+{% block detail_content %}
 <!-- Dados específicos do indicador -->
 <div class="alert-questionario alert-questionario-info">
     <i class="fas fa-info-circle"></i>
@@ -26,4 +26,4 @@
         </tbody>
     </table>
 </div>
-{%% endblock %%}
+{% endblock %}

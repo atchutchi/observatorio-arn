@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Validações específicas para MTN
-        if (form.classList.contains('mtn-form')) {
+        // Validações específicas para TELECEL
+        if (form.classList.contains('telecel-form')) {
             const dataPacks = [
                 'pacote_30mb', 'pacote_100mb', 'pacote_300mb',
                 'pacote_1gb', 'pacote_650mb', 'pacote_1000mb'
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .reduce((sum, input) => sum + (parseFloat(input.value) || 0), 0);
             updateTotal('total-passes', totalPasses);
 
-        } else if (form.classList.contains('mtn-form')) {
+        } else if (form.classList.contains('telecel-form')) {
             // Totais MTN
             const pacotesInputs = document.querySelectorAll('[name*="pacote_"]');
             const totalPacotes = Array.from(pacotesInputs)
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Calcular totais iniciais
     calculateTotals();
 
-    // Limpar campos quando mudar entre Orange e MTN
+    // Limpar campos quando mudar entre Orange e TELECEL
     const operadoraSelect = document.querySelector('[name="operadora"]');
     if (operadoraSelect) {
         operadoraSelect.addEventListener('change', function() {
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (document.getElementById('orangeChart')) {
             initOrangeChart();
         }
-        if (document.getElementById('mtnChart')) {
+        if (document.getElementById('telecelChart')) {
             initMTNChart();
         }
     }
@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para inicializar gráfico MTN
     function initMTNChart() {
-        const ctx = document.getElementById('mtnChart').getContext('2d');
+        const ctx = document.getElementById('telecelChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {

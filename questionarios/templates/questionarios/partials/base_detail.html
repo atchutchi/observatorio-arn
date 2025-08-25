@@ -36,7 +36,7 @@
                         {% if object.operadora == 'ORANGE' %}
                             <i class="fas fa-signal" style="color: #FF6600;"></i>
                         {% elif object.operadora == 'TELECEL' %}
-                            <i class="fas fa-broadcast-tower" style="color: #0066CC;"></i>
+                            <i class="fas fa-broadcast-tower" style="color: #DC3545;"></i>
                         {% else %}
                             <i class="fas fa-tower-cell"></i>
                         {% endif %}
@@ -112,7 +112,7 @@
     </div>
     <div class="card-body">
         <div class="d-flex gap-3 flex-wrap">
-            <a href="{% block edit_url %}#{% endblock %}" class="btn-binance">
+            <a href="#" class="btn-binance" id="editIndicatorBtn">
                 <i class="fas fa-edit me-2"></i>Editar Indicador
             </a>
             <a href="{% block duplicate_url %}#{% endblock %}" class="btn btn-outline">
@@ -143,6 +143,14 @@ document.addEventListener('DOMContentLoaded', function() {
             QuestionariosJS.animateValue(element, 0, parseInt(finalValue));
         }
     });
+    
+    // Configurar botão de editar para usar URL do header
+    const editBtn = document.getElementById('editIndicatorBtn');
+    const headerEditBtn = document.querySelector('.questionario-actions .btn-binance');
+    
+    if (editBtn && headerEditBtn) {
+        editBtn.href = headerEditBtn.href;
+    }
     
     // Adicionar tooltips informativos
     const infoItems = document.querySelectorAll('.detail-info-item');

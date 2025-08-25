@@ -55,7 +55,7 @@ class ARNAssistantService:
         ],
         'comparacao_operadores': [
             r'\b(comparar|versus|vs|diferença|melhor|maior)\b',
-            r'\b(MTN\s+(vs|versus|contra)\s+Orange)\b',
+            r'\b(TELECEL\s+(vs|versus|contra)\s+Orange)\b',
             r'\b(qual\s+é\s+(melhor|maior))\b'
         ],
         'tendencias': [
@@ -68,7 +68,7 @@ class ARNAssistantService:
     ENTITIES = {
         'operadores': {
             'ORANGE': ['orange', 'orange bissau'],
-            'TELECEL': ['telecel', 'mtn', 'antiga mtn']  # TELECEL é a antiga MTN
+            'TELECEL': ['telecel', 'telecel', 'antiga telecel']  # TELECEL é a antiga MTN
         },
         'periodos': {
             'pattern': r'\b(20\d{2}|último|este|próximo)\s*(ano|trimestre|mês)?\b',
@@ -526,7 +526,7 @@ class ARNAssistantService:
                 'sugestoes': [
                     "Quantos assinantes tem a MTN?",
                     "Qual a receita total de 2023?",
-                    "Compare o tráfego da Orange e MTN",
+                    "Compare o tráfego da Orange e TELECEL",
                     "Mostre o market share por operadora"
                 ]
             }

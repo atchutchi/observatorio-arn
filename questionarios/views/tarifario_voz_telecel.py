@@ -5,7 +5,7 @@ from ..models import TarifarioVozTelecelIndicador
 from ..forms import TarifarioVozTelecelForm
 from .base_views import FilteredListView
 
-# Views para TELECEL (mirrored from MTN)
+# Views para TELECEL (mirrored from TELECEL)
 class TarifarioVozTelecelCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = TarifarioVozTelecelIndicador
     form_class = TarifarioVozTelecelForm
@@ -47,7 +47,7 @@ class TarifarioVozTelecelDetailView(LoginRequiredMixin, PermissionRequiredMixin,
     permission_required = 'questionarios.view_tarifariovoztelecelindicador' # Needs new permission
 
 # Resumo view might need adjustments based on Telecel-specific calculations if any
-# For now, mirror MTN structure for calculations
+# For now, mirror TELECEL structure for calculations
 class TarifarioVozTelecelResumoView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = TarifarioVozTelecelIndicador
     template_name = 'questionarios/tarifario_telecel_resumo.html' # Use specific template
@@ -63,7 +63,7 @@ class TarifarioVozTelecelResumoView(LoginRequiredMixin, PermissionRequiredMixin,
         ano = self.kwargs.get('ano')
         indicadores = self.get_queryset()
 
-        # Cálculos trimestrais (mirroring MTN)
+        # Cálculos trimestrais (mirroring TELECEL)
         totais_trimestrais = []
         for trimestre in range(1, 5):
             meses = range((trimestre - 1) * 3 + 1, trimestre * 3 + 1)
@@ -86,7 +86,7 @@ class TarifarioVozTelecelResumoView(LoginRequiredMixin, PermissionRequiredMixin,
                 'total_pacotes_ilimitados': total_pacotes_ilimitados
             })
 
-        # Cálculos anuais (mirroring MTN)
+        # Cálculos anuais (mirroring TELECEL)
         context['ano'] = ano
         context['totais_trimestrais'] = totais_trimestrais
         context['total_equipamentos_anual'] = sum(dado.huawei_4g_lte + dado.huawei_mobile_wifi_4g for dado in indicadores)

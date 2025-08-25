@@ -255,7 +255,7 @@ class ARNAssistantInterface {
         });
         
         // Destacar operadoras
-        formatted = formatted.replace(/\b(MTN|Orange|TELECEL)\b/g, '<strong>$1</strong>');
+        formatted = formatted.replace(/\b(TELECEL|Orange|TELECEL)\b/g, '<strong>$1</strong>');
         
         // Destacar percentuais
         formatted = formatted.replace(/(\d+\.?\d*)%/g, '<strong>$1%</strong>');
@@ -340,7 +340,7 @@ class ARNAssistantInterface {
                     backgroundColor: [
                         '#F0B90B', // Binance Yellow
                         '#FF6600', // Orange
-                        '#0066CC', // Blue
+                        '#DC3545', // Blue
                         '#02C076', // Green
                         '#B7BDC6'  // Gray
                     ],

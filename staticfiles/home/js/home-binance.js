@@ -101,7 +101,7 @@ function initializeAssinantesChart() {
                 backgroundColor: [
                     '#F0B90B', // Binance Yellow
                     '#FF6600', // Orange
-                    '#0066CC', // Blue
+                    '#DC3545', // Blue
                     '#02C076', // Green
                 ],
                 borderColor: '#161A1E',

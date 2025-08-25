@@ -27,7 +27,7 @@ MONTH_CHOICES = [
 
 OPERADORAS_CHOICES = [
     ('orange', 'Orange'),
-    ('mtn', 'MTN'),
+    ('telecel', 'TELECEL'),
     ('telecel', 'TELECEL'),
 ]
 

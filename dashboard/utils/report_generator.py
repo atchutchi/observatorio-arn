@@ -34,9 +34,9 @@ class ARNReportGenerator:
     
     # Configuração de cores para operadoras
     OPERATOR_COLORS = {
-        'MTN': '#FFCC00',
+        'TELECEL': '#DC3545',
         'ORANGE': '#FF6600',
-        'TELECEL': '#0066CC',
+        'TELECEL': '#DC3545',
     }
     
     def __init__(self, year=None, quarter=None):

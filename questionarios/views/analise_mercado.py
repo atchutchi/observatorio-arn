@@ -98,7 +98,7 @@ class AdminDashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateVi
                 'nome': 'Tarifário Voz MTN',
                 'descricao': 'Gestão de informações sobre tarifário voz MTN',
                 'modelo': TarifarioVozMTNIndicador,
-                'url': reverse_lazy('questionarios:tarifario_voz_mtn_list'),
+                'url': reverse_lazy('questionarios:tarifario_voz_telecel_list'),
                 'icone': 'fas fa-comments-dollar',
                 'cor': 'success'
             },
@@ -289,7 +289,7 @@ class RelatorioAnualView(LoginRequiredMixin, TemplateView):
             'total': sum(r.calcular_total_receitas() or 0 for r in receitas),
             'por_operadora': {}
         }
-        for operadora in ['orange', 'mtn', 'telecel']:
+        for operadora in ['orange', 'telecel', 'telecel']:
             receitas_op = receitas.filter(operadora=operadora)
             dados['receitas']['por_operadora'][operadora] = sum(r.calcular_total_receitas() or 0 for r in receitas_op)
         
@@ -368,7 +368,7 @@ class RelatorioTrimestralView(LoginRequiredMixin, TemplateView):
         }
         
         # Agrupar por operadora
-        for operadora in ['orange', 'mtn', 'telecel']:
+        for operadora in ['orange', 'telecel', 'telecel']:
             assinantes_op = assinantes.filter(operadora=operadora)
             dados['assinantes']['por_operadora'][operadora] = sum(a.total_assinantes or 0 for a in assinantes_op)
         
@@ -379,7 +379,7 @@ class RelatorioTrimestralView(LoginRequiredMixin, TemplateView):
             'total': sum(e.calcular_total_estacoes_moveis() or 0 for e in estacoes),
             'por_operadora': {}
         }
-        for operadora in ['orange', 'mtn', 'telecel']:
+        for operadora in ['orange', 'telecel', 'telecel']:
             estacoes_op = estacoes.filter(operadora=operadora)
             dados['estacoes_moveis']['por_operadora'][operadora] = sum(e.calcular_total_estacoes_moveis() or 0 for e in estacoes_op)
         
@@ -389,7 +389,7 @@ class RelatorioTrimestralView(LoginRequiredMixin, TemplateView):
             'total': sum(r.calcular_total_receitas() or 0 for r in receitas),
             'por_operadora': {}
         }
-        for operadora in ['orange', 'mtn', 'telecel']:
+        for operadora in ['orange', 'telecel', 'telecel']:
             receitas_op = receitas.filter(operadora=operadora)
             dados['receitas']['por_operadora'][operadora] = sum(r.calcular_total_receitas() or 0 for r in receitas_op)
         
@@ -399,7 +399,7 @@ class RelatorioTrimestralView(LoginRequiredMixin, TemplateView):
             'total': sum(i.calcular_total_investimentos() or 0 for i in investimentos),
             'por_operadora': {}
         }
-        for operadora in ['orange', 'mtn', 'telecel']:
+        for operadora in ['orange', 'telecel', 'telecel']:
             investimentos_op = investimentos.filter(operadora=operadora)
             dados['investimentos']['por_operadora'][operadora] = sum(i.calcular_total_investimentos() or 0 for i in investimentos_op)
         
@@ -409,7 +409,7 @@ class RelatorioTrimestralView(LoginRequiredMixin, TemplateView):
             'total': sum(t.calcular_total_trafego() or 0 for t in trafego_originado),
             'por_operadora': {}
         }
-        for operadora in ['orange', 'mtn', 'telecel']:
+        for operadora in ['orange', 'telecel', 'telecel']:
             trafego_op = trafego_originado.filter(operadora=operadora)
             dados['trafego_originado']['por_operadora'][operadora] = sum(t.calcular_total_trafego() or 0 for t in trafego_op)
         
@@ -419,7 +419,7 @@ class RelatorioTrimestralView(LoginRequiredMixin, TemplateView):
             'total': sum(i.calcular_total_trafego() or 0 for i in internet),
             'por_operadora': {}
         }
-        for operadora in ['orange', 'mtn', 'telecel']:
+        for operadora in ['orange', 'telecel', 'telecel']:
             internet_op = internet.filter(operadora=operadora)
             dados['trafego_internet']['por_operadora'][operadora] = sum(i.calcular_total_trafego() or 0 for i in internet_op)
         
@@ -547,7 +547,7 @@ class ComparacaoAnualView(LoginRequiredMixin, TemplateView):
         }
         
         # Comparar por operadora
-        for operadora in ['orange', 'mtn', 'telecel']:
+        for operadora in ['orange', 'telecel', 'telecel']:
             assinantes_op1 = assinantes1.filter(operadora=operadora)
             assinantes_op2 = assinantes2.filter(operadora=operadora)
             
@@ -600,7 +600,7 @@ class ComparacaoAnualView(LoginRequiredMixin, TemplateView):
         }
         
         # Comparar por operadora
-        for operadora in ['orange', 'mtn', 'telecel']:
+        for operadora in ['orange', 'telecel', 'telecel']:
             registros_op1 = registros1.filter(operadora=operadora)
             registros_op2 = registros2.filter(operadora=operadora)
             
@@ -811,7 +811,7 @@ class ReceitasAnalysisView(BaseAnalysisView):
         'receitas_mensalidades': Sum,
         'receitas_chamadas_on_net': Sum,
         'receitas_chamadas_off_net': Sum,
-        'receitas_chamadas_mtn': Sum,
+        'receitas_chamadas_telecel': Sum,
         'receitas_chamadas_rede_movel_b': Sum,
         'receitas_chamadas_outros': Sum,
         'receitas_servico_telefonico_fixo': Sum,

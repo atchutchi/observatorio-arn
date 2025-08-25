@@ -6,7 +6,7 @@ from .base import IndicadorBase
 class TrafegoTerminadoIndicador(IndicadorBase):
     # COMUNICAÇÕES DE VOZ
     chamadas_outros_op_moveis_nacionais = models.BigIntegerField(help_text="De outros Operadores móveis nacionais (off-net)")
-    chamadas_mtn = models.BigIntegerField(help_text="MTN")
+    chamadas_telecel = models.BigIntegerField(help_text="TELECEL")
     chamadas_operador_b = models.BigIntegerField(null=True, blank=True, help_text="Operador B")
     chamadas_outros = models.BigIntegerField(null=True, blank=True, help_text="Outros (favor especificar)")
     chamadas_operador_rede_fixa = models.BigIntegerField(null=True, blank=True, help_text="Operador da rede Fixa")
@@ -22,7 +22,7 @@ class TrafegoTerminadoIndicador(IndicadorBase):
 
     # MINUTOS DE VOZ
     minutos_outros_op_moveis_nacionais = models.BigIntegerField(help_text="De outros operadores móveis nacionais (off-net)")
-    minutos_mtn = models.BigIntegerField(help_text="MTN")
+    minutos_telecel = models.BigIntegerField(help_text="TELECEL")
     minutos_operador_b = models.BigIntegerField(null=True, blank=True, help_text="Operador móvel B")
     minutos_outros = models.BigIntegerField(null=True, blank=True, help_text="Outros (favor especificar)")
     minutos_operador_rede_fixa = models.BigIntegerField(null=True, blank=True, help_text="Operador da rede Fixa")
@@ -55,7 +55,7 @@ class TrafegoTerminadoIndicador(IndicadorBase):
     def calcular_total_chamadas(self):
         return (
             self.chamadas_outros_op_moveis_nacionais +
-            self.chamadas_mtn +
+            self.chamadas_telecel +
             (self.chamadas_operador_b or 0) +
             (self.chamadas_outros or 0) +
             (self.chamadas_operador_rede_fixa or 0) +
@@ -70,7 +70,7 @@ class TrafegoTerminadoIndicador(IndicadorBase):
     def calcular_total_minutos(self):
         return (
             self.minutos_outros_op_moveis_nacionais +
-            self.minutos_mtn +
+            self.minutos_telecel +
             (self.minutos_operador_b or 0) +
             (self.minutos_outros or 0) +
             (self.minutos_operador_rede_fixa or 0) +

@@ -121,7 +121,7 @@ class ARNChatbotAPIView(View):
                         'suggestions': [
                             "Qual a quota de mercado da Orange?",
                             "Mostre os dados de assinantes de 2023",
-                            "Compare MTN e Orange em receitas",
+                            "Compare TELECEL e Orange em receitas",
                             "Como evoluiu o tráfego nos últimos anos?"
                         ]
                     }

@@ -39,7 +39,7 @@ class TrafegoOriginadoIndicador(IndicadorBase):
     voz_total = models.BigIntegerField(help_text="Em minutos")
     voz_on_net = models.BigIntegerField(help_text="Em minutos")
     voz_off_net = models.BigIntegerField(help_text="Em minutos")
-    voz_mtn = models.BigIntegerField(help_text="Em minutos")
+    voz_telecel = models.BigIntegerField(help_text="Em minutos")
     voz_internacional = models.BigIntegerField(help_text="Em minutos")
     voz_cedeao = models.BigIntegerField(help_text="Em minutos")
     voz_cplp = models.BigIntegerField(help_text="Em minutos")
@@ -51,7 +51,7 @@ class TrafegoOriginadoIndicador(IndicadorBase):
     chamadas_total = models.BigIntegerField(help_text="Número de chamadas")
     chamadas_on_net = models.BigIntegerField()
     chamadas_off_net = models.BigIntegerField()
-    chamadas_mtn = models.BigIntegerField()
+    chamadas_telecel = models.BigIntegerField()
     chamadas_internacional = models.BigIntegerField()
     chamadas_cedeao = models.BigIntegerField()
     chamadas_cplp = models.BigIntegerField()
@@ -81,12 +81,12 @@ class TrafegoOriginadoIndicador(IndicadorBase):
                 self.sms_resto_africa + self.sms_resto_mundo)
 
     def calcular_total_voz(self):
-        return (self.voz_on_net + self.voz_off_net + self.voz_mtn + 
+        return (self.voz_on_net + self.voz_off_net + self.voz_telecel + 
                 self.voz_internacional + self.voz_cedeao + self.voz_cplp + 
                 self.voz_palop + self.voz_resto_africa + self.voz_resto_mundo)
 
     def calcular_total_chamadas(self):
-        return (self.chamadas_on_net + self.chamadas_off_net + self.chamadas_mtn + 
+        return (self.chamadas_on_net + self.chamadas_off_net + self.chamadas_telecel + 
                 self.chamadas_internacional + self.chamadas_cedeao + self.chamadas_cplp + 
                 self.chamadas_palop + self.chamadas_resto_africa + self.chamadas_resto_mundo)
 

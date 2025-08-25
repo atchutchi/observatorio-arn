@@ -241,7 +241,7 @@ class ReceitasIndicadorAdmin(admin.ModelAdmin):
             'fields': (
                 'receitas_chamadas_on_net',
                 'receitas_chamadas_off_net',
-                'receitas_chamadas_mtn',
+                'receitas_chamadas_telecel',
                 'receitas_chamadas_rede_movel_b',
                 'receitas_chamadas_outros',
                 'receitas_servico_telefonico_fixo'

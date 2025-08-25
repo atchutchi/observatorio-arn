@@ -13,7 +13,6 @@ class IndicadorBase(models.Model):
     
     OPERADORAS_CHOICES = [
         ('orange', 'Orange'),
-        ('mtn', 'MTN'),
         ('telecel', 'TELECEL'),
     ]
     

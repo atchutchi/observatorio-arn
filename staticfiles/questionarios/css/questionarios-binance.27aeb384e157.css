@@ -150,8 +150,8 @@
     font-size: 1rem;
 }
 
-.operadora-icon.mtn {
-    background-color: #FFCC00;
+.operadora-icon.telecel {
+    background-color: #DC3545;
     color: #000;
 }
 
@@ -161,7 +161,7 @@
 }
 
 .operadora-icon.telecel {
-    background-color: #0066CC;
+    background-color: #DC3545;
     color: white;
 }
 

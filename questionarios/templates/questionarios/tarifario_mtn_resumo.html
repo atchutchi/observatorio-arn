@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-4">
-   <h2 class="mb-4">Resumo Tarifário MTN - {{ ano }}</h2>
+   <h2 class="mb-4">Resumo Tarifário TELECEL - {{ ano }}</h2>
 
    <!-- Resumo Trimestral -->
    <div class="row mb-4">
@@ -129,7 +129,7 @@
 
    <!-- Botões de Ação -->
    <div class="mb-4">
-       <a href="{% url 'questionarios:tarifario_mtn_list' %}" class="btn btn-secondary">
+       <a href="{% url 'questionarios:tarifario_telecel_list' %}" class="btn btn-secondary">
            <i class="fas fa-arrow-left"></i> Voltar para a Lista
        </a>
        <button class="btn btn-primary" onclick="window.print()">

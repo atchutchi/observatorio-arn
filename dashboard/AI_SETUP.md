@@ -68,17 +68,17 @@ DEEPSEEK_API_KEY=sk-sua_chave_deepseek_aqui
 - "Mostre o market share por operadora"
 
 ### **📞 Tráfego:**
-- "Volume de tráfego da MTN em 2023"
+- "Volume de tráfego da TELECEL em 2023"
 - "Análise de tráfego on-net vs off-net"
 - "Como evoluiu o tráfego internacional?"
 
 ### **💰 Receitas:**
 - "Receitas totais do setor em 2023"
-- "Compare receitas MTN vs Orange"
+- "Compare receitas TELECEL vs Orange"
 - "Crescimento de receitas ano a ano"
 
 ### **⚖️ Comparações:**
-- "Compare MTN e Orange"
+- "Compare TELECEL e Orange"
 - "Diferença de assinantes entre operadoras"
 - "Qual operadora tem mais receitas?"
 
@@ -103,7 +103,7 @@ DEEPSEEK_API_KEY=sk-sua_chave_deepseek_aqui
 ### **🔍 Extração de Entidades:**
 ```python
 # Entidades reconhecidas automaticamente
-operadoras: ['MTN', 'ORANGE', 'TELECEL']
+operadoras: ['TELECEL', 'ORANGE', 'TELECEL']
 anos: [2019, 2020, 2021, 2022, 2023, 2024, 2025]
 trimestres: [1, 2, 3, 4]
 ```

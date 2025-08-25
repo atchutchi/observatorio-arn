@@ -40,9 +40,9 @@ class Command(BaseCommand):
             'tarifario_orange_form.html',
             'tarifario_orange_detail.html',
             'tarifario_orange_confirm_delete.html',
-            'tarifario_mtn_form.html',
-            'tarifario_mtn_detail.html',
-            'tarifario_mtn_confirm_delete.html',
+            'tarifario_telecel_form.html',
+            'tarifario_telecel_detail.html',
+            'tarifario_telecel_confirm_delete.html',
             'tarifario_telecel_form.html',
             'tarifario_telecel_detail.html',
             'tarifario_telecel_confirm_delete.html'
@@ -205,7 +205,7 @@ class Command(BaseCommand):
                         {{%% if object.operadora == 'ORANGE' %%}}
                             <i class="fas fa-signal" style="color: #FF6600;"></i>
                         {{%% elif object.operadora == 'TELECEL' %%}}
-                            <i class="fas fa-broadcast-tower" style="color: #0066CC;"></i>
+                            <i class="fas fa-broadcast-tower" style="color: #DC3545;"></i>
                         {{%% else %%}}
                             <i class="fas fa-tower-cell"></i>
                         {{%% endif %%}}

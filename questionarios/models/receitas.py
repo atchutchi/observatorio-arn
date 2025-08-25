@@ -10,7 +10,7 @@ class ReceitasIndicador(IndicadorBase):
     # Receitas de serviços de voz
     receitas_chamadas_on_net = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Receitas de chamadas On-net")
     receitas_chamadas_off_net = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Receitas de chamadas para outros STM nacionais")
-    receitas_chamadas_mtn = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Para o operador da rede móvel MTN")
+    receitas_chamadas_telecel = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Para o operador da rede móvel TELECEL")
     receitas_chamadas_rede_movel_b = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Para o operador da rede móvel B")
     receitas_chamadas_outros = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Outros", null=True, blank=True)
     receitas_servico_telefonico_fixo = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Receitas de chamadas para serviço telefónico fixo")
@@ -67,7 +67,7 @@ class ReceitasIndicador(IndicadorBase):
         return (
             self.receitas_chamadas_on_net +
             self.receitas_chamadas_off_net +
-            self.receitas_chamadas_mtn +
+            self.receitas_chamadas_telecel +
             self.receitas_chamadas_rede_movel_b +
             (self.receitas_chamadas_outros or 0) +
             self.receitas_servico_telefonico_fixo +

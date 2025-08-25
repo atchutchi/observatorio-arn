@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Define consistent colors for operators
         return {
             'ORANGE': '#fd7e14', // Bootstrap orange
-            'MTN': '#ffc107',    // Bootstrap yellow
+            'TELECEL': '#ffc107',    // Bootstrap yellow
             'TELECEL': '#0d6efd', // Bootstrap primary blue
             'TOTAL': '#6c757d'  // Bootstrap secondary grey
         };

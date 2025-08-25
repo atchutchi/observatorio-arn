@@ -89,12 +89,12 @@ urlpatterns = [
     path('tarifario-orange/resumo/<int:ano>/', tarifario_voz.TarifarioVozOrangeResumoView.as_view(), name='tarifario_orange_resumo'),
 
     # Tarifário Voz MTN
-    path('tarifario-mtn/', tarifario_voz.TarifarioVozMTNListView.as_view(), name='tarifario_mtn_list'),
-    path('tarifario-mtn/criar/', tarifario_voz.TarifarioVozMTNCreateView.as_view(), name='tarifario_mtn_create'),
-    path('tarifario-mtn/<int:pk>/', tarifario_voz.TarifarioVozMTNDetailView.as_view(), name='tarifario_mtn_detail'),
-    path('tarifario-mtn/<int:pk>/editar/', tarifario_voz.TarifarioVozMTNUpdateView.as_view(), name='tarifario_mtn_update'),
-    path('tarifario-mtn/<int:pk>/excluir/', tarifario_voz.TarifarioVozMTNDeleteView.as_view(), name='tarifario_mtn_delete'),
-    path('tarifario-mtn/resumo/<int:ano>/', tarifario_voz.TarifarioVozMTNResumoView.as_view(), name='tarifario_mtn_resumo'),
+    path('tarifario-telecel/', tarifario_voz.TarifarioVozMTNListView.as_view(), name='tarifario_telecel_list'),
+    path('tarifario-telecel/criar/', tarifario_voz.TarifarioVozMTNCreateView.as_view(), name='tarifario_telecel_create'),
+    path('tarifario-telecel/<int:pk>/', tarifario_voz.TarifarioVozMTNDetailView.as_view(), name='tarifario_telecel_detail'),
+    path('tarifario-telecel/<int:pk>/editar/', tarifario_voz.TarifarioVozMTNUpdateView.as_view(), name='tarifario_telecel_update'),
+    path('tarifario-telecel/<int:pk>/excluir/', tarifario_voz.TarifarioVozMTNDeleteView.as_view(), name='tarifario_telecel_delete'),
+    path('tarifario-telecel/resumo/<int:ano>/', tarifario_voz.TarifarioVozMTNResumoView.as_view(), name='tarifario_telecel_resumo'),
 
     # Tarifário Voz TELECEL
     path('tarifario-telecel/', tarifario_voz_telecel.TarifarioVozTelecelListView.as_view(), name='tarifario_telecel_list'),

@@ -99,11 +99,11 @@ class TarifarioVozOrangeIndicador(IndicadorBase):
 
 class TarifarioVozMTNIndicador(IndicadorBase):
     """
-    Modelo para armazenar os dados de tarifário da operadora MTN.
+    Modelo para armazenar os dados de tarifário da operadora TELECEL.
     Herda de IndicadorBase que contém os campos ano e mês.
     """
     # Identificador da operadora
-    operadora = models.CharField(default="MTN", max_length=50, editable=False)
+    operadora = models.CharField(default="TELECEL", max_length=50, editable=False)
 
     # Huawei
     huawei_4g_lte = models.IntegerField(
@@ -222,13 +222,13 @@ class TarifarioVozMTNIndicador(IndicadorBase):
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
-        related_name='tarifario_mtn_criado'
+        related_name='tarifario_telecel_criado'
     )
     atualizado_por = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
-        related_name='tarifario_mtn_atualizado'
+        related_name='tarifario_telecel_atualizado'
     )
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_atualizacao = models.DateTimeField(auto_now=True)
@@ -239,4 +239,4 @@ class TarifarioVozMTNIndicador(IndicadorBase):
         unique_together = ('ano', 'mes')
 
     def __str__(self):
-        return f"Tarifário MTN - {self.ano}/{self.mes}"
+        return f"Tarifário TELECEL - {self.ano}/{self.mes}"

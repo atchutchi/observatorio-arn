@@ -10,7 +10,7 @@ Uma plataforma web para monitoramento e análise do mercado de telecomunicaçõe
 - **Autenticação**: Suporte para login com Google e sistema tradicional
 - **Integração com Supabase**: Armazenamento híbrido usando banco de dados local e Supabase
 - **Integração com Hugging Face**: Utilização de modelos de IA para o chatbot
-- **Gestão de Tarifários**: Módulo para gerenciamento de tarifários de voz das operadoras Orange e MTN
+- **Gestão de Tarifários**: Módulo para gerenciamento de tarifários de voz das operadoras Orange e TELECEL
 - **Análise de Mercado**: Módulos de análise comparativa, evolução de mercado e relatórios de crescimento
 - **Estações Móveis**: Monitoramento de estações móveis e cobertura territorial
 - **Tráfego de Dados**: Análise de tráfego de internet, originado, terminado e roaming internacional
@@ -145,7 +145,7 @@ Para configurar a integração com Supabase:
 - **IndicadorBase** (Modelo Abstrato)
   - `ano`: IntegerField
   - `mes`: IntegerField
-  - `operadora`: CharField (choices: orange, mtn, telecel)
+  - `operadora`: CharField (choices: orange, telecel, telecel)
 
 #### Tarifários
 - **TarifarioVozOrangeIndicador**

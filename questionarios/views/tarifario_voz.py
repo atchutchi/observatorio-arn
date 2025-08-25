@@ -109,13 +109,13 @@ class TarifarioVozOrangeResumoView(LoginRequiredMixin, PermissionRequiredMixin, 
         context['total_passes_anual'] = total_passes_anual
         return context
 
-# Views para MTN
+# Views para TELECEL
 class TarifarioVozMTNCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = TarifarioVozMTNIndicador
     form_class = TarifarioVozMTNForm
-    template_name = 'questionarios/tarifario_mtn_form.html'
-    success_url = reverse_lazy('questionarios:tarifario_mtn_list')
-    permission_required = 'questionarios.add_tarifariovozmtnindicador'
+    template_name = 'questionarios/tarifario_telecel_form.html'
+    success_url = reverse_lazy('questionarios:tarifario_telecel_list')
+    permission_required = 'questionarios.add_tarifariovoztelecelindicador'
 
     def form_valid(self, form):
         form.instance.criado_por = self.request.user
@@ -123,16 +123,16 @@ class TarifarioVozMTNCreateView(LoginRequiredMixin, PermissionRequiredMixin, Cre
 
 class TarifarioVozMTNListView(FilteredListView):
     model = TarifarioVozMTNIndicador
-    template_name = 'questionarios/tarifario_mtn_list.html'
+    template_name = 'questionarios/tarifario_telecel_list.html'
     context_object_name = 'object_list'
-    permission_required = 'questionarios.view_tarifariovozmtnindicador'
+    permission_required = 'questionarios.view_tarifariovoztelecelindicador'
 
 class TarifarioVozMTNUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = TarifarioVozMTNIndicador
     form_class = TarifarioVozMTNForm
-    template_name = 'questionarios/tarifario_mtn_form.html'
-    success_url = reverse_lazy('questionarios:tarifario_mtn_list')
-    permission_required = 'questionarios.change_tarifariovozmtnindicador'
+    template_name = 'questionarios/tarifario_telecel_form.html'
+    success_url = reverse_lazy('questionarios:tarifario_telecel_list')
+    permission_required = 'questionarios.change_tarifariovoztelecelindicador'
 
     def form_valid(self, form):
         form.instance.atualizado_por = self.request.user
@@ -140,21 +140,21 @@ class TarifarioVozMTNUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Upd
 
 class TarifarioVozMTNDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = TarifarioVozMTNIndicador
-    template_name = 'questionarios/tarifario_mtn_confirm_delete.html'
-    success_url = reverse_lazy('questionarios:tarifario_mtn_list')
-    permission_required = 'questionarios.delete_tarifariovozmtnindicador'
+    template_name = 'questionarios/tarifario_telecel_confirm_delete.html'
+    success_url = reverse_lazy('questionarios:tarifario_telecel_list')
+    permission_required = 'questionarios.delete_tarifariovoztelecelindicador'
 
 class TarifarioVozMTNDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = TarifarioVozMTNIndicador
-    template_name = 'questionarios/tarifario_mtn_detail.html'
+    template_name = 'questionarios/tarifario_telecel_detail.html'
     context_object_name = 'indicador'
-    permission_required = 'questionarios.view_tarifariovozmtnindicador'
+    permission_required = 'questionarios.view_tarifariovoztelecelindicador'
 
 class TarifarioVozMTNResumoView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = TarifarioVozMTNIndicador
-    template_name = 'questionarios/tarifario_mtn_resumo.html'
+    template_name = 'questionarios/tarifario_telecel_resumo.html'
     context_object_name = 'indicadores'
-    permission_required = 'questionarios.view_tarifariovozmtnindicador'
+    permission_required = 'questionarios.view_tarifariovoztelecelindicador'
 
     def get_queryset(self):
         ano = self.kwargs.get('ano')

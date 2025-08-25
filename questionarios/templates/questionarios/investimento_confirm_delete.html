@@ -1,9 +1,9 @@
-{%% extends "questionarios/base_questionarios.html" %%}
-{%% load static %%}
+{% extends "questionarios/base_questionarios.html" %}
+{% load static %}
 
-{%% block questionario_title %%}Confirmar Exclusão{%% endblock %%}
+{% block questionario_title %}Confirmar Exclusão{% endblock %}
 
-{%% block questionario_content %%}
+{% block questionario_content %}
 <!-- Header de Confirmação -->
 <div class="questionario-header">
     <div class="text-center">
@@ -28,13 +28,13 @@
             <div class="col-md-4">
                 <div class="detail-info-item">
                     <div class="detail-info-icon">
-                        {%% if object.operadora == 'ORANGE' %%}
+                        {% if object.operadora == 'ORANGE' %}
                             <i class="fas fa-signal" style="color: #FF6600;"></i>
-                        {%% elif object.operadora == 'TELECEL' %%}
-                            <i class="fas fa-broadcast-tower" style="color: #0066CC;"></i>
-                        {%% else %%}
+                        {% elif object.operadora == 'TELECEL' %}
+                            <i class="fas fa-broadcast-tower" style="color: #DC3545;"></i>
+                        {% else %}
                             <i class="fas fa-tower-cell"></i>
-                        {%% endif %%}
+                        {% endif %}
                     </div>
                     <div class="detail-info-content">
                         <strong>Operadora</strong>
@@ -90,10 +90,10 @@
 <div class="platform-card">
     <div class="card-body">
         <form method="post" class="text-center">
-            {%% csrf_token %%}
+            {% csrf_token %}
             
             <div class="d-flex gap-3 justify-content-center">
-                <a href="{%% url 'questionarios:investimento_list' %%}" class="btn btn-outline">
+                <a href="{% url 'questionarios:investimento_list' %}" class="btn btn-outline">
                     <i class="fas fa-arrow-left me-2"></i>Cancelar
                 </a>
                 
@@ -104,4 +104,4 @@
         </form>
     </div>
 </div>
-{%% endblock %%}
+{% endblock %}

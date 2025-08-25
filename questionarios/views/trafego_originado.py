@@ -25,7 +25,7 @@ class TrafegoOriginadoListView(FilteredListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['orange_list'] = self.model.objects.filter(operadora='orange')
-        context['mtn_list'] = self.model.objects.filter(operadora='mtn')
+        context['telecel_list'] = self.model.objects.filter(operadora='telecel')
         return context
 
 class TrafegoOriginadoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):

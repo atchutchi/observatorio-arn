@@ -44,7 +44,7 @@ class Chatbot:
         Seu objetivo é fornecer informações concisas e precisas sobre o mercado de telecomunicações da Guiné-Bissau com base nos dados disponíveis.
         
         Contexto Principal:
-        - Operadoras Ativas: Orange, MTN, TELECEL.
+        - Operadoras Ativas: Orange, TELECEL, TELECEL.
         - Foco: Dados estatísticos mensais e trimestrais sobre assinantes, tráfego, receitas, investimento, emprego, tarifas.
         
         Instruções de Resposta:
@@ -233,7 +233,7 @@ class Chatbot:
         query_lower = user_message.lower()
         
         if "operadoras" in query_lower:
-            return "As principais operadoras na Guiné-Bissau são Orange, MTN e TELECEL."
+            return "As principais operadoras na Guiné-Bissau são Orange, TELECEL e TELECEL."
         elif "relatório" in query_lower:
             return "Você pode encontrar relatórios detalhados na seção 'Relatórios' do site."
         elif "estatísticas" in query_lower:

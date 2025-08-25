@@ -15,8 +15,8 @@ TABLES_CONFIG = [
         'description': 'Tarifário Orange (sincronizado do Django)',
     },
     {
-        'name': 'tarifario_voz_mtn_indicador',
-        'description': 'Tarifário MTN (sincronizado do Django)',
+        'name': 'tarifario_voz_telecel_indicador',
+        'description': 'Tarifário TELECEL (sincronizado do Django)',
     },
     {
         'name': 'estacoes_moveis_indicador',

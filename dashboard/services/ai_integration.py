@@ -182,7 +182,7 @@ class HuggingFaceService:
             })
         
         # Detectar operadoras
-        operators = ['MTN', 'Orange', 'TELECEL']
+        operators = ['TELECEL', 'Orange', 'TELECEL']
         for operator in operators:
             if operator.lower() in text.lower():
                 entities.append({

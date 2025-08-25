@@ -78,11 +78,11 @@
 - "Crescimento de receitas do setor"
 
 **Tráfego:**
-- "Volume de tráfego da MTN"
+- "Volume de tráfego da TELECEL"
 - "Análise de tráfego on-net vs off-net"
 
 **Comparações:**
-- "Compare MTN e Orange"
+- "Compare TELECEL e Orange"
 - "Diferença de receitas entre operadoras"
 
 ### **📈 Funcionalidades Avançadas:**
@@ -188,7 +188,7 @@
 **Perguntas de Exemplo:**
 - "Qual a quota de mercado da Orange?"
 - "Mostre os dados de assinantes de 2023"
-- "Compare MTN e Orange em receitas"
+- "Compare TELECEL e Orange em receitas"
 - "Como evoluiu o tráfego nos últimos anos?"
 
 ---

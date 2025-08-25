@@ -45,7 +45,7 @@ class ReportsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
        return {
            'total_assinantes': estacoes.aggregate(total=Sum('total_assinantes')),
            'por_operadora': {
-               'mtn': estacoes.filter(operadora='MTN').aggregate(
+               'telecel': estacoes.filter(operadora='TELECEL').aggregate(
                    total=Sum('total_assinantes')
                ),
                'orange': estacoes.filter(operadora='ORANGE').aggregate(
@@ -61,7 +61,7 @@ class ReportsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
        
        return {
            'onnet': {
-               'mtn': trafego_originado.filter(operadora='MTN').aggregate(
+               'telecel': trafego_originado.filter(operadora='TELECEL').aggregate(
                    total=Sum('chamadas_on_net')
                ),
                'orange': trafego_originado.filter(operadora='ORANGE').aggregate(
@@ -69,7 +69,7 @@ class ReportsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
                )
            },
            'offnet': {
-               'mtn': trafego_originado.filter(operadora='MTN').aggregate(
+               'telecel': trafego_originado.filter(operadora='TELECEL').aggregate(
                    total=Sum('chamadas_off_net')
                ),
                'orange': trafego_originado.filter(operadora='ORANGE').aggregate(
@@ -106,7 +106,7 @@ class ReportsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
        return {
            'total': receitas.aggregate(total=Sum('receita_total')),
            'por_operadora': {
-               'mtn': receitas.filter(operadora='MTN').aggregate(
+               'telecel': receitas.filter(operadora='TELECEL').aggregate(
                    total=Sum('receita_total')
                ),
                'orange': receitas.filter(operadora='ORANGE').aggregate(
@@ -166,7 +166,7 @@ class ExportReportView(LoginRequiredMixin, UserPassesTestMixin, View):
        estacoes = EstacoesMoveisIndicador.objects.filter(ano=year)
        total = estacoes.aggregate(total=Sum('total_assinantes'))['total'] or 0
        
-       for operadora in ['MTN', 'ORANGE']:
+       for operadora in ['TELECEL', 'ORANGE']:
            subtotal = estacoes.filter(operadora=operadora).aggregate(
                total=Sum('total_assinantes')
            )['total'] or 0
@@ -179,12 +179,12 @@ class ExportReportView(LoginRequiredMixin, UserPassesTestMixin, View):
            
    def write_traffic_report(self, writer, year):
        writer.writerow(['Relatório de Tráfego', year])
-       writer.writerow(['Tipo', 'MTN', 'Orange', 'Total'])
+       writer.writerow(['Tipo', 'TELECEL', 'Orange', 'Total'])
        
        trafego = TrafegoOriginadoIndicador.objects.filter(ano=year)
        
        # On-Net
-       onnet_mtn = trafego.filter(operadora='MTN').aggregate(
+       onnet_telecel = trafego.filter(operadora='TELECEL').aggregate(
            total=Sum('chamadas_on_net')
        )['total'] or 0
        onnet_orange = trafego.filter(operadora='ORANGE').aggregate(
@@ -193,9 +193,9 @@ class ExportReportView(LoginRequiredMixin, UserPassesTestMixin, View):
        
        writer.writerow([
            'Tráfego On-Net',
-           onnet_mtn,
+           onnet_telecel,
            onnet_orange,
-           onnet_mtn + onnet_orange
+           onnet_telecel + onnet_orange
        ])
        
        # Continue with Off-Net and International traffic...

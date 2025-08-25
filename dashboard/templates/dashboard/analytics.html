@@ -105,7 +105,7 @@
                 primary: '#FF6B00',
                 secondary: 'rgba(255, 107, 0, 0.2)'
             },
-            mtn: {
+            telecel: {
                 primary: '#FFCE00',
                 secondary: 'rgba(255, 206, 0, 0.2)'
             },
@@ -120,13 +120,13 @@
         new Chart(marketShareCtx, {
             type: 'pie',
             data: {
-                labels: ['Orange', 'MTN', 'TELECEL'],
+                labels: ['Orange', 'TELECEL', 'TELECEL'],
                 datasets: [{
                     label: 'Participação de Mercado',
                     data: [45, 35, 20],
                     backgroundColor: [
                         colors.orange.primary,
-                        colors.mtn.primary,
+                        colors.telecel.primary,
                         colors.telecel.primary
                     ],
                     borderWidth: 1
@@ -154,10 +154,10 @@
                         fill: true
                     },
                     {
-                        label: 'MTN',
+                        label: 'TELECEL',
                         data: [350000, 355000, 360000, 365000, 370000, 375000, 380000, 385000, 390000, 395000, 400000, 405000],
-                        backgroundColor: colors.mtn.secondary,
-                        borderColor: colors.mtn.primary,
+                        backgroundColor: colors.telecel.secondary,
+                        borderColor: colors.telecel.primary,
                         tension: 0.4,
                         fill: true
                     },
@@ -195,9 +195,9 @@
                         backgroundColor: colors.orange.primary
                     },
                     {
-                        label: 'MTN',
+                        label: 'TELECEL',
                         data: [3000, 3100, 3200, 3300, 3400, 3500],
-                        backgroundColor: colors.mtn.primary
+                        backgroundColor: colors.telecel.primary
                     },
                     {
                         label: 'TELECEL',
@@ -230,9 +230,9 @@
                         backgroundColor: colors.orange.primary
                     },
                     {
-                        label: 'MTN',
+                        label: 'TELECEL',
                         data: [1900000, 1950000, 2000000, 2050000, 2100000, 2150000],
-                        backgroundColor: colors.mtn.primary
+                        backgroundColor: colors.telecel.primary
                     },
                     {
                         label: 'TELECEL',
@@ -273,12 +273,12 @@
                         pointBackgroundColor: colors.orange.primary
                     },
                     {
-                        label: 'MTN',
+                        label: 'TELECEL',
                         data: [70, 65, 60, 50, 65, 70, 60, 45, 40],
-                        backgroundColor: colors.mtn.secondary,
-                        borderColor: colors.mtn.primary,
+                        backgroundColor: colors.telecel.secondary,
+                        borderColor: colors.telecel.primary,
                         borderWidth: 2,
-                        pointBackgroundColor: colors.mtn.primary
+                        pointBackgroundColor: colors.telecel.primary
                     },
                     {
                         label: 'TELECEL',

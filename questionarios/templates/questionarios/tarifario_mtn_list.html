@@ -1,9 +1,9 @@
 {% extends "questionarios/partials/base_list.html" %}
 
 {% block indicator_title %}Tarifário MTN{% endblock %}
-{% block indicator_subtitle %}Gestão e controle de dados tarifários da MTN{% endblock %}
+{% block indicator_subtitle %}Gestão e controle de dados tarifários da TELECEL{% endblock %}
 
-{% block create_url %}{% url 'questionarios:tarifario_mtn_create' %}{% endblock %}
+{% block create_url %}{% url 'questionarios:tarifario_telecel_create' %}{% endblock %}
 
 {% block table_headers %}
 <th>Rede Própria</th>
@@ -19,10 +19,10 @@
 <td>{{ indicador.sms|default:"-" }}</td>
 {% endblock %}
 
-{% block detail_url %}{% url 'questionarios:tarifario_mtn_detail' indicador.pk %}{% endblock %}
-{% block update_url %}{% url 'questionarios:tarifario_mtn_update' indicador.pk %}{% endblock %}
-{% block delete_url %}{% url 'questionarios:tarifario_mtn_delete' indicador.pk %}{% endblock %}
+{% block detail_url %}{% url 'questionarios:tarifario_telecel_detail' indicador.pk %}{% endblock %}
+{% block update_url %}{% url 'questionarios:tarifario_telecel_update' indicador.pk %}{% endblock %}
+{% block delete_url %}{% url 'questionarios:tarifario_telecel_delete' indicador.pk %}{% endblock %}
 
 {% block table_colspan %}8{% endblock %}
 
-{% block resumo_url %}{% url 'questionarios:tarifario_mtn_resumo' 2024 %}{% endblock %}
+{% block resumo_url %}{% url 'questionarios:tarifario_telecel_resumo' 2024 %}{% endblock %}
