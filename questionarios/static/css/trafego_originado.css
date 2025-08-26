@@ -4,7 +4,7 @@
  */
 
 /* ========== SEÇÕES DE DADOS ========== */
-.trafego-section {
+.trafego-section, .questionario-section.trafego-section {
     margin-bottom: 2rem;
     border-left: 4px solid var(--binance-yellow);
     padding-left: 1rem;
@@ -35,7 +35,7 @@
 }
 
 /* ========== TÍTULOS DE SUBSECÇÕES ========== */
-.trafego-subsection-title {
+.trafego-subsection-title, .questionario-subsection-title.trafego-subsection-title {
     font-size: 0.95rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -43,6 +43,7 @@
     border-radius: 6px;
     background: rgba(240, 185, 11, 0.1);
     border: 1px solid rgba(240, 185, 11, 0.2);
+    color: var(--binance-yellow);
 }
 
 .trafego-subsection-title.nacional {
