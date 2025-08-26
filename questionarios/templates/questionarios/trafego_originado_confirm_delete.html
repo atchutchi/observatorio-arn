@@ -1,5 +1,6 @@
 {% extends "questionarios/base_questionarios.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block questionario_title %}Confirmar Exclusão{% endblock %}
 
@@ -15,7 +16,7 @@
     </div>
 </div>
 
-<!-- Informações do Item -->
+<!-- Informações do Item a Ser Excluído -->
 <div class="platform-card mb-4">
     <div class="card-header">
         <h3 class="card-title">
@@ -25,7 +26,7 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="detail-info-item">
                     <div class="detail-info-icon">
                         {% if object.operadora == 'ORANGE' %}
@@ -43,26 +44,38 @@
                 </div>
             </div>
             
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="detail-info-item">
                     <div class="detail-info-icon">
                         <i class="fas fa-calendar"></i>
                     </div>
                     <div class="detail-info-content">
                         <strong>Período</strong>
-                        <p>{{ object.ano }} - {{ object.trimestre }}º Trimestre</p>
+                        <p>{{ object.ano }}/{{ object.mes|stringformat:"02d" }}</p>
                     </div>
                 </div>
             </div>
             
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="detail-info-item">
                     <div class="detail-info-icon">
                         <i class="fas fa-chart-bar"></i>
                     </div>
                     <div class="detail-info-content">
                         <strong>Tipo</strong>
-                        <p>Trafego Originado</p>
+                        <p>Tráfego Originado</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>Volume Dados</strong>
+                        <p>{{ object.calcular_total_dados_gb|floatformat:1 }} GB</p>
                     </div>
                 </div>
             </div>
@@ -70,23 +83,159 @@
     </div>
 </div>
 
-<!-- Aviso -->
+<!-- Resumo dos Dados que Serão Perdidos -->
+<div class="platform-card mb-4">
+    <div class="card-header bg-warning">
+        <h4 class="card-title text-dark">
+            <i class="fas fa-database me-2"></i>
+            Dados que Serão Perdidos
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- Tráfego de Dados -->
+            <div class="col-md-6">
+                <h6 style="color: var(--binance-yellow);">📊 Tráfego de Dados</h6>
+                <ul style="color: var(--binance-text-muted);">
+                    <li>Dados 2G: {{ object.trafego_dados_2g_mbytes|intcomma }} MB</li>
+                    <li>Dados 3G: {{ object.calcular_total_dados_3g_mb|intcomma }} MB</li>
+                    <li>Dados 4G: {{ object.calcular_total_dados_4g_mb|intcomma }} MB</li>
+                    <li>Total: <strong>{{ object.calcular_total_dados_gb|floatformat:1 }} GB</strong></li>
+                    <li>Sessões: {{ object.calcular_total_sessoes|intcomma }}</li>
+                </ul>
+            </div>
+            
+            <!-- SMS -->
+            <div class="col-md-6">
+                <h6 style="color: var(--binance-success);">💬 Mensagens SMS</h6>
+                <ul style="color: var(--binance-text-muted);">
+                    <li>SMS Total: {{ object.calcular_total_sms|intcomma }}</li>
+                    <li>SMS On-net: {{ object.sms_on_net|intcomma }}</li>
+                    <li>SMS Off-net: {{ object.sms_off_net_nacional|intcomma }}</li>
+                    <li>SMS Internacional: {{ object.calcular_total_sms_internacional|intcomma }}</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="row mt-3">
+            <!-- Voz -->
+            <div class="col-md-6">
+                <h6 style="color: var(--binance-info);">📞 Volume de Voz</h6>
+                <ul style="color: var(--binance-text-muted);">
+                    <li>Total Minutos: {{ object.calcular_total_voz_minutos|intcomma }}</li>
+                    <li>On-net: {{ object.voz_on_net_minutos|intcomma }} min</li>
+                    <li>Off-net: {{ object.voz_off_net_nacional_minutos|intcomma }} min</li>
+                    <li>Internacional: {{ object.calcular_total_voz_internacional_minutos|intcomma }} min</li>
+                    <li>Percentual On-net: {{ object.get_percentual_on_net|floatformat:1 }}%</li>
+                </ul>
+            </div>
+            
+            <!-- Chamadas -->
+            <div class="col-md-6">
+                <h6 style="color: var(--binance-warning);">📱 Número de Chamadas</h6>
+                <ul style="color: var(--binance-text-muted);">
+                    <li>Total Chamadas: {{ object.calcular_total_chamadas|intcomma }}</li>
+                    <li>On-net: {{ object.chamadas_on_net|intcomma }}</li>
+                    <li>Off-net: {{ object.chamadas_off_net_nacional|intcomma }}</li>
+                    <li>Internacional: {{ object.calcular_total_chamadas_internacional|intcomma }}</li>
+                    <li>Duração Média: 
+                        {% if object.calcular_total_chamadas > 0 %}
+                            {{ object.calcular_total_voz_minutos|div:object.calcular_total_chamadas|floatformat:1 }} min
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Outros Serviços -->
+        {% if object.numeros_curtos or object.mms_total %}
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <h6 style="color: var(--binance-text);">🔹 Outros Serviços</h6>
+                <ul style="color: var(--binance-text-muted);">
+                    {% if object.numeros_curtos %}
+                    <li>Números Curtos: {{ object.numeros_curtos|intcomma }}</li>
+                    {% endif %}
+                    {% if object.mms_total %}
+                    <li>MMS: {{ object.mms_total|intcomma }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Aviso de Confirmação -->
 <div class="platform-card mb-4">
     <div class="card-body">
         <div class="alert-questionario alert-questionario-danger">
             <i class="fas fa-exclamation-triangle"></i>
             <div>
-                <strong>⚠️ ATENÇÃO!</strong>
-                <p class="mt-2 mb-0">
-                    Todos os dados relacionados a este indicador serão perdidos permanentemente.
-                    Esta ação não pode ser desfeita.
+                <strong>⚠️ ATENÇÃO - EXCLUSÃO PERMANENTE!</strong>
+                <p class="mt-2 mb-2">
+                    Você está prestes a excluir permanentemente o indicador de <strong>Tráfego Originado</strong> 
+                    da operadora <strong>{{ object.operadora }}</strong> referente a 
+                    <strong>{{ object.get_mes_display }} de {{ object.ano }}</strong>.
+                </p>
+                <p class="mb-0">
+                    <strong>Esta ação é IRREVERSÍVEL</strong> e todos os dados listados acima serão perdidos permanentemente.
+                    Isso inclui todos os dados de tráfego, SMS, voz e chamadas.
                 </p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Botões -->
+<!-- Estatísticas de Impacto -->
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title">
+            <i class="fas fa-chart-pie me-2"></i>
+            Impacto da Exclusão
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="impact-stat">
+                    <i class="fas fa-database fa-2x mb-2" style="color: var(--binance-danger);"></i>
+                    <h6>Dados</h6>
+                    <p class="h5 text-danger">{{ object.calcular_total_dados_gb|floatformat:1 }} GB</p>
+                    <small class="text-muted">serão removidos</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="impact-stat">
+                    <i class="fas fa-sms fa-2x mb-2" style="color: var(--binance-danger);"></i>
+                    <h6>SMS</h6>
+                    <p class="h5 text-danger">{{ object.calcular_total_sms|intcomma }}</p>
+                    <small class="text-muted">mensagens perdidas</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="impact-stat">
+                    <i class="fas fa-phone-alt fa-2x mb-2" style="color: var(--binance-danger);"></i>
+                    <h6>Minutos</h6>
+                    <p class="h5 text-danger">{{ object.calcular_total_voz_minutos|intcomma }}</p>
+                    <small class="text-muted">de registro de voz</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="impact-stat">
+                    <i class="fas fa-phone-volume fa-2x mb-2" style="color: var(--binance-danger);"></i>
+                    <h6>Chamadas</h6>
+                    <p class="h5 text-danger">{{ object.calcular_total_chamadas|intcomma }}</p>
+                    <small class="text-muted">registros excluídos</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botões de Confirmação -->
 <div class="platform-card">
     <div class="card-body">
         <form method="post" class="text-center">
@@ -94,14 +243,157 @@
             
             <div class="d-flex gap-3 justify-content-center">
                 <a href="{% url 'questionarios:trafego_originado_list' %}" class="btn btn-outline">
-                    <i class="fas fa-arrow-left me-2"></i>Cancelar
+                    <i class="fas fa-arrow-left me-2"></i>Cancelar e Voltar
                 </a>
                 
-                <button type="submit" class="btn btn-danger">
+                <a href="{% url 'questionarios:trafego_originado_detail' object.pk %}" class="btn btn-outline">
+                    <i class="fas fa-eye me-2"></i>Ver Detalhes
+                </a>
+                
+                <button type="submit" class="btn btn-danger" 
+                        onclick="return confirmDeletion()">
                     <i class="fas fa-trash me-2"></i>Confirmar Exclusão
                 </button>
+            </div>
+            
+            <div class="mt-4">
+                <p style="color: var(--binance-text-muted); font-size: 0.875rem;">
+                    💡 <strong>Dica:</strong> Se não tem certeza, use "Ver Detalhes" para revisar os dados 
+                    ou "Cancelar" para voltar à lista sem fazer alterações.
+                </p>
             </div>
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block questionario_js %}
+<script>
+function confirmDeletion() {
+    // Confirmação dupla para exclusão
+    const firstConfirm = confirm(
+        '⚠️ PRIMEIRA CONFIRMAÇÃO\n\n' +
+        'Tem certeza que deseja excluir este indicador de Tráfego Originado?\n\n' +
+        'Operadora: {{ object.operadora }}\n' +
+        'Período: {{ object.get_mes_display }} de {{ object.ano }}\n' +
+        'Volume de Dados: {{ object.calcular_total_dados_gb|floatformat:1 }} GB\n' +
+        'Total SMS: {{ object.calcular_total_sms|intcomma }}\n' +
+        'Total Minutos: {{ object.calcular_total_voz_minutos|intcomma }}\n\n' +
+        'Esta ação é IRREVERSÍVEL!'
+    );
+    
+    if (firstConfirm) {
+        const secondConfirm = confirm(
+            '⚠️ CONFIRMAÇÃO FINAL\n\n' +
+            'Esta é sua ÚLTIMA CHANCE de cancelar!\n\n' +
+            'Todos os dados serão PERMANENTEMENTE EXCLUÍDOS.\n' +
+            'Não será possível recuperar estas informações.\n\n' +
+            'Deseja REALMENTE prosseguir com a exclusão?'
+        );
+        
+        if (secondConfirm) {
+            // Mostrar indicador de processamento
+            showProcessingIndicator();
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+function showProcessingIndicator() {
+    const btn = document.querySelector('button[type="submit"]');
+    if (btn) {
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Excluindo...';
+        btn.disabled = true;
+    }
+}
+
+// Estilos específicos
+const styles = `
+.impact-stat {
+    padding: 1rem;
+    background: var(--binance-dark);
+    border-radius: 8px;
+    border: 1px solid var(--binance-border);
+}
+
+.impact-stat h6 {
+    color: var(--binance-text-muted);
+    margin: 0.5rem 0;
+}
+
+.impact-stat p {
+    margin: 0.5rem 0;
+}
+
+.detail-info-item {
+    text-align: center;
+    padding: 1rem;
+}
+
+.detail-info-icon {
+    margin-bottom: 0.5rem;
+}
+
+.detail-info-icon i {
+    font-size: 2rem;
+}
+
+.operadora-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.operadora-badge.orange {
+    background: rgba(255, 102, 0, 0.2);
+    color: #FF6600;
+}
+
+.operadora-badge.telecel {
+    background: rgba(220, 53, 69, 0.2);
+    color: #DC3545;
+}
+
+.alert-questionario-danger {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid var(--binance-danger);
+    color: var(--binance-text);
+}
+
+.btn-danger:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+`;
+
+// Adicionar estilos
+const styleSheet = document.createElement('style');
+styleSheet.textContent = styles;
+document.head.appendChild(styleSheet);
+
+// Adicionar contador de tempo desde criação
+document.addEventListener('DOMContentLoaded', function() {
+    const creationDate = new Date('{{ object.data_criacao|date:"c" }}');
+    const now = new Date();
+    const diff = now - creationDate;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
+    if (days > 0) {
+        const infoElement = document.createElement('div');
+        infoElement.className = 'alert alert-info mt-3';
+        infoElement.innerHTML = `
+            <i class="fas fa-clock me-2"></i>
+            Este registro existe há <strong>${days} dia(s)</strong> no sistema.
+        `;
+        
+        const cardBody = document.querySelector('.platform-card:last-child .card-body');
+        if (cardBody) {
+            cardBody.insertBefore(infoElement, cardBody.firstChild);
+        }
+    }
+});
+</script>
 {% endblock %}

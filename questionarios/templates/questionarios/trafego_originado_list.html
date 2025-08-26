@@ -1,26 +1,187 @@
 {% extends "questionarios/partials/base_list.html" %}
+{% load humanize %}
 
-{% block indicator_title %}Indicadores de Tráfego Originado{% endblock %}
-{% block indicator_subtitle %}Gestão e controle de dados de tráfego originado por operadora{% endblock %}
+{% block indicator_title %}Indicadores de Tráfego Originado - KPI ARN{% endblock %}
+{% block indicator_subtitle %}Seção 5: Gestão de tráfego de dados, SMS, voz e chamadas por operadora{% endblock %}
 
 {% block create_url %}{% url 'questionarios:trafego_originado_create' %}{% endblock %}
 
+{% block list_stats %}
+<!-- Estatísticas Resumidas -->
+{% if estatisticas %}
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stat-summary-card">
+            <i class="fas fa-database"></i>
+            <div>
+                <small>Total Dados</small>
+                <h4>{{ estatisticas.total_dados_gb|floatformat:1 }} GB</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-summary-card">
+            <i class="fas fa-sms"></i>
+            <div>
+                <small>Total SMS</small>
+                <h4>{{ estatisticas.total_sms|intcomma }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-summary-card">
+            <i class="fas fa-phone-alt"></i>
+            <div>
+                <small>Total Minutos</small>
+                <h4>{{ estatisticas.total_voz_minutos|intcomma }}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-summary-card">
+            <i class="fas fa-phone-volume"></i>
+            <div>
+                <small>Total Chamadas</small>
+                <h4>{{ estatisticas.total_chamadas|intcomma }}</h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
 {% block table_headers %}
-<th>Rede Própria</th>
-<th>Outras Redes</th>
-<th>Total</th>
+<th data-sortable="true">Mês</th>
+<th data-sortable="true">Dados (GB)</th>
+<th data-sortable="true">SMS</th>
+<th data-sortable="true">Voz (min)</th>
+<th data-sortable="true">Chamadas</th>
+<th data-sortable="true">On-net %</th>
+<th data-sortable="true">Internacional %</th>
 {% endblock %}
 
 {% block table_row_data %}
-<td>{{ indicador.trafego_rede_propria|default:"-" }}</td>
-<td>{{ indicador.trafego_outras_redes|default:"-" }}</td>
-<td><strong>{{ indicador.calcular_total_trafego|default:"-" }}</strong></td>
+<td data-column="mes">
+    <span class="badge bg-secondary">{{ indicador.get_mes_display|default:indicador.mes }}</span>
+</td>
+<td data-column="dados">
+    <div class="d-flex flex-column">
+        <strong>{{ indicador.calcular_total_dados_gb|floatformat:1 }} GB</strong>
+        <small class="text-muted">
+            2G: {{ indicador.trafego_dados_2g_mbytes|div:1024|floatformat:1 }} | 
+            3G: {{ indicador.calcular_total_dados_3g_mb|div:1024|floatformat:1 }} | 
+            4G: {{ indicador.calcular_total_dados_4g_mb|div:1024|floatformat:1 }}
+        </small>
+    </div>
+</td>
+<td data-column="sms">
+    <div class="d-flex flex-column">
+        <span class="badge bg-success">{{ indicador.calcular_total_sms|intcomma }}</span>
+        <small class="text-muted">
+            On-net: {{ indicador.sms_on_net|intcomma }}
+        </small>
+    </div>
+</td>
+<td data-column="voz">
+    <div class="d-flex flex-column">
+        <span class="badge bg-info">{{ indicador.calcular_total_voz_minutos|intcomma }}</span>
+        <small class="text-muted">
+            {{ indicador.calcular_total_voz_minutos|div:60|floatformat:0 }} horas
+        </small>
+    </div>
+</td>
+<td data-column="chamadas">
+    <div class="d-flex flex-column">
+        <span class="badge bg-warning">{{ indicador.calcular_total_chamadas|intcomma }}</span>
+        <small class="text-muted">
+            {% if indicador.calcular_total_chamadas > 0 %}
+                ~{{ indicador.calcular_total_voz_minutos|div:indicador.calcular_total_chamadas|floatformat:1 }} min/ch
+            {% else %}
+                -
+            {% endif %}
+        </small>
+    </div>
+</td>
+<td data-column="onnet">
+    {% if indicador.calcular_total_voz_minutos > 0 %}
+        <div class="progress" style="height: 20px;">
+            <div class="progress-bar bg-primary" 
+                 role="progressbar" 
+                 style="width: {{ indicador.get_percentual_on_net|floatformat:0 }}%">
+                {{ indicador.get_percentual_on_net|floatformat:1 }}%
+            </div>
+        </div>
+    {% else %}
+        <span class="text-muted">-</span>
+    {% endif %}
+</td>
+<td data-column="internacional">
+    {% if indicador.calcular_total_voz_minutos > 0 %}
+        <div class="progress" style="height: 20px;">
+            <div class="progress-bar bg-warning" 
+                 role="progressbar" 
+                 style="width: {{ indicador.get_percentual_internacional|floatformat:0 }}%">
+                {{ indicador.get_percentual_internacional|floatformat:1 }}%
+            </div>
+        </div>
+    {% else %}
+        <span class="text-muted">-</span>
+    {% endif %}
+</td>
 {% endblock %}
 
 {% block detail_url %}{% url 'questionarios:trafego_originado_detail' indicador.pk %}{% endblock %}
 {% block update_url %}{% url 'questionarios:trafego_originado_update' indicador.pk %}{% endblock %}
 {% block delete_url %}{% url 'questionarios:trafego_originado_delete' indicador.pk %}{% endblock %}
 
-{% block table_colspan %}7{% endblock %}
+{% block table_colspan %}10{% endblock %}
 
 {% block resumo_url %}{% url 'questionarios:trafego_originado_resumo' 2024 %}{% endblock %}
+
+{% block list_styles %}
+<style>
+    .stat-summary-card {
+        background: var(--binance-dark);
+        border: 1px solid var(--binance-border);
+        border-radius: 8px;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .stat-summary-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .stat-summary-card i {
+        font-size: 2rem;
+        color: var(--binance-yellow);
+    }
+    
+    .stat-summary-card small {
+        color: var(--binance-text-muted);
+        display: block;
+    }
+    
+    .stat-summary-card h4 {
+        margin: 0;
+        color: var(--binance-text);
+    }
+    
+    .questionario-table td {
+        vertical-align: middle;
+    }
+    
+    .progress {
+        background: var(--binance-dark);
+    }
+    
+    .badge {
+        font-weight: normal;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}
