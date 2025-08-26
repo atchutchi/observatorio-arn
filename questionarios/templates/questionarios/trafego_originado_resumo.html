@@ -73,9 +73,9 @@
                             {% endif %}
                         </div>
                         <div class="annual-stat-details">
-                            <small>2G: {{ total_dados_2g_anual|div:1024|floatformat:1 }} GB</small><br>
-                            <small>3G: {{ total_dados_3g_anual|div:1024|floatformat:1 }} GB</small><br>
-                            <small>4G: {{ total_dados_4g_anual|div:1024|floatformat:1 }} GB</small><br>
+                            <small>2G: {% widthratio total_dados_2g_anual 1024 1 %} GB</small><br>
+                            <small>3G: {% widthratio total_dados_3g_anual 1024 1 %} GB</small><br>
+                            <small>4G: {% widthratio total_dados_4g_anual 1024 1 %} GB</small><br>
                             <small class="text-warning">Sessões: {{ total_sessoes_anual|intcomma }}</small>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                             <small>Internacional: {{ total_sms_internacional_anual|intcomma }}</small><br>
                             <small class="text-info">
                                 {% if total_sms_anual > 0 %}
-                                    Int: {{ total_sms_internacional_anual|mul:100|div:total_sms_anual|floatformat:1 }}%
+                                    Int: {% widthratio total_sms_internacional_anual total_sms_anual 100 %}%
                                 {% endif %}
                             </small>
                         </div>
@@ -119,7 +119,7 @@
                         </div>
                         <div class="annual-stat-details">
                             <small>minutos</small><br>
-                            <small>{{ total_voz_minutos_anual|div:60|floatformat:0|intcomma }} horas</small><br>
+                            <small>{% widthratio total_voz_minutos_anual 60 1 %} horas</small><br>
                             <small>On-net: {{ percentual_on_net_anual|floatformat:1 }}%</small><br>
                             <small>Internacional: {{ percentual_internacional_anual|floatformat:1 }}%</small>
                         </div>
@@ -143,7 +143,7 @@
                             <small>Internacional: {{ total_chamadas_internacional_anual|intcomma }}</small><br>
                             <small class="text-success">
                                 {% if total_chamadas_anual > 0 %}
-                                    Média: {{ total_voz_minutos_anual|div:total_chamadas_anual|floatformat:1 }} min
+                                    Média: {% widthratio total_voz_minutos_anual total_chamadas_anual 1 %} min
                                 {% endif %}
                             </small>
                         </div>
@@ -420,7 +420,7 @@ const trimestralData = {
         {
             label: 'SMS (mil)',
             data: [
-                {% for t in totais_trimestrais %}{{ t.total_sms|div:1000|default:0 }}{% if not forloop.last %},{% endif %}{% endfor %}
+                {% for t in totais_trimestrais %}{% widthratio t.total_sms 1000 1 %}{% if not forloop.last %},{% endif %}{% endfor %}
             ],
             borderColor: 'rgb(75, 192, 192)',
             backgroundColor: 'rgba(75, 192, 192, 0.1)',
@@ -430,7 +430,7 @@ const trimestralData = {
         {
             label: 'Voz (mil min)',
             data: [
-                {% for t in totais_trimestrais %}{{ t.total_voz_minutos|div:1000|default:0 }}{% if not forloop.last %},{% endif %}{% endfor %}
+                {% for t in totais_trimestrais %}{% widthratio t.total_voz_minutos 1000 1 %}{% if not forloop.last %},{% endif %}{% endfor %}
             ],
             borderColor: 'rgb(240, 185, 11)',
             backgroundColor: 'rgba(240, 185, 11, 0.1)',

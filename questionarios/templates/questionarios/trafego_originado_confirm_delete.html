@@ -140,7 +140,7 @@
                     <li>Internacional: {{ object.calcular_total_chamadas_internacional|intcomma }}</li>
                     <li>Duração Média: 
                         {% if object.calcular_total_chamadas > 0 %}
-                            {{ object.calcular_total_voz_minutos|div:object.calcular_total_chamadas|floatformat:1 }} min
+                            {{ object.calcular_duracao_media_chamada|floatformat:1 }} min
                         {% else %}
                             N/A
                         {% endif %}

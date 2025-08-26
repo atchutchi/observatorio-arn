@@ -92,7 +92,7 @@
                             <td>MB/Sessão:</td>
                             <td class="text-end">
                                 {% if object.trafego_dados_2g_sessoes > 0 %}
-                                    {{ object.trafego_dados_2g_mbytes|div:object.trafego_dados_2g_sessoes|floatformat:2 }}
+                                    {{ object.calcular_mb_por_sessao_2g|floatformat:2 }}
                                 {% else %}
                                     N/A
                                 {% endif %}
@@ -185,7 +185,7 @@
                             <td class="text-end"><strong>{{ object.sms_on_net|intcomma }}</strong></td>
                             <td class="text-muted">
                                 {% if totals.sms.total > 0 %}
-                                    ({{ object.sms_on_net|mul:100|div:totals.sms.total|floatformat:1 }}%)
+                                    ({% widthratio object.sms_on_net totals.sms.total 100 %}%)
                                 {% endif %}
                             </td>
                         </tr>
@@ -194,7 +194,7 @@
                             <td class="text-end"><strong>{{ object.sms_off_net_nacional|intcomma }}</strong></td>
                             <td class="text-muted">
                                 {% if totals.sms.total > 0 %}
-                                    ({{ object.sms_off_net_nacional|mul:100|div:totals.sms.total|floatformat:1 }}%)
+                                    ({% widthratio object.sms_off_net_nacional totals.sms.total 100 %}%)
                                 {% endif %}
                             </td>
                         </tr>
@@ -338,8 +338,8 @@
             <div class="col-md-12 text-center">
                 <h5>Total Geral Voz: <strong class="text-info">{{ totals.voz.total_minutos|intcomma }}</strong> minutos</h5>
                 <p class="text-muted">
-                    Equivalente a {{ totals.voz.total_minutos|div:60|floatformat:0|intcomma }} horas ou 
-                    {{ totals.voz.total_minutos|div:1440|floatformat:1 }} dias
+                    Equivalente a {{ object.calcular_total_voz_horas|floatformat:0|intcomma }} horas ou 
+                    {{ object.calcular_total_voz_dias|floatformat:1 }} dias
                 </p>
             </div>
         </div>
@@ -434,7 +434,7 @@
                     <strong>Taxa On-net:</strong><br>
                     <span class="h5">
                         {% if totals.chamadas.total > 0 %}
-                            {{ object.chamadas_on_net|mul:100|div:totals.chamadas.total|floatformat:1 }}%
+                            {% widthratio object.chamadas_on_net totals.chamadas.total 100 %}%
                         {% else %}
                             N/A
                         {% endif %}

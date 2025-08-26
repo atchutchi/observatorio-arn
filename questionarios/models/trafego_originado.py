@@ -408,6 +408,39 @@ class TrafegoOriginadoIndicador(IndicadorBase):
         """Calcula total de dados em GB"""
         return self.calcular_total_dados_mb() / 1024
     
+    def calcular_total_dados_2g_gb(self):
+        """Calcula total de dados 2G em GB"""
+        return self.calcular_total_dados_2g_mb() / 1024
+    
+    def calcular_total_dados_3g_gb(self):
+        """Calcula total de dados 3G em GB"""
+        return self.calcular_total_dados_3g_mb() / 1024
+    
+    def calcular_total_dados_4g_gb(self):
+        """Calcula total de dados 4G em GB"""
+        return self.calcular_total_dados_4g_mb() / 1024
+    
+    def calcular_total_voz_horas(self):
+        """Calcula total de voz em horas"""
+        return self.calcular_total_voz_minutos() / 60
+    
+    def calcular_duracao_media_chamada(self):
+        """Calcula duração média por chamada em minutos"""
+        total_chamadas = self.calcular_total_chamadas()
+        if total_chamadas > 0:
+            return self.calcular_total_voz_minutos() / total_chamadas
+        return 0
+    
+    def calcular_mb_por_sessao_2g(self):
+        """Calcula média de MB por sessão 2G"""
+        if self.trafego_dados_2g_sessoes > 0:
+            return self.trafego_dados_2g_mbytes / self.trafego_dados_2g_sessoes
+        return 0
+    
+    def calcular_total_voz_dias(self):
+        """Calcula total de voz em dias"""
+        return self.calcular_total_voz_minutos() / 1440
+    
     def calcular_total_sessoes(self):
         """Calcula total de sessões de dados"""
         return (
