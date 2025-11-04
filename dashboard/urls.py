@@ -1,6 +1,6 @@
 # dashboard/urls.py
 from django.urls import path
-from .views import main, analytics, reports, chatbot, export_views
+from .views import main, analytics, reports, chatbot, export_views, advanced_analytics
 
 app_name = 'dashboard'
 
@@ -40,4 +40,20 @@ urlpatterns = [
     # ===== EXPORTAÇÃO DE RELATÓRIOS =====
     path('reports/export/<str:report_type>/<str:format_type>/', export_views.ExportReportView.as_view(), name='export-report-new'),
     path('reports/quick-export/', export_views.QuickExportView.as_view(), name='quick-export'),
+    
+    # ===== ANÁLISES AVANÇADAS (PRIORIDADE 1) =====
+    # Dashboard consolidado
+    path('advanced/', advanced_analytics.AdvancedAnalyticsDashboard.as_view(), name='advanced-dashboard'),
+    
+    # Previsões ML
+    path('advanced/predictions/', advanced_analytics.PredictionsView.as_view(), name='advanced-predictions'),
+    path('api/predictions/', advanced_analytics.PredictionsAPIView.as_view(), name='api-predictions'),
+    
+    # Análise Geográfica
+    path('advanced/geographic/', advanced_analytics.GeographicAnalyticsView.as_view(), name='advanced-geographic'),
+    path('api/geographic/', advanced_analytics.GeographicAPIView.as_view(), name='api-geographic'),
+    
+    # Análise de Preços (público)
+    path('advanced/prices/', advanced_analytics.PriceAnalyticsView.as_view(), name='advanced-prices'),
+    path('api/prices/', advanced_analytics.PriceAPIView.as_view(), name='api-prices'),
 ]

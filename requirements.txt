@@ -41,10 +41,13 @@ djangorestframework==3.14.0
 markdown==3.5.2
 django-filter==24.1
 
-# ==================== DATA PROCESSING ====================
+# ==================== DATA PROCESSING & ML ====================
+# NumPy & Pandas para análises preditivas (ML) e processamento de dados
 pandas>=2.2.0
 numpy>=1.26.0
 openpyxl>=3.1.2
+# Nota: ML predictions implementadas com NumPy nativo (sem sklearn)
+# para manter dependências leves e performance otimizada
 
 # ==================== REPORT GENERATION ====================
 reportlab>=4.0.9

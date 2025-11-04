@@ -79,6 +79,36 @@
             </div>
             {% endif %}
             
+            <!-- Análises Avançadas (NOVO - PRIORIDADE 1) -->
+            {% if request.user.is_staff %}
+            <div class="sidebar-nav-item">
+                <button class="sidebar-nav-link" type="button" data-bs-toggle="collapse" data-bs-target="#advancedMenu" aria-expanded="false">
+                    <i class="fas fa-brain"></i>
+                    Análises Avançadas
+                    <i class="fas fa-chevron-down ms-auto"></i>
+                    <span class="badge bg-warning ms-2">NOVO</span>
+                </button>
+                <div class="collapse sidebar-dropdown" id="advancedMenu">
+                    <a href="{% url 'dashboard:advanced-dashboard' %}" class="sidebar-dropdown-link">
+                        <i class="fas fa-chart-line"></i>
+                        Dashboard Consolidado
+                    </a>
+                    <a href="{% url 'dashboard:advanced-predictions' %}" class="sidebar-dropdown-link">
+                        <i class="fas fa-chart-line"></i>
+                        Previsões ML
+                    </a>
+                    <a href="{% url 'dashboard:advanced-geographic' %}" class="sidebar-dropdown-link">
+                        <i class="fas fa-map-marked-alt"></i>
+                        Análise Geográfica
+                    </a>
+                    <a href="{% url 'dashboard:advanced-prices' %}" class="sidebar-dropdown-link">
+                        <i class="fas fa-tags"></i>
+                        Comparador de Preços
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            
             <!-- Chatbot -->
             <div class="sidebar-nav-item">
                 <a href="{% url 'dashboard:chatbot' %}" class="sidebar-nav-link">
