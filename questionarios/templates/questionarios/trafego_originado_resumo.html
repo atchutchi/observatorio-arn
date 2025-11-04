@@ -59,94 +59,83 @@
         <div class="row">
             <!-- Tráfego de Dados -->
             <div class="col-md-6 col-lg-3 mb-4">
-                <div class="annual-stat-card">
-                    <div class="annual-stat-header bg-primary">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
                         <i class="fas fa-database"></i>
-                        <span>Tráfego de Dados</span>
                     </div>
-                    <div class="annual-stat-body">
-                        <div class="annual-stat-value">
+                    <div class="detail-info-content">
+                        <strong>Tráfego de Dados</strong>
+                        <p class="detail-value">
                             {% if total_dados_tb_anual > 1 %}
                                 {{ total_dados_tb_anual|floatformat:2 }} TB
                             {% else %}
                                 {{ total_dados_gb_anual|floatformat:1 }} GB
                             {% endif %}
-                        </div>
-                        <div class="annual-stat-details">
-                            <small>2G: {% widthratio total_dados_2g_anual 1024 1 %} GB</small><br>
-                            <small>3G: {% widthratio total_dados_3g_anual 1024 1 %} GB</small><br>
-                            <small>4G: {% widthratio total_dados_4g_anual 1024 1 %} GB</small><br>
-                            <small class="text-warning">Sessões: {{ total_sessoes_anual|intcomma }}</small>
-                        </div>
+                        </p>
+                        <small class="text-muted">
+                            2G: {% widthratio total_dados_2g_anual 1024 1 %} GB | 
+                            3G: {% widthratio total_dados_3g_anual 1024 1 %} GB | 
+                            4G: {% widthratio total_dados_4g_anual 1024 1 %} GB<br>
+                            Sessões: {{ total_sessoes_anual|intcomma }}
+                        </small>
                     </div>
                 </div>
             </div>
             
             <!-- SMS -->
             <div class="col-md-6 col-lg-3 mb-4">
-                <div class="annual-stat-card">
-                    <div class="annual-stat-header bg-success">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
                         <i class="fas fa-sms"></i>
-                        <span>Mensagens SMS</span>
                     </div>
-                    <div class="annual-stat-body">
-                        <div class="annual-stat-value">
-                            {{ total_sms_anual|intcomma }}
-                        </div>
-                        <div class="annual-stat-details">
-                            <small>On-net: {{ total_sms_on_net_anual|intcomma }}</small><br>
-                            <small>Internacional: {{ total_sms_internacional_anual|intcomma }}</small><br>
-                            <small class="text-info">
-                                {% if total_sms_anual > 0 %}
-                                    Int: {% widthratio total_sms_internacional_anual total_sms_anual 100 %}%
-                                {% endif %}
-                            </small>
-                        </div>
+                    <div class="detail-info-content">
+                        <strong>Mensagens SMS</strong>
+                        <p class="detail-value">{{ total_sms_anual|intcomma }}</p>
+                        <small class="text-muted">
+                            On-net: {{ total_sms_on_net_anual|intcomma }} | 
+                            Internacional: {{ total_sms_internacional_anual|intcomma }}<br>
+                            {% if total_sms_anual > 0 %}
+                                Int: {% widthratio total_sms_internacional_anual total_sms_anual 100 %}%
+                            {% endif %}
+                        </small>
                     </div>
                 </div>
             </div>
             
             <!-- Voz -->
             <div class="col-md-6 col-lg-3 mb-4">
-                <div class="annual-stat-card">
-                    <div class="annual-stat-header bg-info">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
                         <i class="fas fa-phone-alt"></i>
-                        <span>Volume de Voz</span>
                     </div>
-                    <div class="annual-stat-body">
-                        <div class="annual-stat-value">
-                            {{ total_voz_minutos_anual|intcomma }}
-                        </div>
-                        <div class="annual-stat-details">
-                            <small>minutos</small><br>
-                            <small>{% widthratio total_voz_minutos_anual 60 1 %} horas</small><br>
-                            <small>On-net: {{ percentual_on_net_anual|floatformat:1 }}%</small><br>
-                            <small>Internacional: {{ percentual_internacional_anual|floatformat:1 }}%</small>
-                        </div>
+                    <div class="detail-info-content">
+                        <strong>Volume de Voz</strong>
+                        <p class="detail-value">{{ total_voz_minutos_anual|intcomma }}</p>
+                        <small class="text-muted">
+                            minutos | {% widthratio total_voz_minutos_anual 60 1 %} horas<br>
+                            On-net: {{ percentual_on_net_anual|floatformat:1 }}% | 
+                            Internacional: {{ percentual_internacional_anual|floatformat:1 }}%
+                        </small>
                     </div>
                 </div>
             </div>
             
             <!-- Chamadas -->
             <div class="col-md-6 col-lg-3 mb-4">
-                <div class="annual-stat-card">
-                    <div class="annual-stat-header bg-warning">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
                         <i class="fas fa-phone-volume"></i>
-                        <span>Chamadas</span>
                     </div>
-                    <div class="annual-stat-body">
-                        <div class="annual-stat-value">
-                            {{ total_chamadas_anual|intcomma }}
-                        </div>
-                        <div class="annual-stat-details">
-                            <small>On-net: {{ total_chamadas_on_net_anual|intcomma }}</small><br>
-                            <small>Internacional: {{ total_chamadas_internacional_anual|intcomma }}</small><br>
-                            <small class="text-success">
-                                {% if total_chamadas_anual > 0 %}
-                                    Média: {% widthratio total_voz_minutos_anual total_chamadas_anual 1 %} min
-                                {% endif %}
-                            </small>
-                        </div>
+                    <div class="detail-info-content">
+                        <strong>Chamadas</strong>
+                        <p class="detail-value">{{ total_chamadas_anual|intcomma }}</p>
+                        <small class="text-muted">
+                            On-net: {{ total_chamadas_on_net_anual|intcomma }} | 
+                            Internacional: {{ total_chamadas_internacional_anual|intcomma }}<br>
+                            {% if total_chamadas_anual > 0 %}
+                                Média: {% widthratio total_voz_minutos_anual total_chamadas_anual 1 %} min
+                            {% endif %}
+                        </small>
                     </div>
                 </div>
             </div>
@@ -166,59 +155,53 @@
         <div class="row">
             {% for trimestre in totais_trimestrais %}
             <div class="col-md-6 col-lg-3 mb-4">
-                <div class="trimestre-card {% if not trimestre.tem_dados %}no-data{% endif %}">
-                    <div class="trimestre-header">
-                        <h5>{{ trimestre.trimestre }}º Trimestre</h5>
+                <div class="platform-card {% if not trimestre.tem_dados %}opacity-50{% endif %}">
+                    <div class="card-header">
+                        <h5 class="card-title">{{ trimestre.trimestre }}º Trimestre</h5>
                         {% if not trimestre.tem_dados %}
                             <span class="badge bg-secondary">Sem dados</span>
                         {% endif %}
                     </div>
                     {% if trimestre.tem_dados %}
-                    <div class="trimestre-body">
-                        <div class="trimestre-section">
-                            <h6><i class="fas fa-database"></i> Dados</h6>
-                            <div class="trimestre-stat">
-                                <span class="trimestre-label">Volume:</span>
-                                <span class="trimestre-value">{{ trimestre.total_dados_gb|floatformat:1 }} GB</span>
+                    <div class="card-body">
+                        <div class="detail-info-item mb-3">
+                            <div class="detail-info-icon">
+                                <i class="fas fa-database"></i>
                             </div>
-                            <div class="trimestre-stat">
-                                <span class="trimestre-label">Sessões:</span>
-                                <span class="trimestre-value">{{ trimestre.total_sessoes|intcomma }}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="trimestre-section">
-                            <h6><i class="fas fa-sms"></i> SMS</h6>
-                            <div class="trimestre-stat">
-                                <span class="trimestre-label">Total:</span>
-                                <span class="trimestre-value">{{ trimestre.total_sms|intcomma }}</span>
-                            </div>
-                            <div class="trimestre-stat small">
-                                <span class="trimestre-label">On-net:</span>
-                                <span class="trimestre-value">{{ trimestre.total_sms_on_net|intcomma }}</span>
+                            <div class="detail-info-content">
+                                <strong>Dados</strong>
+                                <p class="detail-value">{{ trimestre.total_dados_gb|floatformat:1 }} GB</p>
+                                <small class="text-muted">Sessões: {{ trimestre.total_sessoes|intcomma }}</small>
                             </div>
                         </div>
                         
-                        <div class="trimestre-section">
-                            <h6><i class="fas fa-phone-alt"></i> Voz</h6>
-                            <div class="trimestre-stat">
-                                <span class="trimestre-label">Minutos:</span>
-                                <span class="trimestre-value">{{ trimestre.total_voz_minutos|intcomma }}</span>
+                        <div class="detail-info-item mb-3">
+                            <div class="detail-info-icon">
+                                <i class="fas fa-sms"></i>
                             </div>
-                            <div class="trimestre-stat">
-                                <span class="trimestre-label">Chamadas:</span>
-                                <span class="trimestre-value">{{ trimestre.total_chamadas|intcomma }}</span>
+                            <div class="detail-info-content">
+                                <strong>SMS</strong>
+                                <p class="detail-value">{{ trimestre.total_sms|intcomma }}</p>
+                                <small class="text-muted">On-net: {{ trimestre.total_sms_on_net|intcomma }}</small>
                             </div>
-                            {% if trimestre.duracao_media %}
-                            <div class="trimestre-stat small">
-                                <span class="trimestre-label">Média:</span>
-                                <span class="trimestre-value">{{ trimestre.duracao_media|floatformat:1 }} min</span>
+                        </div>
+                        
+                        <div class="detail-info-item">
+                            <div class="detail-info-icon">
+                                <i class="fas fa-phone-alt"></i>
                             </div>
-                            {% endif %}
+                            <div class="detail-info-content">
+                                <strong>Voz</strong>
+                                <p class="detail-value">{{ trimestre.total_voz_minutos|intcomma }} min</p>
+                                <small class="text-muted">
+                                    Chamadas: {{ trimestre.total_chamadas|intcomma }}
+                                    {% if trimestre.duracao_media %} | Média: {{ trimestre.duracao_media|floatformat:1 }} min{% endif %}
+                                </small>
+                            </div>
                         </div>
                     </div>
                     {% else %}
-                    <div class="trimestre-body no-data">
+                    <div class="card-body">
                         <p class="text-muted text-center mb-0">
                             <i class="fas fa-inbox fa-2x mb-2"></i><br>
                             Dados não disponíveis
@@ -520,139 +503,6 @@ if (ctx) {
     new Chart(ctx, config);
 }
 
-// Estilos específicos
-const styles = `
-.annual-stat-card {
-    background: var(--binance-dark);
-    border: 1px solid var(--binance-border);
-    border-radius: 8px;
-    overflow: hidden;
-}
 
-.annual-stat-header {
-    padding: 1rem;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-}
-
-.annual-stat-body {
-    padding: 1.5rem 1rem;
-    text-align: center;
-}
-
-.annual-stat-value {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--binance-yellow);
-    margin-bottom: 0.5rem;
-}
-
-.annual-stat-details {
-    color: var(--binance-text-muted);
-    font-size: 0.875rem;
-    line-height: 1.6;
-}
-
-.trimestre-card {
-    background: var(--binance-dark);
-    border: 1px solid var(--binance-border);
-    border-radius: 8px;
-    overflow: hidden;
-    height: 100%;
-}
-
-.trimestre-card.no-data {
-    opacity: 0.5;
-}
-
-.trimestre-header {
-    background: linear-gradient(135deg, var(--binance-yellow) 0%, #D4A00A 100%);
-    color: var(--binance-dark);
-    padding: 1rem;
-    text-align: center;
-}
-
-.trimestre-header h5 {
-    margin: 0;
-    font-weight: 600;
-    color: var(--binance-dark) !important;
-}
-
-.trimestre-body {
-    padding: 1rem;
-}
-
-.trimestre-body.no-data {
-    padding: 2rem 1rem;
-}
-
-.trimestre-section {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--binance-border);
-}
-
-.trimestre-section:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.trimestre-section h6 {
-    color: var(--binance-yellow);
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
-}
-
-.trimestre-stat {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.25rem 0;
-}
-
-.trimestre-stat.small {
-    font-size: 0.875rem;
-}
-
-.trimestre-label {
-    color: var(--binance-text-muted);
-    font-size: 0.875rem;
-}
-
-.trimestre-value {
-    color: var(--binance-text);
-    font-weight: 600;
-}
-
-.table-summary {
-    background: var(--binance-dark);
-    font-weight: bold;
-}
-
-.table-summary th {
-    color: var(--binance-yellow);
-}
-
-@media print {
-    .questionario-filters,
-    .questionario-actions,
-    .btn-group {
-        display: none !important;
-    }
-    
-    .platform-card {
-        break-inside: avoid;
-    }
-}
-`;
-
-// Adicionar estilos
-const styleSheet = document.createElement('style');
-styleSheet.textContent = styles;
-document.head.appendChild(styleSheet);
 </script>
 {% endblock %}

@@ -162,4 +162,77 @@ test_*.py
 
 # Backups de banco de dados
 *.db.backup
-*.sqlite3.backup 
+*.sqlite3.backup
+*.bak
+db.sqlite3.20*
+
+# Static files (coletados)
+/staticfiles/
+/static_root/
+
+# Media files (uploads de usuários)
+/media/
+
+# Logs
+/logs/
+*.log
+
+# Coverage reports
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Django migrations (opcional - descomente se não quiser versionar)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# Node modules (se usar npm/yarn)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Secrets e credentials
+.env
+.env.local
+.env.*.local
+secrets.json
+credentials.json
+
+# Cache do Django
+.cache/
+
+# Arquivos temporários do projeto
+temp/
+tmp/
+*.tmp
+
+# ========================================
+# DOCUMENTAÇÃO TÉCNICA (Gerada - Não versionar)
+# ========================================
+# Manter apenas README.md principal
+dashboard/EXPORT_README.md
+QUICKSTART.md
+SETUP.md
+DEPLOYMENT.md
+UPGRADE_GUIDE.md
+CHANGELOG.md
+IMPLEMENTATION_SUMMARY.md
+TEMPLATES_REVIEW_SUMMARY.md
+TEMPLATES_STANDARDIZATION_PLAN.md
+PLATFORM_ARCHITECTURE.md
+PLATFORM_FINAL.md
+AI_SETUP.md
+
+# Arquivos de análise e planos
+*_ANALYSIS.md
+*_PLAN.md
+*_SUMMARY.md
+*_GUIDE.md
+DOCUMENTATION_INDEX.md 

@@ -1,6 +1,6 @@
 # dashboard/urls.py
 from django.urls import path
-from .views import main, analytics, reports, chatbot
+from .views import main, analytics, reports, chatbot, export_views
 
 app_name = 'dashboard'
 
@@ -36,4 +36,8 @@ urlpatterns = [
     
     # APIs para relatórios
     path('api/reports/<str:report_type>/', reports.ReportAPIView.as_view(), name='report-api'),
+    
+    # ===== EXPORTAÇÃO DE RELATÓRIOS =====
+    path('reports/export/<str:report_type>/<str:format_type>/', export_views.ExportReportView.as_view(), name='export-report-new'),
+    path('reports/quick-export/', export_views.QuickExportView.as_view(), name='quick-export'),
 ]

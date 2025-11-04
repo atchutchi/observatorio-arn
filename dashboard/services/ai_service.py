@@ -6,7 +6,7 @@ import re
 import json
 import time
 from datetime import datetime, timedelta
-from django.db.models import Sum, Count, Avg, Max, Min
+from django.db.models import Sum, Count, Avg, Max, Min, F
 from django.utils import timezone
 
 # Imports dos modelos de dados das outras apps
@@ -349,7 +349,7 @@ class ARNAssistantService:
         
         # Total do mercado
         total_mercado = assinantes_data.aggregate(
-            total=Sum('assinantes_activos')
+            total=Sum(F('assinantes_pre_pago') + F('assinantes_pos_pago'))
         )['total'] or 0
         
         # Por operadora
@@ -357,7 +357,7 @@ class ARNAssistantService:
         
         for operadora in ['ORANGE', 'TELECEL']:
             operadora_total = assinantes_data.filter(operadora=operadora).aggregate(
-                total=Sum('assinantes_activos')
+                total=Sum(F('assinantes_pre_pago') + F('assinantes_pos_pago'))
             )['total'] or 0
             
             if total_mercado > 0:

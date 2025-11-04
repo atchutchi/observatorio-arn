@@ -1,17 +1,58 @@
-Django==3.2.24
-python-dotenv==0.21.1
-supabase==0.7.1
-huggingface-hub>=0.17.0
-google-auth==2.22.0
-django-allauth==0.54.0
-gunicorn==21.2.0
-whitenoise==6.5.0
-psycopg2-binary==2.9.6
-pillow==9.5.0
+# ========================================
+# OBSERVATÓRIO ARN - Dependências de Produção
+# ========================================
+# Atualizado em: 2025-11-04
+
+# ==================== CORE FRAMEWORK ====================
+# Django 4.2 LTS - Suporte até Abril 2026
+Django==4.2.11
+
+# Environment Management
+python-dotenv==1.0.1
+
+# ==================== DATABASE ====================
+psycopg2-binary==2.9.9
+dj-database-url==2.1.0
+
+# ==================== CLOUD STORAGE & APIs ====================
+supabase==2.3.4
 requests==2.31.0
-dj-database-url==2.0.0
-django-widget-tweaks==1.4.12
+
+# ==================== AI & MACHINE LEARNING ====================
+huggingface-hub==0.20.3
+transformers==4.37.2
+
+# ==================== AUTHENTICATION ====================
+google-auth==2.27.0
+django-allauth==0.61.1
+
+# ==================== PRODUCTION SERVER ====================
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# ==================== IMAGE PROCESSING ====================
+Pillow==10.2.0
+
+# ==================== FORMS & UI ====================
+django-widget-tweaks==1.5.0
+
+# ==================== REST API ====================
 djangorestframework==3.14.0
-markdown==3.4.4
-django-filter==23.2
-pandas>=2.0.0 
+markdown==3.5.2
+django-filter==24.1
+
+# ==================== DATA PROCESSING ====================
+pandas>=2.2.0
+numpy>=1.26.0
+openpyxl>=3.1.2
+
+# ==================== REPORT GENERATION ====================
+reportlab>=4.0.9
+
+# ==================== SECURITY ====================
+cryptography>=42.0.0
+django-cors-headers==4.3.1
+
+# ==================== UTILITIES ====================
+python-dateutil>=2.8.2
+pytz>=2024.1 

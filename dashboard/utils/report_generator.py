@@ -4,7 +4,7 @@ Baseado na configuração YAML fornecida
 """
 import json
 from datetime import datetime, timedelta
-from django.db.models import Sum, Count, Avg, Max, Min
+from django.db.models import Sum, Count, Avg, Max, Min, F
 from django.utils import timezone
 from questionarios.models import (
     EstacoesMoveisIndicador, AssinantesIndicador, ReceitasIndicador,
@@ -43,6 +43,32 @@ class ARNReportGenerator:
         self.year = year or timezone.now().year
         self.quarter = quarter
         self.report_data = {}
+    
+    def _calcular_receita_total_expression(self):
+        """
+        Retorna expressão F() para calcular receita total.
+        Método helper para evitar repetição de código.
+        """
+        return Sum(
+            F('receitas_mensalidades') +
+            F('receitas_chamadas_on_net') +
+            F('receitas_chamadas_off_net') +
+            F('receitas_chamadas_telecel') +
+            F('receitas_chamadas_rede_movel_b') +
+            F('receitas_servico_telefonico_fixo') +
+            F('receitas_chamadas_cedeao') +
+            F('receitas_chamadas_cplp') +
+            F('receitas_chamadas_palop') +
+            F('receitas_chamadas_resto_africa') +
+            F('receitas_chamadas_resto_mundo') +
+            F('receitas_voz_roaming_out') +
+            F('receitas_mensagens') +
+            F('receitas_dados_moveis') +
+            F('receitas_internet_banda_larga') +
+            F('outras_receitas_retalhistas') +
+            F('receitas_terminacao_voz') +
+            F('outras_receitas_grossistas')
+        )
         
     def generate_market_report(self):
         """Gera relatório completo do mercado"""
@@ -60,13 +86,13 @@ class ARNReportGenerator:
         assinantes_data = AssinantesIndicador.objects.filter(ano=self.year)
         
         total_assinantes = assinantes_data.aggregate(
-            total=Sum('assinantes_activos')
+            total=Sum(F('assinantes_pre_pago') + F('assinantes_pos_pago'))
         )['total'] or 0
         
         # Crescimento
         previous_year_data = AssinantesIndicador.objects.filter(ano=self.year-1)
         previous_total = previous_year_data.aggregate(
-            total=Sum('assinantes_activos')
+            total=Sum(F('assinantes_pre_pago') + F('assinantes_pos_pago'))
         )['total'] or 0
         
         growth_rate = 0
@@ -77,7 +103,7 @@ class ARNReportGenerator:
         market_share = {}
         for operadora in ['ORANGE', 'TELECEL']:
             operadora_total = assinantes_data.filter(operadora=operadora).aggregate(
-                total=Sum('assinantes_activos')
+                total=Sum(F('assinantes_pre_pago') + F('assinantes_pos_pago'))
             )['total'] or 0
             
             if total_assinantes > 0:
@@ -95,30 +121,31 @@ class ARNReportGenerator:
             'taxa_penetracao': round(penetration_rate, 2),
             'dados_por_operadora': [
                 {
-                    'operadora': item.operadora,
-                    'assinantes': item.assinantes_activos,
-                    'percentual': market_share.get(item.operadora, 0)
+                    'operadora': item['operadora'],
+                    'assinantes': item['total_assinantes'],
+                    'percentual': market_share.get(item['operadora'], 0)
                 }
                 for item in assinantes_data.values('operadora').annotate(
-                    assinantes_activos=Sum('assinantes_activos')
+                    total_assinantes=Sum(F('assinantes_pre_pago') + F('assinantes_pos_pago'))
                 )
             ]
         }
     
     def get_voice_traffic_analysis(self):
-        """Análise de tráfego de voz"""
+        """Análise de tráfego de voz (em minutos)"""
         trafego_originado = TrafegoOriginadoIndicador.objects.filter(ano=self.year)
         
-        # Volume total por operadora
+        # Volume total de minutos de voz por operadora
         traffic_by_operator = {}
         total_traffic = 0
         
         for operadora in ['ORANGE', 'TELECEL']:
             op_data = trafego_originado.filter(operadora=operadora)
             
-            on_net = op_data.aggregate(total=Sum('chamadas_on_net'))['total'] or 0
-            off_net = op_data.aggregate(total=Sum('chamadas_off_net'))['total'] or 0
-            international = op_data.aggregate(total=Sum('chamadas_internacionais'))['total'] or 0
+            # Usar minutos de voz (voz_*_minutos) em vez de chamadas
+            on_net = op_data.aggregate(total=Sum('voz_on_net_minutos'))['total'] or 0
+            off_net = op_data.aggregate(total=Sum('voz_off_net_nacional_minutos'))['total'] or 0
+            international = op_data.aggregate(total=Sum('voz_internacional_total_minutos'))['total'] or 0
             
             operator_total = on_net + off_net + international
             total_traffic += operator_total
@@ -144,7 +171,7 @@ class ARNReportGenerator:
             }
         
         return {
-            'volume_total': total_traffic,
+            'volume_total': total_traffic,  # Total em minutos
             'por_operadora': traffic_by_operator,
             'distribuicao_percentual': distribution,
             'evolucao_mensal': self.get_monthly_evolution('trafego_originado')
@@ -176,25 +203,36 @@ class ARNReportGenerator:
         }
     
     def get_broadband_analysis(self):
-        """Análise de banda larga móvel"""
-        lbi_data = LBIIndicador.objects.filter(ano=self.year)
-        internet_data = TrafegoInternetIndicador.objects.filter(ano=self.year)
+        """Análise de banda larga móvel e internet fixa"""
+        # Usar EstacoesMoveisIndicador para dados de utilizadores móveis por tecnologia
+        estacoes_data = EstacoesMoveisIndicador.objects.filter(ano=self.year)
         
-        # Assinantes por tecnologia
-        tech_3g = lbi_data.filter(tecnologia='3G').aggregate(
-            total=Sum('total_assinantes')
+        # TrafegoOriginadoIndicador tem dados de tráfego de dados móveis em MB
+        trafego_movel = TrafegoOriginadoIndicador.objects.filter(ano=self.year)
+        
+        # TrafegoInternetIndicador tem dados de internet fixa
+        internet_fixa = TrafegoInternetIndicador.objects.filter(ano=self.year)
+        
+        # Utilizadores de banda larga móvel por tecnologia
+        tech_3g = estacoes_data.aggregate(
+            total=Sum('utilizadores_servico_3g_upgrades')
         )['total'] or 0
         
-        tech_4g = lbi_data.filter(tecnologia='4G').aggregate(
-            total=Sum('total_assinantes')
+        tech_4g = estacoes_data.aggregate(
+            total=Sum('utilizadores_servico_4g')
         )['total'] or 0
         
-        # Tráfego de dados
-        traffic_data = internet_data.aggregate(
-            download_nacional=Sum('trafego_nacional_download'),
-            upload_nacional=Sum('trafego_nacional_upload'),
-            download_internacional=Sum('trafego_internacional_download'),
-            upload_internacional=Sum('trafego_internacional_upload')
+        # Tráfego de dados móveis (em MB)
+        trafego_dados_moveis = trafego_movel.aggregate(
+            dados_2g=Sum('trafego_dados_2g_mbytes'),
+            dados_3g=Sum('trafego_dados_3g_upgrade_mbytes'),
+            dados_4g=Sum('trafego_dados_4g_mbytes')
+        )
+        
+        # Tráfego internet fixa total (em Mbit/s)
+        trafego_internet_fixa = internet_fixa.aggregate(
+            total=Sum('trafego_total'),
+            banda_larga=Sum('banda_larga_total')
         )
         
         return {
@@ -203,7 +241,20 @@ class ARNReportGenerator:
                 '4G': tech_4g,
                 '5G': 0  # Placeholder para futuro
             },
-            'trafego_dados': traffic_data,
+            'trafego_dados_moveis_mb': {
+                '2G': trafego_dados_moveis['dados_2g'] or 0,
+                '3G': trafego_dados_moveis['dados_3g'] or 0,
+                '4G': trafego_dados_moveis['dados_4g'] or 0,
+                'total': (
+                    (trafego_dados_moveis['dados_2g'] or 0) +
+                    (trafego_dados_moveis['dados_3g'] or 0) +
+                    (trafego_dados_moveis['dados_4g'] or 0)
+                )
+            },
+            'internet_fixa_mbps': {
+                'total': float(trafego_internet_fixa['total'] or 0),
+                'banda_larga': float(trafego_internet_fixa['banda_larga'] or 0)
+            },
             'taxa_penetracao_dados': self.calculate_data_penetration(tech_3g + tech_4g)
         }
     
@@ -212,16 +263,20 @@ class ARNReportGenerator:
         receitas_data = ReceitasIndicador.objects.filter(ano=self.year)
         
         # Volume de negócios por operadora
+        # ReceitasIndicador não tem campo receita_total, calculamos a soma de todas as receitas
         revenue_by_operator = {}
         total_revenue = 0
         
         for operadora in ['ORANGE', 'TELECEL']:
-            op_revenue = receitas_data.filter(operadora=operadora).aggregate(
-                total=Sum('receita_total')
+            op_data = receitas_data.filter(operadora=operadora)
+            
+            # Calcular total de receitas usando helper
+            op_revenue = op_data.aggregate(
+                total=self._calcular_receita_total_expression()
             )['total'] or 0
             
-            revenue_by_operator[operadora] = op_revenue
-            total_revenue += op_revenue
+            revenue_by_operator[operadora] = float(op_revenue) if op_revenue else 0
+            total_revenue += revenue_by_operator[operadora]
         
         # Quota de receitas
         revenue_share = {}
@@ -270,13 +325,16 @@ class ARNReportGenerator:
         evolution = []
         
         for year in years:
-            yearly_revenue = ReceitasIndicador.objects.filter(
-                ano=year
-            ).aggregate(total=Sum('receita_total'))['total'] or 0
+            yearly_data = ReceitasIndicador.objects.filter(ano=year)
+            
+            # Calcular total de receitas usando helper
+            yearly_revenue = yearly_data.aggregate(
+                total=self._calcular_receita_total_expression()
+            )['total'] or 0
             
             evolution.append({
                 'ano': year,
-                'receita': yearly_revenue
+                'receita': float(yearly_revenue) if yearly_revenue else 0
             })
         
         return evolution
@@ -289,16 +347,21 @@ class ARNReportGenerator:
     
     def calculate_revenue_growth(self):
         """Calcula crescimento de receita anual"""
-        current_revenue = ReceitasIndicador.objects.filter(
-            ano=self.year
-        ).aggregate(total=Sum('receita_total'))['total'] or 0
+        current_data = ReceitasIndicador.objects.filter(ano=self.year)
+        previous_data = ReceitasIndicador.objects.filter(ano=self.year - 1)
         
-        previous_revenue = ReceitasIndicador.objects.filter(
-            ano=self.year - 1
-        ).aggregate(total=Sum('receita_total'))['total'] or 0
+        # Calcular receita total do ano atual usando helper
+        current_revenue = current_data.aggregate(
+            total=self._calcular_receita_total_expression()
+        )['total'] or 0
+        
+        # Calcular receita total do ano anterior usando helper
+        previous_revenue = previous_data.aggregate(
+            total=self._calcular_receita_total_expression()
+        )['total'] or 0
         
         if previous_revenue > 0:
-            return round(((current_revenue - previous_revenue) / previous_revenue) * 100, 2)
+            return round(((float(current_revenue) - float(previous_revenue)) / float(previous_revenue)) * 100, 2)
         return 0
     
     def generate_dashboard_data(self):

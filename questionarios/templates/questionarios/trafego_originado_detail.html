@@ -13,7 +13,7 @@
 <!-- Resumo de Totais Principais -->
 <div class="row mb-4">
     <div class="col-md-3">
-        <div class="detail-info-item highlight">
+        <div class="detail-info-item">
             <div class="detail-info-icon">
                 <i class="fas fa-database"></i>
             </div>
@@ -26,7 +26,7 @@
     </div>
     
     <div class="col-md-3">
-        <div class="detail-info-item highlight">
+        <div class="detail-info-item">
             <div class="detail-info-icon">
                 <i class="fas fa-sms"></i>
             </div>
@@ -39,7 +39,7 @@
     </div>
     
     <div class="col-md-3">
-        <div class="detail-info-item highlight">
+        <div class="detail-info-item">
             <div class="detail-info-icon">
                 <i class="fas fa-phone-alt"></i>
             </div>
@@ -52,7 +52,7 @@
     </div>
     
     <div class="col-md-3">
-        <div class="detail-info-item highlight">
+        <div class="detail-info-item">
             <div class="detail-info-icon">
                 <i class="fas fa-phone-volume"></i>
             </div>
@@ -77,9 +77,13 @@
         <!-- Comparativo por Tecnologia -->
         <div class="row mb-4">
             <div class="col-md-4">
-                <div class="tech-card bg-secondary">
-                    <h6><i class="fas fa-mobile me-2"></i>2G</h6>
-                    <table class="table table-sm text-white">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-mobile"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>2G</strong>
+                        <table class="table table-sm">
                         <tr>
                             <td>Volume:</td>
                             <td class="text-end"><strong>{{ object.trafego_dados_2g_mbytes|intcomma }} MB</strong></td>
@@ -103,9 +107,13 @@
             </div>
             
             <div class="col-md-4">
-                <div class="tech-card bg-success">
-                    <h6><i class="fas fa-signal me-2"></i>3G</h6>
-                    <table class="table table-sm text-white">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-signal"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>3G</strong>
+                        <table class="table table-sm">
                         <tr>
                             <td>Volume Total:</td>
                             <td class="text-end"><strong>{{ totals.dados.3g_mb|intcomma }} MB</strong></td>
@@ -127,9 +135,13 @@
             </div>
             
             <div class="col-md-4">
-                <div class="tech-card bg-primary">
-                    <h6><i class="fas fa-broadcast-tower me-2"></i>4G/LTE</h6>
-                    <table class="table table-sm text-white">
+                <div class="detail-info-item">
+                    <div class="detail-info-icon">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <div class="detail-info-content">
+                        <strong>4G/LTE</strong>
+                        <table class="table table-sm">
                         <tr>
                             <td>Volume Total:</td>
                             <td class="text-end"><strong>{{ totals.dados.4g_mb|intcomma }} MB</strong></td>
@@ -530,39 +542,4 @@
 </div>
 {% endblock %}
 
-{% block detail_styles %}
-<style>
-    .tech-card {
-        padding: 1rem;
-        border-radius: 8px;
-        color: white;
-    }
-    
-    .tech-card h6 {
-        color: white !important;
-        border-bottom: 1px solid rgba(255,255,255,0.2);
-        padding-bottom: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .tech-card .table {
-        margin-bottom: 0;
-    }
-    
-    .tech-card .table td {
-        border: none;
-        padding: 0.25rem;
-    }
-    
-    .detail-info-item.highlight {
-        background: linear-gradient(135deg, var(--binance-dark) 0%, rgba(240, 185, 11, 0.1) 100%);
-        border: 1px solid var(--binance-yellow);
-    }
-    
-    .detail-value {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin: 0.5rem 0;
-    }
-</style>
 {% endblock %}

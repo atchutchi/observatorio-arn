@@ -1,29 +1,154 @@
-# Observatório do Mercado de Telecomunicações da Guiné-Bissau
+# 🌍 Observatório do Mercado de Telecomunicações da Guiné-Bissau
 
-Uma plataforma web para monitoramento e análise do mercado de telecomunicações da Guiné-Bissau, permitindo visualizar dados estatísticos das operadoras e tendências do setor.
+[![Django](https://img.shields.io/badge/Django-4.2-green.svg)](https://www.djangoproject.com/)
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-1.1.0-orange.svg)](CHANGELOG.md)
 
-## Características Principais
+Uma plataforma web moderna para monitoramento e análise do mercado de telecomunicações da Guiné-Bissau, permitindo visualizar dados estatísticos das operadoras e tendências do setor.
 
-- **Dashboard Analítico**: Visualizações interativas de dados do mercado de telecomunicações
-- **Questionários**: Sistema de coleta de dados por meio de questionários
-- **Chatbot Inteligente**: Assistente virtual para esclarecimento de dúvidas
-- **Autenticação**: Suporte para login com Google e sistema tradicional
-- **Integração com Supabase**: Armazenamento híbrido usando banco de dados local e Supabase
-- **Integração com Hugging Face**: Utilização de modelos de IA para o chatbot
-- **Gestão de Tarifários**: Módulo para gerenciamento de tarifários de voz das operadoras Orange e TELECEL
-- **Análise de Mercado**: Módulos de análise comparativa, evolução de mercado e relatórios de crescimento
-- **Estações Móveis**: Monitoramento de estações móveis e cobertura territorial
-- **Tráfego de Dados**: Análise de tráfego de internet, originado, terminado e roaming internacional
-- **Indicadores Económicos**: Monitoramento de receitas, emprego e investimentos no setor
+---
 
-## Tecnologias Utilizadas
+## ✨ Características Principais
 
-- **Backend**: Django 3.2+
-- **Frontend**: Bootstrap 5, Chart.js
-- **Banco de Dados**: SQLite (desenvolvimento) / PostgreSQL (produção)
-- **Armazenamento em Nuvem**: Supabase
-- **IA**: Hugging Face
-- **Autenticação**: Django AllAuth com Google OAuth
+- 📊 **Dashboard Analítico**: Visualizações interativas de dados do mercado de telecomunicações
+- 📝 **Questionários KPI**: Sistema de coleta de dados via questionários padronizados ARN
+- 🤖 **Chatbot Inteligente**: Assistente virtual com IA para esclarecimento de dúvidas
+- 🔐 **Autenticação Segura**: Login com Google OAuth e sistema tradicional
+- ☁️ **Integração Supabase**: Armazenamento híbrido (local + cloud)
+- 🧠 **AI/ML**: Integração com Hugging Face para processamento de linguagem natural
+- 💰 **Gestão de Tarifários**: Módulo para gerenciamento de tarifários das operadoras
+- 📈 **Análise de Mercado**: Módulos de análise comparativa e relatórios
+- 📡 **Estações Móveis**: Monitoramento de cobertura territorial
+- 🌐 **Tráfego de Dados**: Análise de tráfego (originado, terminado, roaming)
+- 💼 **Indicadores Económicos**: Receitas, emprego e investimentos no setor
+- 🏥 **Health Monitoring**: Endpoints de monitoramento para produção
+
+---
+
+## 🚀 Tecnologias Utilizadas
+
+### Backend
+- **Framework**: Django 4.2.11 LTS
+- **Linguagem**: Python 3.9+
+- **API**: Django REST Framework
+- **Auth**: Django AllAuth + Google OAuth
+
+### Frontend
+- **Framework CSS**: Bootstrap 5
+- **Gráficos**: Chart.js
+- **Icons**: Font Awesome
+
+### Banco de Dados
+- **Desenvolvimento**: SQLite 3
+- **Produção**: PostgreSQL 12+
+
+### Cloud & IA
+- **Storage**: Supabase
+- **AI/ML**: Hugging Face Transformers
+- **Chatbot**: BlenderBot 400M
+
+### DevOps
+- **Server**: Gunicorn
+- **Static Files**: WhiteNoise
+- **Container**: Docker + Docker Compose
+- **Deploy**: Heroku, Railway, AWS, VPS
+
+---
+
+## ⚡ Quickstart
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/observatorio-arn.git
+cd observatorio-arn
+
+# Configure e execute
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+cp env.example .env  # Configure suas variáveis
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+**Acesse:** http://127.0.0.1:8000
+
+📖 **Documentação completa:** [QUICKSTART.md](QUICKSTART.md) | [SETUP.md](SETUP.md)
+
+---
+
+## 🐳 Docker (Recomendado)
+
+```bash
+# Configure
+cp env.example .env
+
+# Execute
+docker-compose up
+
+# Migrations (novo terminal)
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+```
+
+**Acesse:** http://localhost:8000
+
+---
+
+## 📋 Versão 1.1.0 - Novidades
+
+### ✅ Atualizações
+- ✨ Django 3.2 → 4.2.11 LTS (suporte até 2026)
+- 🔒 Configurações de segurança avançadas
+- 🏥 Health check endpoints
+- 🐳 Containerização com Docker
+- 📚 Documentação completa
+
+### 🔐 Segurança
+- HTTPS/SSL redirect em produção
+- Content Security Policy (CSP)
+- CSRF protection avançada
+- Session security aprimorada
+- Cookies seguros (HttpOnly, SameSite)
+
+### 📊 Monitoramento
+- `GET /health/` - Status básico
+- `GET /health/detailed/` - Status completo
+- `GET /health/ready/` - Readiness probe
+- `GET /health/alive/` - Liveness probe
+
+Veja o [CHANGELOG.md](CHANGELOG.md) para detalhes completos.
+
+---
+
+## 📚 Documentação
+
+| Documento | Descrição |
+|-----------|-----------|
+| [QUICKSTART.md](QUICKSTART.md) | Guia rápido (5 minutos) |
+| [SETUP.md](SETUP.md) | Instalação detalhada |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | Guia de deploy (Heroku, AWS, VPS) |
+| [UPGRADE_GUIDE.md](UPGRADE_GUIDE.md) | Migração Django 3.2 → 4.2 |
+| [CHANGELOG.md](CHANGELOG.md) | Histórico de mudanças |
+| [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) | Resumo técnico |
+| [TEMPLATES_REVIEW_SUMMARY.md](TEMPLATES_REVIEW_SUMMARY.md) | ⭐ Revisão de templates |
+| [TEMPLATES_STANDARDIZATION_PLAN.md](TEMPLATES_STANDARDIZATION_PLAN.md) | Plano de padronização |
+
+---
+
+## 🏗️ Tecnologias Atualizadas (v1.1.0)
+
+| Tecnologia | Versão | Status |
+|------------|--------|--------|
+| Django | 4.2.11 LTS | ✅ |
+| Python | 3.9+ | ✅ |
+| django-allauth | 0.61.1 | ✅ |
+| supabase | 2.3.4 | ✅ |
+| huggingface-hub | 0.20.3 | ✅ |
+| transformers | 4.37.2 | ✅ |
+| PostgreSQL | 12+ | ✅ |
 
 ## User Stories
 

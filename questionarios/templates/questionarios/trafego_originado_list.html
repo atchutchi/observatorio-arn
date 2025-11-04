@@ -11,38 +11,46 @@
 {% if estatisticas %}
 <div class="row mb-4">
     <div class="col-md-3">
-        <div class="stat-summary-card">
-            <i class="fas fa-database"></i>
-            <div>
-                <small>Total Dados</small>
-                <h4>{{ estatisticas.total_dados_gb|floatformat:1 }} GB</h4>
+        <div class="detail-info-item">
+            <div class="detail-info-icon">
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="detail-info-content">
+                <strong>Total Dados</strong>
+                <p class="detail-value">{{ estatisticas.total_dados_gb|floatformat:1 }} GB</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="stat-summary-card">
-            <i class="fas fa-sms"></i>
-            <div>
-                <small>Total SMS</small>
-                <h4>{{ estatisticas.total_sms|intcomma }}</h4>
+        <div class="detail-info-item">
+            <div class="detail-info-icon">
+                <i class="fas fa-sms"></i>
+            </div>
+            <div class="detail-info-content">
+                <strong>Total SMS</strong>
+                <p class="detail-value">{{ estatisticas.total_sms|intcomma }}</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="stat-summary-card">
-            <i class="fas fa-phone-alt"></i>
-            <div>
-                <small>Total Minutos</small>
-                <h4>{{ estatisticas.total_voz_minutos|intcomma }}</h4>
+        <div class="detail-info-item">
+            <div class="detail-info-icon">
+                <i class="fas fa-phone-alt"></i>
+            </div>
+            <div class="detail-info-content">
+                <strong>Total Minutos</strong>
+                <p class="detail-value">{{ estatisticas.total_voz_minutos|intcomma }}</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="stat-summary-card">
-            <i class="fas fa-phone-volume"></i>
-            <div>
-                <small>Total Chamadas</small>
-                <h4>{{ estatisticas.total_chamadas|intcomma }}</h4>
+        <div class="detail-info-item">
+            <div class="detail-info-icon">
+                <i class="fas fa-phone-volume"></i>
+            </div>
+            <div class="detail-info-content">
+                <strong>Total Chamadas</strong>
+                <p class="detail-value">{{ estatisticas.total_chamadas|intcomma }}</p>
             </div>
         </div>
     </div>
@@ -137,51 +145,3 @@
 {% block table_colspan %}10{% endblock %}
 
 {% block resumo_url %}{% url 'questionarios:trafego_originado_resumo' 2024 %}{% endblock %}
-
-{% block list_styles %}
-<style>
-    .stat-summary-card {
-        background: var(--binance-dark);
-        border: 1px solid var(--binance-border);
-        border-radius: 8px;
-        padding: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        transition: all 0.3s ease;
-    }
-    
-    .stat-summary-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    
-    .stat-summary-card i {
-        font-size: 2rem;
-        color: var(--binance-yellow);
-    }
-    
-    .stat-summary-card small {
-        color: var(--binance-text-muted);
-        display: block;
-    }
-    
-    .stat-summary-card h4 {
-        margin: 0;
-        color: var(--binance-text);
-    }
-    
-    .questionario-table td {
-        vertical-align: middle;
-    }
-    
-    .progress {
-        background: var(--binance-dark);
-    }
-    
-    .badge {
-        font-weight: normal;
-        font-size: 0.875rem;
-    }
-</style>
-{% endblock %}

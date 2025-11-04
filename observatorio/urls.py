@@ -18,11 +18,23 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from home import views as home_views
+from observatorio.health import health_check, health_check_detailed, readiness_check, liveness_check
 
 urlpatterns = [
+    # Admin
     path('admin/', admin.site.urls),
+    
+    # Health Check Endpoints
+    path('health/', health_check, name='health_check'),
+    path('health/detailed/', health_check_detailed, name='health_check_detailed'),
+    path('health/ready/', readiness_check, name='readiness_check'),
+    path('health/alive/', liveness_check, name='liveness_check'),
+    
+    # Authentication
     path('accounts/', include('allauth.urls')),  # URLs para autenticação
     path('accounts/profile/', home_views.profile, name='account_profile'),
+    
+    # Applications
     path('', include('home.urls')),  # URLs para a aplicação home
     path('questionarios/', include('questionarios.urls', namespace='questionarios')),  # URLs para a aplicação questionarios
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),  # URLs para a aplicação dashboard

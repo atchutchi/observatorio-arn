@@ -22,7 +22,7 @@ class Command(BaseCommand):
                 'palavras_chave': ['assinantes', 'clientes', 'utilizadores', 'estações', 'quantos', 'número'],
                 'entidades_esperadas': ['operadora', 'periodo', 'ano'],
                 'template_resposta': 'Em {ano}, {operadora} tinha {total} assinantes, representando {percentual}% do mercado.',
-                'query_sql': 'SELECT operadora, SUM(assinantes_activos) FROM assinantes WHERE ano = %s GROUP BY operadora',
+                'query_sql': 'SELECT operadora, SUM(assinantes_pre_pago + assinantes_pos_pago) as total FROM questionarios_assinantesindicador WHERE ano = %s GROUP BY operadora',
                 'confianca_minima': 0.7
             },
             {

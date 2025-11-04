@@ -38,17 +38,20 @@ def index(request):
         if latest_year:
             assinantes_data = AssinantesIndicador.objects.filter(ano=latest_year)
             total_assinantes = assinantes_data.aggregate(
-                total=Sum('assinantes_activos')
+                total=Sum(F('assinantes_pre_pago') + F('assinantes_pos_pago'))
             )['total'] or 0
             context['total_assinantes'] = total_assinantes
             
-            # Preparar dados para gráficos
+            # Preparar dados para gráficos - agrupar por operadora
+            assinantes_agregados = assinantes_data.values('operadora').annotate(
+                total_assinantes=Sum(F('assinantes_pre_pago') + F('assinantes_pos_pago'))
+            )
             context['assinantes_por_operadora'] = [
                 {
-                    'operadora': item.operadora,
-                    'assinantes': item.assinantes_activos
+                    'operadora': item['operadora'],
+                    'assinantes': item['total_assinantes']
                 }
-                for item in assinantes_data
+                for item in assinantes_agregados
             ]
         
         # Obter dados de receitas
