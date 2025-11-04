@@ -1,224 +1,233 @@
-{% extends 'dashboard/base_dashboard.html' %}
+{% extends "dashboard/base_dashboard.html" %}
 {% load static %}
 
-{% block title %}Análises Avançadas - ARN{% endblock %}
+{% block dashboard_title %}Análises Avançadas{% endblock %}
 
-{% block extra_css %}
-<style>
-    .insight-card {
-        border-left: 4px solid;
-        transition: transform 0.2s;
-    }
-    .insight-card:hover {
-        transform: translateX(5px);
-    }
-    .insight-card.positive {
-        border-color: #0ECB81;
-    }
-    .insight-card.warning {
-        border-color: #F6465D;
-    }
-    .insight-card.info {
-        border-color: #F0B90B;
-    }
-    .kpi-card {
-        background: linear-gradient(135deg, #181A20 0%, #2B3139 100%);
-        border: 1px solid #474D57;
-        border-radius: 12px;
-        padding: 20px;
-        text-align: center;
-    }
-    .kpi-value {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #F0B90B;
-    }
-    .kpi-label {
-        color: #EAECEF;
-        margin-top: 8px;
-        font-size: 0.9rem;
-    }
-    .analysis-section {
-        background: #181A20;
-        border-radius: 12px;
-        padding: 25px;
-        margin-bottom: 20px;
-        border: 1px solid #474D57;
-    }
-    .badge-high { background-color: #F6465D !important; }
-    .badge-medium { background-color: #F0B90B !important; }
-    .badge-low { background-color: #0ECB81 !important; }
-</style>
-{% endblock %}
-
-{% block content %}
-<div class="container-fluid">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+{% block dashboard_content %}
+<!-- Header do Dashboard -->
+<div class="platform-card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-            <h2><i class="fas fa-brain"></i> Análises Avançadas</h2>
-            <p class="text-muted mb-0">Insights inteligentes e análises preditivas</p>
+            <h2 class="card-title mb-0">
+                <i class="fas fa-brain me-2"></i>
+                Análises Avançadas
+            </h2>
+            <p class="card-subtitle">Insights inteligentes e análises preditivas</p>
         </div>
-        <div>
-            <select name="year" class="form-select" onchange="window.location.href='?year='+this.value">
+        <div class="dashboard-filter-group">
+            <select name="year" class="form-select-questionario dashboard-filter" onchange="window.location.href='?year='+this.value">
                 {% for y in "2021 2022 2023 2024 2025"|make_list %}
                     <option value="{{ y }}" {% if y|add:0 == year %}selected{% endif %}>{{ y }}</option>
                 {% endfor %}
             </select>
         </div>
     </div>
+</div>
 
-    <!-- KPIs Principais -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="kpi-card">
-                <div class="kpi-value">{{ kpis.penetration_rate }}%</div>
-                <div class="kpi-label">Taxa de Penetração</div>
-            </div>
+<!-- KPIs Principais -->
+<div class="dashboard-kpis">
+    <div class="kpi-card kpi-primary">
+        <div class="kpi-icon">
+            <i class="fas fa-chart-pie"></i>
         </div>
-        <div class="col-md-3">
-            <div class="kpi-card">
-                <div class="kpi-value">
-                    {% if kpis.growth_projection > 0 %}+{% endif %}{{ kpis.growth_projection }}%
-                </div>
-                <div class="kpi-label">Crescimento Projetado (3 meses)</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="kpi-card">
-                <div class="kpi-value text-capitalize">{{ kpis.market_maturity }}</div>
-                <div class="kpi-label">Maturidade do Mercado</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="kpi-card">
-                <div class="kpi-value">
-                    <i class="fas fa-arrow-{% if kpis.trend == 'growing' %}up text-success{% elif kpis.trend == 'declining' %}down text-danger{% else %}right text-warning{% endif %}"></i>
-                </div>
-                <div class="kpi-label">Tendência Histórica</div>
-            </div>
+        <div class="kpi-value">{{ kpis.penetration_rate }}%</div>
+        <div class="kpi-label">Taxa de Penetração</div>
+        <div class="kpi-change neutral">
+            <i class="fas fa-chart-line"></i>
+            {{ kpis.market_maturity|title }}
         </div>
     </div>
-
-    <!-- Insights Consolidados -->
-    <div class="analysis-section">
-        <h4 class="mb-4"><i class="fas fa-lightbulb"></i> Insights Automáticos</h4>
-        {% if insights %}
-            <div class="row">
-                {% for insight in insights %}
-                <div class="col-md-6 mb-3">
-                    <div class="card insight-card {{ insight.type }}">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h6 class="mb-0">
-                                    {% if insight.type == 'positive' %}
-                                        <i class="fas fa-check-circle text-success"></i>
-                                    {% elif insight.type == 'warning' %}
-                                        <i class="fas fa-exclamation-triangle text-warning"></i>
-                                    {% else %}
-                                        <i class="fas fa-info-circle text-info"></i>
-                                    {% endif %}
-                                    {{ insight.title }}
-                                </h6>
-                                <span class="badge badge-{{ insight.priority }}">{{ insight.priority|upper }}</span>
-                            </div>
-                            <p class="mb-0 text-muted">{{ insight.message }}</p>
-                            <small class="text-muted">
-                                <i class="fas fa-tag"></i> {{ insight.category }}
-                            </small>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="alert alert-info">
-                <i class="fas fa-info-circle"></i>
-                Nenhum insight disponível no momento. Mais dados são necessários para gerar análises.
-            </div>
-        {% endif %}
-    </div>
-
-    <!-- Links Rápidos para Análises Específicas -->
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <div class="mb-3">
-                        <i class="fas fa-chart-line fa-3x text-primary"></i>
-                    </div>
-                    <h5>Previsões ML</h5>
-                    <p class="text-muted">
-                        Análise preditiva de crescimento, receitas e tráfego
-                    </p>
-                    <a href="{% url 'dashboard:advanced-predictions' %}?year={{ year }}" class="btn btn-primary">
-                        <i class="fas fa-arrow-right"></i> Acessar
-                    </a>
-                </div>
-            </div>
+    
+    <div class="kpi-card kpi-{% if kpis.growth_projection > 0 %}success{% else %}warning{% endif %}">
+        <div class="kpi-icon">
+            <i class="fas fa-arrow-trend-up"></i>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <div class="mb-3">
-                        <i class="fas fa-map-marked-alt fa-3x text-success"></i>
-                    </div>
-                    <h5>Análise Geográfica</h5>
-                    <p class="text-muted">
-                        Cobertura regional e identificação de áreas carentes
-                    </p>
-                    <a href="{% url 'dashboard:advanced-geographic' %}?year={{ year }}" class="btn btn-success">
-                        <i class="fas fa-arrow-right"></i> Acessar
-                    </a>
-                </div>
-            </div>
+        <div class="kpi-value">
+            {% if kpis.growth_projection > 0 %}+{% endif %}{{ kpis.growth_projection }}%
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <div class="card-body text-center">
-                    <div class="mb-3">
-                        <i class="fas fa-tags fa-3x text-warning"></i>
-                    </div>
-                    <h5>Análise de Preços</h5>
-                    <p class="text-muted">
-                        Comparação de tarifários e melhores ofertas
-                    </p>
-                    <a href="{% url 'dashboard:advanced-prices' %}?year={{ year }}" class="btn btn-warning">
-                        <i class="fas fa-arrow-right"></i> Acessar
-                    </a>
-                </div>
-            </div>
+        <div class="kpi-label">Crescimento Projetado (3 meses)</div>
+        <div class="kpi-change {% if kpis.growth_projection > 0 %}positive{% else %}negative{% endif %}">
+            <i class="fas fa-arrow-{% if kpis.growth_projection > 0 %}up{% else %}down{% endif %}"></i>
+            {% if kpis.growth_projection > 0 %}Crescimento{% else %}Declínio{% endif %}
         </div>
     </div>
+    
+    <div class="kpi-card kpi-info">
+        <div class="kpi-icon">
+            <i class="fas fa-layer-group"></i>
+        </div>
+        <div class="kpi-value text-capitalize">{{ kpis.market_maturity }}</div>
+        <div class="kpi-label">Maturidade do Mercado</div>
+        <div class="kpi-change neutral">
+            <i class="fas fa-info-circle"></i>
+            Análise ML
+        </div>
+    </div>
+    
+    <div class="kpi-card kpi-{% if kpis.trend == 'growing' %}success{% elif kpis.trend == 'declining' %}warning{% else %}info{% endif %}">
+        <div class="kpi-icon">
+            <i class="fas fa-arrow-{% if kpis.trend == 'growing' %}up{% elif kpis.trend == 'declining' %}down{% else %}right{% endif %}"></i>
+        </div>
+        <div class="kpi-value text-capitalize">{{ kpis.trend }}</div>
+        <div class="kpi-label">Tendência Histórica</div>
+        <div class="kpi-change {% if kpis.trend == 'growing' %}positive{% elif kpis.trend == 'declining' %}negative{% else %}neutral{% endif %}">
+            <i class="fas fa-chart-line"></i>
+            Baseado em dados históricos
+        </div>
+    </div>
+</div>
 
-    <!-- Estatísticas de Análise -->
-    <div class="analysis-section">
-        <h5><i class="fas fa-info-circle"></i> Sobre as Análises</h5>
-        <div class="row mt-3">
+<!-- Insights Consolidados -->
+{% if insights %}
+<div class="platform-card mb-4">
+    <div class="card-header">
+        <h4 class="card-title mb-0">
+            <i class="fas fa-lightbulb me-2"></i>
+            Insights Automáticos
+        </h4>
+        <p class="card-subtitle">Análises geradas por inteligência artificial</p>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {% for insight in insights %}
+            <div class="col-md-6 mb-3">
+                <div class="alert-card alert-{{ insight.type }}">
+                    <div class="alert-header">
+                        <i class="fas fa-{% if insight.type == 'positive' %}check-circle{% elif insight.type == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                        <strong>{{ insight.title }}</strong>
+                        <span class="badge badge-{{ insight.priority }}">{{ insight.priority|upper }}</span>
+                    </div>
+                    <p class="mb-2">{{ insight.message }}</p>
+                    <small class="text-muted">
+                        <i class="fas fa-tag me-1"></i>{{ insight.category }}
+                    </small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="platform-card mb-4">
+    <div class="card-body text-center">
+        <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Nenhum insight disponível no momento. Mais dados são necessários para gerar análises.</p>
+    </div>
+</div>
+{% endif %}
+
+<!-- Links Rápidos para Análises Específicas -->
+<div class="dashboard-widgets">
+    <div class="widget-card">
+        <div class="widget-header">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-chart-line fa-2x text-primary me-3"></i>
+                <div>
+                    <h5 class="widget-title mb-0">Previsões ML</h5>
+                    <p class="widget-subtitle mb-0">Análise preditiva de crescimento, receitas e tráfego</p>
+                </div>
+            </div>
+        </div>
+        <div class="widget-body">
+            <ul class="list-unstyled mb-3">
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Previsão de Assinantes</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Previsão de Receitas</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Análise de Saturação</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Insights Automáticos</li>
+            </ul>
+            <a href="{% url 'dashboard:advanced-predictions' %}?year={{ year }}" class="btn-binance w-100">
+                <i class="fas fa-arrow-right me-2"></i>Acessar Dashboard
+            </a>
+        </div>
+    </div>
+    
+    <div class="widget-card">
+        <div class="widget-header">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-map-marked-alt fa-2x text-success me-3"></i>
+                <div>
+                    <h5 class="widget-title mb-0">Análise Geográfica</h5>
+                    <p class="widget-subtitle mb-0">Cobertura regional e identificação de áreas carentes</p>
+                </div>
+            </div>
+        </div>
+        <div class="widget-body">
+            <ul class="list-unstyled mb-3">
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Mapa de Cobertura</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Áreas Carentes</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Comparação Urbano-Rural</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Divisão Digital</li>
+            </ul>
+            <a href="{% url 'dashboard:advanced-geographic' %}?year={{ year }}" class="btn-binance w-100">
+                <i class="fas fa-arrow-right me-2"></i>Acessar Dashboard
+            </a>
+        </div>
+    </div>
+    
+    <div class="widget-card">
+        <div class="widget-header">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-tags fa-2x text-warning me-3"></i>
+                <div>
+                    <h5 class="widget-title mb-0">Análise de Preços</h5>
+                    <p class="widget-subtitle mb-0">Comparação de tarifários e melhores ofertas</p>
+                </div>
+            </div>
+        </div>
+        <div class="widget-body">
+            <ul class="list-unstyled mb-3">
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Comparação de Operadoras</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Melhores Ofertas</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Índice de Preços</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Evolução Histórica</li>
+            </ul>
+            <a href="{% url 'dashboard:advanced-prices' %}?year={{ year }}" class="btn-binance w-100">
+                <i class="fas fa-arrow-right me-2"></i>Acessar Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Estatísticas de Análise -->
+<div class="platform-card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">
+            <i class="fas fa-info-circle me-2"></i>
+            Sobre as Análises Avançadas
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
             <div class="col-md-4">
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-robot fa-2x text-primary me-3"></i>
-                    <div>
+                <div class="stats-item">
+                    <div class="stats-icon">
+                        <i class="fas fa-robot fa-2x text-primary"></i>
+                    </div>
+                    <div class="stats-content">
                         <strong>Machine Learning</strong>
-                        <p class="mb-0 text-muted small">Modelos de regressão linear para previsões</p>
+                        <p class="text-muted small mb-0">Modelos de regressão linear para previsões</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-globe-africa fa-2x text-success me-3"></i>
-                    <div>
+                <div class="stats-item">
+                    <div class="stats-icon">
+                        <i class="fas fa-globe-africa fa-2x text-success"></i>
+                    </div>
+                    <div class="stats-content">
                         <strong>Cobertura Nacional</strong>
-                        <p class="mb-0 text-muted small">Análise de todas as 9 regiões da Guiné-Bissau</p>
+                        <p class="text-muted small mb-0">Análise de todas as 9 regiões da Guiné-Bissau</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-chart-bar fa-2x text-warning me-3"></i>
-                    <div>
+                <div class="stats-item">
+                    <div class="stats-icon">
+                        <i class="fas fa-chart-bar fa-2x text-warning"></i>
+                    </div>
+                    <div class="stats-content">
                         <strong>Análise em Tempo Real</strong>
-                        <p class="mb-0 text-muted small">Dados atualizados automaticamente</p>
+                        <p class="text-muted small mb-0">Dados atualizados automaticamente</p>
                     </div>
                 </div>
             </div>
@@ -227,11 +236,100 @@
 </div>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    .alert-card {
+        background: var(--binance-dark-light);
+        border: 1px solid var(--binance-border);
+        border-left: 4px solid;
+        border-radius: 8px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .alert-card:hover {
+        transform: translateX(5px);
+        box-shadow: var(--shadow-light);
+    }
+    
+    .alert-card.alert-positive {
+        border-left-color: var(--binance-success);
+    }
+    
+    .alert-card.alert-warning {
+        border-left-color: var(--binance-warning);
+    }
+    
+    .alert-card.alert-info {
+        border-left-color: var(--binance-info);
+    }
+    
+    .alert-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .alert-header i {
+        font-size: 1.2rem;
+    }
+    
+    .alert-positive .alert-header i {
+        color: var(--binance-success);
+    }
+    
+    .alert-warning .alert-header i {
+        color: var(--binance-warning);
+    }
+    
+    .alert-info .alert-header i {
+        color: var(--binance-info);
+    }
+    
+    .badge-high {
+        background-color: var(--binance-danger) !important;
+    }
+    
+    .badge-medium {
+        background-color: var(--binance-warning) !important;
+    }
+    
+    .badge-low {
+        background-color: var(--binance-success) !important;
+    }
+    
+    .stats-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--binance-hover);
+        border-radius: 8px;
+    }
+    
+    .stats-icon {
+        flex-shrink: 0;
+    }
+    
+    .stats-content {
+        flex-grow: 1;
+    }
+    
+    .dashboard-widgets {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+</style>
+{% endblock %}
+
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Animações suaves ao carregar
-    const cards = document.querySelectorAll('.insight-card, .kpi-card');
+    const cards = document.querySelectorAll('.kpi-card, .widget-card, .alert-card');
     cards.forEach((card, index) => {
         setTimeout(() => {
             card.style.opacity = '0';
@@ -242,9 +340,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.style.opacity = '1';
                 card.style.transform = 'translateY(0)';
             }, 50);
-        }, index * 100);
+        }, index * 50);
     });
 });
 </script>
 {% endblock %}
-
