@@ -12,9 +12,9 @@
                 <i class="fas fa-brain me-2"></i>
                 Análises Avançadas
             </h2>
-            <p class="card-subtitle">Insights inteligentes e análises preditivas</p>
+            <p class="card-subtitle">Insights inteligentes e análises preditivas com IA</p>
         </div>
-        <div class="dashboard-filter-group">
+        <div class="form-group mb-0">
             <select name="year" class="form-select-questionario dashboard-filter" onchange="window.location.href='?year='+this.value">
                 {% for y in "2021 2022 2023 2024 2025"|make_list %}
                     <option value="{{ y }}" {% if y|add:0 == year %}selected{% endif %}>{{ y }}</option>
@@ -72,7 +72,7 @@
         <div class="kpi-label">Tendência Histórica</div>
         <div class="kpi-change {% if kpis.trend == 'growing' %}positive{% elif kpis.trend == 'declining' %}negative{% else %}neutral{% endif %}">
             <i class="fas fa-chart-line"></i>
-            Baseado em dados históricos
+            Baseado em histórico
         </div>
     </div>
 </div>
@@ -91,16 +91,20 @@
         <div class="row">
             {% for insight in insights %}
             <div class="col-md-6 mb-3">
-                <div class="alert-card alert-{{ insight.type }}">
-                    <div class="alert-header">
+                <div class="platform-alert platform-alert-{% if insight.type == 'positive' %}success{% elif insight.type == 'warning' %}warning{% else %}info{% endif %}">
+                    <div class="alert-icon">
                         <i class="fas fa-{% if insight.type == 'positive' %}check-circle{% elif insight.type == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
-                        <strong>{{ insight.title }}</strong>
-                        <span class="badge badge-{{ insight.priority }}">{{ insight.priority|upper }}</span>
                     </div>
-                    <p class="mb-2">{{ insight.message }}</p>
-                    <small class="text-muted">
-                        <i class="fas fa-tag me-1"></i>{{ insight.category }}
-                    </small>
+                    <div class="alert-content">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="alert-title mb-0">{{ insight.title }}</h6>
+                            <span class="badge badge-{{ insight.priority }}">{{ insight.priority|upper }}</span>
+                        </div>
+                        <p class="alert-message mb-1">{{ insight.message }}</p>
+                        <small class="text-muted">
+                            <i class="fas fa-tag me-1"></i>{{ insight.category }}
+                        </small>
+                    </div>
                 </div>
             </div>
             {% endfor %}
@@ -108,87 +112,138 @@
     </div>
 </div>
 {% else %}
-<div class="platform-card mb-4">
-    <div class="card-body text-center">
-        <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>
-        <p class="text-muted">Nenhum insight disponível no momento. Mais dados são necessários para gerar análises.</p>
+<div class="platform-alert platform-alert-info mb-4">
+    <div class="alert-icon">
+        <i class="fas fa-info-circle"></i>
+    </div>
+    <div class="alert-content">
+        <h6 class="alert-title">Sem Insights Disponíveis</h6>
+        <p class="alert-message mb-0">Mais dados são necessários para gerar análises automáticas.</p>
     </div>
 </div>
 {% endif %}
 
-<!-- Links Rápidos para Análises Específicas -->
-<div class="dashboard-widgets">
-    <div class="widget-card">
-        <div class="widget-header">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-chart-line fa-2x text-primary me-3"></i>
-                <div>
-                    <h5 class="widget-title mb-0">Previsões ML</h5>
-                    <p class="widget-subtitle mb-0">Análise preditiva de crescimento, receitas e tráfego</p>
+<!-- Acesso Rápido aos Dashboards -->
+<div class="row mb-4">
+    <div class="col-lg-4 mb-3">
+        <div class="platform-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="feature-icon me-3">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title">Previsões ML</h5>
+                        <p class="card-text text-muted">
+                            Análise preditiva de crescimento, receitas e tráfego usando Machine Learning
+                        </p>
+                    </div>
                 </div>
+                <ul class="list-unstyled mb-3">
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Previsão de Assinantes</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Previsão de Receitas</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Análise de Saturação</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Tráfego de Dados</small>
+                    </li>
+                </ul>
+                <a href="{% url 'dashboard:advanced-predictions' %}?year={{ year }}" class="btn-binance w-100">
+                    <i class="fas fa-arrow-right me-2"></i>Acessar Previsões
+                </a>
             </div>
-        </div>
-        <div class="widget-body">
-            <ul class="list-unstyled mb-3">
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Previsão de Assinantes</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Previsão de Receitas</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Análise de Saturação</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Insights Automáticos</li>
-            </ul>
-            <a href="{% url 'dashboard:advanced-predictions' %}?year={{ year }}" class="btn-binance w-100">
-                <i class="fas fa-arrow-right me-2"></i>Acessar Dashboard
-            </a>
         </div>
     </div>
     
-    <div class="widget-card">
-        <div class="widget-header">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-map-marked-alt fa-2x text-success me-3"></i>
-                <div>
-                    <h5 class="widget-title mb-0">Análise Geográfica</h5>
-                    <p class="widget-subtitle mb-0">Cobertura regional e identificação de áreas carentes</p>
+    <div class="col-lg-4 mb-3">
+        <div class="platform-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="feature-icon me-3">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title">Análise Geográfica</h5>
+                        <p class="card-text text-muted">
+                            Cobertura regional e identificação de áreas carentes nas 9 regiões
+                        </p>
+                    </div>
                 </div>
+                <ul class="list-unstyled mb-3">
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Mapa de Cobertura</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Áreas Carentes</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Urbano vs Rural</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Divisão Digital</small>
+                    </li>
+                </ul>
+                <a href="{% url 'dashboard:advanced-geographic' %}?year={{ year }}" class="btn-binance w-100">
+                    <i class="fas fa-arrow-right me-2"></i>Acessar Geográfica
+                </a>
             </div>
-        </div>
-        <div class="widget-body">
-            <ul class="list-unstyled mb-3">
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Mapa de Cobertura</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Áreas Carentes</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Comparação Urbano-Rural</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Divisão Digital</li>
-            </ul>
-            <a href="{% url 'dashboard:advanced-geographic' %}?year={{ year }}" class="btn-binance w-100">
-                <i class="fas fa-arrow-right me-2"></i>Acessar Dashboard
-            </a>
         </div>
     </div>
     
-    <div class="widget-card">
-        <div class="widget-header">
-            <div class="d-flex align-items-center">
-                <i class="fas fa-tags fa-2x text-warning me-3"></i>
-                <div>
-                    <h5 class="widget-title mb-0">Análise de Preços</h5>
-                    <p class="widget-subtitle mb-0">Comparação de tarifários e melhores ofertas</p>
+    <div class="col-lg-4 mb-3">
+        <div class="platform-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-start mb-3">
+                    <div class="feature-icon me-3">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="card-title">Análise de Preços</h5>
+                        <p class="card-text text-muted">
+                            Comparação de tarifários e identificação das melhores ofertas
+                        </p>
+                    </div>
                 </div>
+                <ul class="list-unstyled mb-3">
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Comparação de Operadoras</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Melhores Ofertas</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Índice de Preços</small>
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <small>Evolução Histórica</small>
+                    </li>
+                </ul>
+                <a href="{% url 'dashboard:advanced-prices' %}?year={{ year }}" class="btn-binance w-100">
+                    <i class="fas fa-arrow-right me-2"></i>Acessar Preços
+                </a>
             </div>
-        </div>
-        <div class="widget-body">
-            <ul class="list-unstyled mb-3">
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Comparação de Operadoras</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Melhores Ofertas</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Índice de Preços</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Evolução Histórica</li>
-            </ul>
-            <a href="{% url 'dashboard:advanced-prices' %}?year={{ year }}" class="btn-binance w-100">
-                <i class="fas fa-arrow-right me-2"></i>Acessar Dashboard
-            </a>
         </div>
     </div>
 </div>
 
-<!-- Estatísticas de Análise -->
+<!-- Sobre as Análises -->
 <div class="platform-card">
     <div class="card-header">
         <h5 class="card-title mb-0">
@@ -198,36 +253,42 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-md-4">
-                <div class="stats-item">
-                    <div class="stats-icon">
-                        <i class="fas fa-robot fa-2x text-primary"></i>
+            <div class="col-md-4 mb-3">
+                <div class="d-flex align-items-start">
+                    <div class="me-3" style="color: var(--binance-yellow);">
+                        <i class="fas fa-robot fa-2x"></i>
                     </div>
-                    <div class="stats-content">
-                        <strong>Machine Learning</strong>
-                        <p class="text-muted small mb-0">Modelos de regressão linear para previsões</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="stats-item">
-                    <div class="stats-icon">
-                        <i class="fas fa-globe-africa fa-2x text-success"></i>
-                    </div>
-                    <div class="stats-content">
-                        <strong>Cobertura Nacional</strong>
-                        <p class="text-muted small mb-0">Análise de todas as 9 regiões da Guiné-Bissau</p>
+                    <div>
+                        <h6 class="mb-2">Machine Learning</h6>
+                        <p class="text-muted small mb-0">
+                            Modelos de regressão linear para previsões precisas baseadas em dados históricos
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="stats-item">
-                    <div class="stats-icon">
-                        <i class="fas fa-chart-bar fa-2x text-warning"></i>
+            <div class="col-md-4 mb-3">
+                <div class="d-flex align-items-start">
+                    <div class="me-3" style="color: var(--binance-success);">
+                        <i class="fas fa-globe-africa fa-2x"></i>
                     </div>
-                    <div class="stats-content">
-                        <strong>Análise em Tempo Real</strong>
-                        <p class="text-muted small mb-0">Dados atualizados automaticamente</p>
+                    <div>
+                        <h6 class="mb-2">Cobertura Nacional</h6>
+                        <p class="text-muted small mb-0">
+                            Análise detalhada de todas as 9 regiões da Guiné-Bissau com recomendações específicas
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="d-flex align-items-start">
+                    <div class="me-3" style="color: var(--binance-info);">
+                        <i class="fas fa-chart-bar fa-2x"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-2">Análise em Tempo Real</h6>
+                        <p class="text-muted small mb-0">
+                            Dados atualizados automaticamente com insights gerados por IA
+                        </p>
                     </div>
                 </div>
             </div>
@@ -238,53 +299,17 @@
 
 {% block extra_css %}
 <style>
-    .alert-card {
-        background: var(--binance-dark-light);
-        border: 1px solid var(--binance-border);
-        border-left: 4px solid;
-        border-radius: 8px;
-        padding: 1rem;
-        transition: all 0.3s ease;
-    }
-    
-    .alert-card:hover {
-        transform: translateX(5px);
-        box-shadow: var(--shadow-light);
-    }
-    
-    .alert-card.alert-positive {
-        border-left-color: var(--binance-success);
-    }
-    
-    .alert-card.alert-warning {
-        border-left-color: var(--binance-warning);
-    }
-    
-    .alert-card.alert-info {
-        border-left-color: var(--binance-info);
-    }
-    
-    .alert-header {
+    .feature-icon {
+        width: 50px;
+        height: 50px;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .alert-header i {
-        font-size: 1.2rem;
-    }
-    
-    .alert-positive .alert-header i {
-        color: var(--binance-success);
-    }
-    
-    .alert-warning .alert-header i {
-        color: var(--binance-warning);
-    }
-    
-    .alert-info .alert-header i {
-        color: var(--binance-info);
+        justify-content: center;
+        background: var(--binance-hover);
+        border-radius: 12px;
+        color: var(--binance-yellow);
+        font-size: 1.5rem;
+        flex-shrink: 0;
     }
     
     .badge-high {
@@ -298,48 +323,22 @@
     .badge-low {
         background-color: var(--binance-success) !important;
     }
-    
-    .stats-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-        padding: 1rem;
-        background: var(--binance-hover);
-        border-radius: 8px;
-    }
-    
-    .stats-icon {
-        flex-shrink: 0;
-    }
-    
-    .stats-content {
-        flex-grow: 1;
-    }
-    
-    .dashboard-widgets {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
 </style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Animações suaves ao carregar
-    const cards = document.querySelectorAll('.kpi-card, .widget-card, .alert-card');
+    // Animação suave ao carregar
+    const cards = document.querySelectorAll('.kpi-card, .platform-card, .platform-alert');
     cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
         setTimeout(() => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
             card.style.transition = 'all 0.5s ease';
-            
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 50);
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
         }, index * 50);
     });
 });
